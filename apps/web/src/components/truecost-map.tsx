@@ -9,6 +9,7 @@ import {
   getVersion,
   setWorkerUrl,
 } from "maplibre-gl";
+import type { StyleSpecification } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 type StationMarker = {
   name: string;
@@ -18,6 +19,20 @@ type StationMarker = {
   address?: string | null;
 };
 type Geometry = { type: "LineString"; coordinates: number[][] };
+
+const openStreetMapStyle: StyleSpecification = {
+  version: 8,
+  sources: {
+    "openstreetmap-raster": {
+      type: "raster",
+      tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      tileSize: 256,
+      attribution: "© OpenStreetMap contributors",
+    },
+  },
+  layers: [{ id: "openstreetmap-raster", type: "raster", source: "openstreetmap-raster" }],
+};
+
 export function TrueCostMap({
   markers,
   routeGeometry,
@@ -35,10 +50,11 @@ export function TrueCostMap({
   const key = process.env.NEXT_PUBLIC_MAPTILER_KEY;
   useEffect(() => {
     const origin = center ?? markers[0];
-    if (!container.current || !origin || !key) return;
+    if (!container.current || !origin) return;
     let map: Map | undefined;
     let ready = false;
     let hadError = false;
+    let usingFallbackStyle = !key;
     let active = true;
     const reset = window.setTimeout(() => {
       setFailed(false);
@@ -51,7 +67,9 @@ export function TrueCostMap({
       setWorkerUrl(`/maplibre/${getVersion()}/maplibre-gl-worker.mjs`);
       map = new Map({
         container: container.current,
-        style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(key)}`,
+        style: key
+          ? `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(key)}`
+          : openStreetMapStyle,
         center: [origin.longitude, origin.latitude],
         zoom: 12,
         cooperativeGestures: true,
@@ -61,7 +79,13 @@ export function TrueCostMap({
         if (!active) return;
         hadError = true;
         const status = (event.error as Error & { status?: number }).status;
-        if (status === 401 || status === 403) setAccessDenied(true);
+        if ((status === 401 || status === 403) && !usingFallbackStyle) {
+          usingFallbackStyle = true;
+          setAccessDenied(true);
+          map?.setStyle(openStreetMapStyle);
+          setFailed(false);
+          return;
+        }
         setFailed(true);
       });
       const bounds = new LngLatBounds();
@@ -127,16 +151,14 @@ export function TrueCostMap({
     );
   return (
     <section aria-label="Fuel station map">
-      <div className="truecost-map" ref={container} hidden={!key || failed} />
-      {(!key || failed) && (
+      <div className="truecost-map" ref={container} hidden={failed} />
+      {failed && (
         <div className="driver-map-fallback" role="status">
           <strong>Map unavailable</strong>
           <p>
             {accessDenied
               ? "The map service denied access. The account owner needs to check the key, allowed hosts and plan permissions."
-              : key
-              ? "The map service or WebGL could not load."
-              : "A map service key is not configured."}{" "}
+              : "The map service or WebGL could not load."}{" "}
             Use the station list and directions links below.
           </p>
           <ul>
