@@ -56,3 +56,71 @@ create policy "Admins manage service prices"
   to authenticated
   using (public.is_admin())
   with check (public.is_admin() and updated_by = auth.uid());
+
+create or replace function public.admin_update_station(
+  target_station_id uuid,
+  target_name text,
+  target_brand text,
+  target_address text,
+  target_supported_fuels text[],
+  target_verification_status text
+)
+returns public.stations
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  updated_station public.stations;
+begin
+  if not public.is_admin() then
+    raise exception 'Admin role is required';
+  end if;
+  if target_name is null or length(trim(target_name)) = 0 or length(target_name) > 200 then
+    raise exception 'Invalid station name';
+  end if;
+  if target_verification_status not in ('unverified', 'pending', 'verified', 'rejected') then
+    raise exception 'Invalid verification status';
+  end if;
+  if target_supported_fuels is null
+     or exists (
+       select 1 from unnest(target_supported_fuels) fuel
+       where fuel not in ('petrol', 'diesel', 'cng')
+     ) then
+    raise exception 'Invalid supported fuels';
+  end if;
+
+  update public.stations
+  set name = trim(target_name),
+      brand = nullif(trim(target_brand), ''),
+      address = nullif(trim(target_address), ''),
+      supported_fuels = target_supported_fuels,
+      verification_status = target_verification_status,
+      updated_at = now()
+  where id = target_station_id
+  returning * into updated_station;
+
+  if updated_station.id is null then
+    raise exception 'Station not found';
+  end if;
+
+  insert into public.admin_audit_log (actor_id, action, entity_type, entity_id, details)
+  values (
+    auth.uid(),
+    'update_station',
+    'station',
+    target_station_id::text,
+    jsonb_build_object(
+      'name', target_name,
+      'brand', target_brand,
+      'address', target_address,
+      'supported_fuels', target_supported_fuels,
+      'verification_status', target_verification_status
+    )
+  );
+  return updated_station;
+end;
+$$;
+
+revoke all on function public.admin_update_station(uuid, text, text, text, text[], text) from public;
+grant execute on function public.admin_update_station(uuid, text, text, text, text[], text) to authenticated;
