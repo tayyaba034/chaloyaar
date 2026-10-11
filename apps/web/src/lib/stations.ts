@@ -4,6 +4,8 @@ import { demoStations, type FuelType, type Station } from "./station-data";
 import { getSupabaseConfig } from "./supabase-config";
 import { resolveAvailabilityStatus } from "./availability";
 import type { StationSearch } from "./station-search";
+import type { RouteCandidate } from "./route-comparison";
+import type { RouteEstimate } from "./routing";
 
 export { demoStations };
 export type { FuelType, Station };
@@ -90,6 +92,18 @@ export async function getDiscoveryAvailability(stationIds: string[], fuel: FuelT
   return facts;
 }
 
+export async function getStationsAlongRoute(client: ReturnType<typeof stationClient>, geometry: NonNullable<RouteEstimate["geometry"]>, fuel: FuelType): Promise<RouteCandidate[]> {
+  const { data, error } = await client.rpc("route_stations", { route_geometry: geometry, requested_fuel: fuel });
+  if (error) {
+    console.error("Route station lookup failed", error.code);
+    throw new Error("Route station data is temporarily unavailable.");
+  }
+  return (data as Record<string, unknown>[]).flatMap(row => {
+    const station = parseStation(row);
+    return station ? [{ ...station, corridorDistanceKm: Number(row.corridor_distance_km), price: row.price as RouteCandidate["price"] }] : [];
+  });
+}
+
 export async function getStations(): Promise<Station[]> {
   const { url, key } = getSupabaseConfig();
   if (!url || !key) {
@@ -147,6 +161,7 @@ export async function getStationLiveFacts(stationIds: string[]): Promise<Station
       .from("fuel_prices")
       .select("fuel_type,price_per_litre,source_name,effective_at")
       .eq("is_demo",false)
+      .is("station_id", null)
       .lte("effective_at", now)
       .order("effective_at", { ascending: false })
       .limit(20),

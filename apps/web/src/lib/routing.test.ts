@@ -10,6 +10,14 @@ afterEach(() => {
 });
 
 describe("routing providers", () => {
+  it("pins via routes to the base provider without crossing to a different service", async () => {
+    process.env.OSRM_BASE_URL = "https://routing.example.test";
+    process.env.OPENROUTESERVICE_API_KEY = "test-key";
+    const fetchMock = vi.fn().mockResolvedValue(new Response("failed", {status:503}));
+    vi.stubGlobal("fetch",fetchMock);
+    expect(await getDrivingRoute({latitude:31,longitude:73},{latitude:32,longitude:74},{latitude:31.5,longitude:73.5},"osrm")).toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
   it("uses configured OSRM without an API key", async () => {
     process.env.OSRM_BASE_URL = "https://routing.example.test";
     vi.stubGlobal(

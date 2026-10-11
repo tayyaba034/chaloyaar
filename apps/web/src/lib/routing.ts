@@ -46,11 +46,8 @@ async function requestJson(
       return null;
     }
     return (await response.json()) as unknown;
-  } catch (error) {
-    console.error(
-      "Routing provider request failed",
-      error instanceof Error ? error.message : "unknown error",
-    );
+  } catch {
+    console.error("Routing provider request failed or timed out");
     return null;
   } finally {
     clearTimeout(timeout);
@@ -138,7 +135,10 @@ export async function getDrivingRoute(
   origin: Coordinates,
   destination: Coordinates,
   via?: Coordinates,
+  provider?: RouteEstimate["source"],
 ): Promise<RouteEstimate | null> {
+  if (provider === "osrm") return getOsrmRoute(origin, destination, via);
+  if (provider === "openrouteservice") return getOpenRouteServiceRoute(origin, destination, via);
   return (
     (await getOsrmRoute(origin, destination, via)) ??
     (await getOpenRouteServiceRoute(origin, destination, via))
@@ -157,7 +157,8 @@ function validGeometry(
     line.coordinates.every(
       (point) =>
         Array.isArray(point) &&
-        point.length >= 2 &&
+          point.length >= 2 &&
+          Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90 &&
         point.every(
           (number) => typeof number === "number" && Number.isFinite(number),
         ),

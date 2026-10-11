@@ -37,6 +37,7 @@ export async function GET() {
         .from("fuel_prices")
         .select("price_per_litre,source_name,effective_at,entered_at,is_demo")
         .eq("fuel_type", "petrol")
+        .is("station_id", null)
         .lte("effective_at", now.toISOString())
         .order("effective_at", { ascending: false })
         .limit(1)
