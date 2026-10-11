@@ -20,10 +20,14 @@ const overpassResponse = await fetch(overpassUrl, {
   body: new URLSearchParams({ data: query }),
 });
 if (!overpassResponse.ok) {
-  throw new Error(`Overpass request failed (${overpassResponse.status}).`);
+  throw new Error(`Overpass request failed (${overpassResponse.status}): ${await overpassResponse.text()}`);
 }
 
 const osm = await overpassResponse.json();
+if (!Array.isArray(osm.elements)) {
+  throw new Error("Overpass returned an invalid response without an elements array.");
+}
+
 const rows = osm.elements.flatMap((element) => {
   const latitude = element.lat ?? element.center?.lat;
   const longitude = element.lon ?? element.center?.lon;
@@ -31,12 +35,16 @@ const rows = osm.elements.flatMap((element) => {
 
   const tags = element.tags ?? {};
   const fuels = [];
-  if (tags["fuel:octane_95"] === "yes" || tags["fuel:octane_98"] === "yes" || tags["fuel:petrol"] === "yes") fuels.push("petrol");
+  if (
+    tags["fuel:octane_95"] === "yes"
+    || tags["fuel:octane_98"] === "yes"
+    || tags["fuel:petrol"] === "yes"
+  ) fuels.push("petrol");
   if (tags["fuel:diesel"] === "yes") fuels.push("diesel");
   if (tags["fuel:cng"] === "yes") fuels.push("cng");
+
   const osmType = element.type;
   const osmId = element.id;
-
   return [{
     name: tags.name ?? tags.brand ?? `Fuel station (${osmType} ${osmId})`,
     brand: tags.brand ?? null,
