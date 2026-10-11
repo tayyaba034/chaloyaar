@@ -4,13 +4,9 @@ import { requireApiRole } from "@/lib/api-auth";
 export async function GET() {
   const access = await requireApiRole("provider");
   if ("response" in access) return access.response;
-  const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
   const { data, error } = await access.supabase
     .from("service_requests")
-    .select("id,service_type,status,created_at,is_demo")
-    .eq("assigned_provider_id", access.profile.id)
-    .gte("created_at", startOfDay.toISOString())
+    .select("id,service_type,status,latitude,longitude,notes,created_at,updated_at,is_demo,assigned_provider_id")
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) {

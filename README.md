@@ -13,6 +13,8 @@ npm run dev
 
 Open the local URL printed by Next.js. Choose Urdu, English, Roman Urdu or Punjabi Shahmukhi, then use the public landing page or sign in. Station list and detail pages are public at `/app/stations`; the driver dashboard and provider/admin workspaces require their matching role.
 
+The roadside-help pilot flow is available for authenticated demo users after applying all migrations, including `202610110004_service_request_flow.sql`. Drivers can open `/app/help`, select puncture, battery or towing, and submit their current location with optional notes. Approved active providers see eligible unassigned requests in `/provider`, can claim or decline them, and can move claimed requests to “on the way” and “completed”. Drivers can track a request at `/app/help/[request-id]` and cancel it while it is still requested or confirmed. Map routing, quotes, payments, chat and admin request moderation remain outside this milestone.
+
 ## Environment variables
 
 Create `apps/web/.env.local` for web sign-in and the public station service:

@@ -10,6 +10,10 @@ type ProviderRequest = {
   status: "requested" | "quoted" | "confirmed" | "en_route" | "completed" | "cancelled";
   created_at: string;
   is_demo: boolean;
+  assigned_provider_id: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  notes: string | null;
 };
 
 export function ProviderDashboard() {
@@ -17,6 +21,25 @@ export function ProviderDashboard() {
   const [requests, setRequests] = useState<ProviderRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [busyKey, setBusyKey] = useState("");
+
+  async function act(requestId: string, action: "accept" | "decline" | "en_route" | "completed") {
+    setBusyKey(`${requestId}:${action}`);
+    try {
+      const response = await fetch(`/api/dashboard/provider/${requestId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      if (!response.ok) throw new Error("Request action failed.");
+      setRequests((current) => action === "decline" ? current.filter((item) => item.id !== requestId) : current.map((item) => item.id === requestId ? { ...item, status: action === "accept" ? "confirmed" : action } : item));
+    } catch (actionError) {
+      console.error("Provider request action failed", actionError);
+      setError(true);
+    } finally {
+      setBusyKey("");
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -67,11 +90,14 @@ export function ProviderDashboard() {
                 <h3>{t("serviceLabel", { service: t(`services.${request.service_type}`) })}</h3>
                 <p>{t(`requestStatuses.${request.status}`)}</p>
                 {request.is_demo && <span className="demo-badge">⚠ {t("demo")}</span>}
+                {request.notes && <p>{request.notes}</p>}
                 <div className="provider-request-actions">
-                  <button type="button" disabled>{t("accept")}</button>
-                  <button type="button" disabled>{t("decline")}</button>
-                  <button type="button" disabled>{t("enRoute")}</button>
-                  <button type="button" disabled>{t("completed")}</button>
+                  {request.status === "requested" && !request.assigned_provider_id && <>
+                    <button type="button" disabled={Boolean(busyKey)} onClick={() => void act(request.id, "accept")}>{t("accept")}</button>
+                    <button type="button" disabled={Boolean(busyKey)} onClick={() => void act(request.id, "decline")}>{t("decline")}</button>
+                  </>}
+                  {request.status === "confirmed" && request.assigned_provider_id && <button type="button" disabled={Boolean(busyKey)} onClick={() => void act(request.id, "en_route")}>{t("enRoute")}</button>}
+                  {request.status === "en_route" && request.assigned_provider_id && <button type="button" disabled={Boolean(busyKey)} onClick={() => void act(request.id, "completed")}>{t("completed")}</button>}
                 </div>
               </li>
             ))}
@@ -83,7 +109,6 @@ export function ProviderDashboard() {
             <p>{t("emptyMessage")}</p>
           </div>
         )}
-        <p className="helper-note">{t("notReady")}</p>
         <p className="helper-note">{t("locationPrivate")}</p>
       </section>
     </main>
