@@ -28,9 +28,12 @@
     "logoAlt": "Chalo Yaar logo: Fuel. Help. Move.",
     "city": "Faisalabad pilot",
     "browseStations": "Find fuel nearby",
+    "getHelp": "Get Help",
     "signUp": "Create account",
-    "heroTitle": "See which pumps have fuel, and who said so.",
-    "heroSubtitle": "Check petrol, diesel and CNG at nearby stations. Every status shows the time it was reported.",
+    "heroTitle": "Get help when the road stops you. Find fuel before you go.",
+    "heroSubtitle": "Request approved roadside help for a puncture, battery or tow, or check petrol, diesel and CNG at nearby stations.",
+    "heroHelpTitle": "Need roadside help?",
+    "heroHelpBody": "Check verified quotes first, then send a request to an approved provider in your area.",
     "preview": {
       "ariaLabel": "Example of a station card",
       "example": "Example",
@@ -71,8 +74,7 @@
       "savings": "Compare the real cost of a fill-up, including the extra fuel to drive there.",
       "car": "Log each refuel to track mileage and monthly fuel spend."
     },
-    "liveTag": "Live now",
-    "comingTag": "Coming next",
+    "liveTag": "Available now",
     "voiceTitle": "Every screen can be read aloud, in 4 languages.",
     "voiceBody": "Tap the speaker on any card. Change language whenever you like; your choice stays saved on this phone.",
     "voiceSample": "Chalo Yaar shows fuel status with the time it was reported.",
@@ -751,6 +753,16 @@
     "button": "Read aloud",
     "unavailable": "Audio is not available for this language on this device.",
     "error": "Audio could not be played. You can still read the text."
+  },
+  "assistant": {
+    "title": "Ask Chalo Yaar",
+    "subtitle": "Ask about nearby fuel. Answers use station reports, not guesses.",
+    "label": "Your question",
+    "placeholder": "Find petrol near D-Ground",
+    "send": "Ask",
+    "thinking": "Checking...",
+    "grounded": "Based on current station data. Availability is not guaranteed.",
+    "error": "The assistant could not check station data."
   },
   "states": {
     "loading": "Loading this page",

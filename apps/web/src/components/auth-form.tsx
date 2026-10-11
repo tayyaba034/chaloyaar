@@ -19,11 +19,11 @@ import { SpeakerButton } from "./speaker-button";
 
 type AuthMethod = "email" | "phone";
 
-// What an account adds. Only availability reports are live in this milestone.
+// What an account adds. Each benefit is available in the app.
 const benefits = [
-  { key: "report", icon: Megaphone, live: true },
-  { key: "car", icon: Car, live: false },
-  { key: "help", icon: Wrench, live: false },
+  { key: "report", icon: Megaphone },
+  { key: "car", icon: Car },
+  { key: "help", icon: Wrench },
 ] as const;
 
 export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
@@ -144,14 +144,14 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
         <div className="cy-auth-panel-body">
           <p className="cy-auth-panel-title">{t("visualTitle")}</p>
           <ul className="cy-auth-benefits">
-            {benefits.map(({ key, icon: BenefitIcon, live }) => (
+            {benefits.map(({ key, icon: BenefitIcon }) => (
               <li key={key}>
                 <span className="cy-auth-benefit-icon" aria-hidden="true">
                   <BenefitIcon weight="bold" />
                 </span>
                 <span>{t(`benefits.${key}`)}</span>
-                <span className={live ? "cy-tag cy-tag--live" : "cy-tag"}>
-                  {landingT(live ? "liveTag" : "comingTag")}
+                <span className="cy-tag cy-tag--live">
+                  {landingT("liveTag")}
                 </span>
               </li>
             ))}

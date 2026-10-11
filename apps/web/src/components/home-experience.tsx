@@ -30,12 +30,12 @@ const languageOptions = [
   { locale: "pa-Arab", labelKey: "pa-Arab", direction: "rtl" },
 ] as const;
 
-// The four home-screen actions. Only station discovery is live in this milestone.
+// The four home-screen actions. Each destination is available from the app.
 const appActions = [
-  { key: "fuel", icon: GasPump, href: "/app/stations", live: true },
-  { key: "help", icon: Wrench, href: "/coming/help", live: false },
-  { key: "savings", icon: Coins, href: "/coming/savings", live: false },
-  { key: "car", icon: Car, href: "/coming/car", live: false },
+  { key: "fuel", icon: GasPump, href: "/app/stations" },
+  { key: "help", icon: Wrench, href: "/app/help" },
+  { key: "savings", icon: Coins, href: "/app/truecost" },
+  { key: "car", icon: Car, href: "/app/vehicle" },
 ] as const;
 
 const steps = [
@@ -148,8 +148,16 @@ export function HomeExperience({
               </p>
               <h1 id="cy-hero-title">{landingT("heroTitle")}</h1>
               <p className="cy-hero-lede">{landingT("heroSubtitle")}</p>
+              <p className="cy-hero-help-copy">
+                <strong>{landingT("heroHelpTitle")}</strong>{" "}
+                {landingT("heroHelpBody")}
+              </p>
               <div className="cy-hero-actions">
-                <Link href="/app/stations" className="cy-button cy-button--accent">
+                <Link href="/app/help" className="cy-button cy-button--accent">
+                  {landingT("getHelp")}
+                  <ArrowRight className="cy-flip" aria-hidden="true" weight="bold" />
+                </Link>
+                <Link href="/app/stations" className="cy-button cy-button--outline">
                   {landingT("browseStations")}
                   <ArrowRight className="cy-flip" aria-hidden="true" weight="bold" />
                 </Link>
@@ -206,7 +214,7 @@ export function HomeExperience({
                 <p>{landingT("actionsBody")}</p>
               </Reveal>
               <ul className="cy-actions">
-                {appActions.map(({ key, icon: ActionIcon, href, live }, index) => (
+                {appActions.map(({ key, icon: ActionIcon, href }, index) => (
                   <li key={key}>
                     <Reveal delay={index * 0.06}>
                       <Link className="cy-action" href={href}>
@@ -215,8 +223,8 @@ export function HomeExperience({
                         </span>
                         <span className="cy-action-name">{t(`actions.${key}`)}</span>
                         <span className="cy-action-text">{landingT(`actions.${key}`)}</span>
-                        <span className={live ? "cy-tag cy-tag--live" : "cy-tag"}>
-                          {landingT(live ? "liveTag" : "comingTag")}
+                        <span className="cy-tag cy-tag--live">
+                          {landingT("liveTag")}
                         </span>
                         <ArrowRight className="cy-action-arrow cy-flip" aria-hidden="true" weight="bold" />
                       </Link>

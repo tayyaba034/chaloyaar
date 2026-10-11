@@ -50,6 +50,15 @@
   font-size: clamp(1.1rem, 1.6vw, 1.3rem);
 }
 
+.cy-hero-help-copy {
+  max-width: 34rem;
+  color: var(--cy-body);
+}
+
+.cy-hero-help-copy strong {
+  color: var(--cy-ink);
+}
+
 .cy-hero-actions {
   display: flex;
   flex-wrap: wrap;

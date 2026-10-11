@@ -28,9 +28,12 @@
     "logoAlt": "Chalo Yaar ka logo: Fuel. Help. Move.",
     "city": "Faisalabad pilot",
     "browseStations": "Qareeb petrol dhoondein",
+    "getHelp": "Madad hasil karein",
     "signUp": "Account banayein",
-    "heroTitle": "Dekhein kin pumps par fuel hai, aur ye kis ne bataya.",
-    "heroSubtitle": "Qareebi stations par petrol, diesel aur CNG dekhein. Har haal ke saath report ka waqt likha hai.",
+    "heroTitle": "Sarak par mushkil ho to madad paayein, rawana hone se pehle fuel dekhein.",
+    "heroSubtitle": "Puncture, battery ya towing ke liye manzoor-shuda madadgar ko darkhwast dein, ya qareebi stations par petrol, diesel aur CNG dekhein.",
+    "heroHelpTitle": "Sarak par madad chahiye?",
+    "heroHelpBody": "Pehle tasdeeq shuda quotes dekhein, phir apne ilaqe ke manzoor-shuda provider ko darkhwast bhejein.",
     "preview": {
       "ariaLabel": "Station card ki misaal",
       "example": "Misaal",
@@ -71,8 +74,7 @@
       "savings": "Fuel bharwane ka asal kharcha dekhein, wahan tak jaane ke izafi fuel samait.",
       "car": "Har dafa fuel ka record rakhein aur mileage aur mahana kharcha dekhein."
     },
-    "liveTag": "Abhi available",
-    "comingTag": "Jald aa raha hai",
+    "liveTag": "Abhi dastiyab",
     "voiceTitle": "Har screen 4 zabanon mein suni ja sakti hai.",
     "voiceBody": "Kisi bhi card par speaker dabayein. Zaban jab chahein badlein, aap ka intikhab isi phone par mehfooz rehta hai.",
     "voiceSample": "Chalo Yaar fuel ka haal report ke waqt ke saath dikhata hai.",
@@ -751,6 +753,16 @@
     "button": "Awaaz mein sunein",
     "unavailable": "Is device par is zaban ki awaaz mojood nahi.",
     "error": "Awaaz nahi chal saki. Aap matn parh sakte hain."
+  },
+  "assistant": {
+    "title": "Chalo Yaar se poochein",
+    "subtitle": "Qareebi fuel ke baare mein poochein. Jawab reports par mabni hai, andazay par nahi.",
+    "label": "Apna sawal",
+    "placeholder": "D-Ground ke qareeb petrol dikhayein",
+    "send": "Poochein",
+    "thinking": "Check ho raha hai...",
+    "grounded": "Mojooda station data par mabni. Availability ki guarantee nahi.",
+    "error": "Assistant station data check nahi kar saka."
   },
   "states": {
     "loading": "Page load ho raha hai",

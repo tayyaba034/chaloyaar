@@ -5,10 +5,10 @@ import { Link } from "@/i18n/navigation";
 import { SpeakerButton } from "./speaker-button";
 
 const actions = [
-  { key: "fuel", href: "/dashboard/stations" },
-  { key: "savings", href: "/dashboard/coming/savings" },
-  { key: "help", href: "/dashboard/coming/help" },
-  { key: "car", href: "/dashboard/coming/car" },
+  { key: "fuel", href: "/app/stations" },
+  { key: "savings", href: "/app/truecost" },
+  { key: "help", href: "/app/help" },
+  { key: "car", href: "/app/vehicle" },
 ] as const;
 
 export function DashboardExperience() {

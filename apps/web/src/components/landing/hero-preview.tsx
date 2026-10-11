@@ -129,7 +129,7 @@ export function HeroPreview() {
           <BatteryCharging weight="bold" />
           <Truck weight="bold" />
         </span>
-        <small>{t("comingTag")}</small>
+        <small>{t("liveTag")}</small>
       </motion.div>
     </div>
   );
