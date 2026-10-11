@@ -304,6 +304,29 @@
       "noData": "No data yet",
       "loading": "Loading overview"
     },
+    "fuelLog": {
+      "title": "My car and fuel log",
+      "addTitle": "Add a fuel log",
+      "addLog": "Add refuel",
+      "summaryTitle": "Your fuel summary",
+      "totalSpend": "Recorded spend: {amount}",
+      "totalLitres": "Recorded fuel: {litres} litres",
+      "efficiency": "Average efficiency: {value} km/L",
+      "notEnoughData": "Add odometer readings to calculate efficiency.",
+      "litres": "Fuel quantity (litres)",
+      "totalAmount": "Total amount",
+      "odometer": "Odometer (km, optional)",
+      "date": "Refuel date",
+      "save": "Save fuel log",
+      "saving": "Saving...",
+      "saved": "Fuel log saved.",
+      "saveError": "Fuel log could not be saved.",
+      "loadError": "Fuel logs could not be loaded.",
+      "emptyTitle": "No fuel logs yet",
+      "emptyMessage": "Add your first refuel to start tracking spend and efficiency.",
+      "unknownStation": "Station not recorded",
+      "logLine": "{litres} litres · total {amount}"
+    },
     "placeholders": {
       "truecost": {
         "title": "Save Money",

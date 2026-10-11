@@ -346,6 +346,29 @@
       "noData": "Abhi maloomat nahi",
       "loading": "Overview aa raha hai"
     },
+    "fuelLog": {
+      "title": "Meri gaari aur fuel log",
+      "addTitle": "Fuel log shamil karein",
+      "addLog": "Fuel shamil karein",
+      "summaryTitle": "Aap ka fuel khulasa",
+      "totalSpend": "Darj shuda kharch: {amount}",
+      "totalLitres": "Darj shuda fuel: {litres} litres",
+      "efficiency": "Ausat karkardagi: {value} km/L",
+      "notEnoughData": "Karkardagi ke liye odometer readings shamil karein.",
+      "litres": "Fuel miqdaar (litres)",
+      "totalAmount": "Kul raqam",
+      "odometer": "Odometer (km, ikhtiyari)",
+      "date": "Fuel bharne ki tareekh",
+      "save": "Fuel log mehfooz karein",
+      "saving": "Mehfooz ho raha hai...",
+      "saved": "Fuel log mehfooz ho gaya.",
+      "saveError": "Fuel log mehfooz nahi ho saka.",
+      "loadError": "Fuel logs nahi khul sake.",
+      "emptyTitle": "Abhi koi fuel log nahi",
+      "emptyMessage": "Kharch aur karkardagi dekhne ke liye pehla log shamil karein.",
+      "unknownStation": "Station darj nahi",
+      "logLine": "{litres} litres · kul {amount}"
+    },
     "placeholders": {
       "truecost": {
         "title": "Sasta Scene",
