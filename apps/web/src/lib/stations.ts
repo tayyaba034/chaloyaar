@@ -107,11 +107,18 @@ export async function getStationLiveFacts(stationIds: string[]): Promise<Station
       .order("reported_at", { ascending: false })
       .limit(300),
   ]);
-  if (pricesResult.error) throw new Error(`Fuel price query failed: ${pricesResult.error.message}`);
-  if (availabilityResult.error) throw new Error(`Availability query failed: ${availabilityResult.error.message}`);
+  if (pricesResult.error) {
+    console.error("Fuel price query failed; showing unknown prices", pricesResult.error.message);
+  }
+  if (availabilityResult.error) {
+    console.error(
+      "Availability query failed; showing unknown availability",
+      availabilityResult.error.message,
+    );
+  }
 
   const prices: StationLiveFacts["prices"] = {};
-  for (const row of pricesResult.data ?? []) {
+  for (const row of pricesResult.error ? [] : pricesResult.data ?? []) {
     const fuelType: unknown = row.fuel_type;
     if (
       isFuelType(fuelType) &&
@@ -126,7 +133,7 @@ export async function getStationLiveFacts(stationIds: string[]): Promise<Station
   }
 
   const availability: StationLiveFacts["availability"] = {};
-  for (const row of availabilityResult.data ?? []) {
+  for (const row of availabilityResult.error ? [] : availabilityResult.data ?? []) {
     const fuelType: unknown = row.fuel_type;
     const reportedStatus: unknown = row.reported_status;
     const sourceType: unknown = row.source_type;
