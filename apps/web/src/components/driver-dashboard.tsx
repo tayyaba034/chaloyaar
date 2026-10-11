@@ -36,10 +36,10 @@ type DriverDashboardData = {
 };
 
 const tiles = [
-  { key: "stations", icon: "⛽", href: "/app/stations" },
-  { key: "truecost", icon: "🪙", href: "/app/truecost" },
-  { key: "help", icon: "🧰", href: "/app/help" },
-  { key: "vehicle", icon: "🚗", href: "/app/vehicle" },
+  { key: "stations", href: "/app/stations" },
+  { key: "truecost", href: "/app/truecost" },
+  { key: "help", href: "/app/help" },
+  { key: "vehicle", href: "/app/vehicle" },
 ] as const;
 
 const statusIcons = {
@@ -109,12 +109,11 @@ export function DriverDashboard() {
       </section>
 
       <nav className="dashboard-tiles" aria-label={t("summary")}>
-        {tiles.map(({ key, icon, href }) => {
+        {tiles.map(({ key, href }) => {
           const label = shellT(key);
           return (
             <article className="dashboard-tile" key={key}>
               <Link className="dashboard-tile-link" href={href}>
-                <span aria-hidden="true">{icon}</span>
                 <span>{label}</span>
               </Link>
               <SpeakerButton text={label} phraseId={`driver-tile-${key}`} />

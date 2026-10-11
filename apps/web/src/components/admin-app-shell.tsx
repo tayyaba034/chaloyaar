@@ -5,14 +5,14 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 
 const navigation = [
-  { key: "overview", href: "/admin", icon: "⌂" },
-  { key: "fuelPrices", href: "/admin/fuel-prices", icon: "⛽" },
-  { key: "stations", href: "/admin/stations", icon: "📍" },
-  { key: "reports", href: "/admin/reports", icon: "📝" },
-  { key: "providers", href: "/admin/providers", icon: "🧰" },
-  { key: "requests", href: "/admin/requests", icon: "📋" },
-  { key: "coverage", href: "/admin/coverage", icon: "🗺️" },
-  { key: "audit", href: "/admin/audit", icon: "🔎" },
+  { key: "overview", href: "/admin" },
+  { key: "fuelPrices", href: "/admin/fuel-prices" },
+  { key: "stations", href: "/admin/stations" },
+  { key: "reports", href: "/admin/reports" },
+  { key: "providers", href: "/admin/providers" },
+  { key: "requests", href: "/admin/requests" },
+  { key: "coverage", href: "/admin/coverage" },
+  { key: "audit", href: "/admin/audit" },
 ] as const;
 
 export function AdminAppShell({ children }: { children: ReactNode }) {
@@ -20,11 +20,11 @@ export function AdminAppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const links = (
     <nav className="role-navigation" aria-label={t("navigationLabel")}>
-      {navigation.map(({ key, href, icon }) => {
+      {navigation.map(({ key, href }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link className={`role-nav-link${active ? " is-active" : ""}`} href={href} key={key} aria-current={active ? "page" : undefined}>
-            <span aria-hidden="true">{icon}</span><span>{t(key)}</span>
+            <span>{t(key)}</span>
           </Link>
         );
       })}

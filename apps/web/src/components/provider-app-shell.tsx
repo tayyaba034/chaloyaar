@@ -6,9 +6,9 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { SpeakerButton } from "./speaker-button";
 
 const navigation = [
-  { key: "requests", href: "/provider/requests", icon: "🧰" },
-  { key: "services", href: "/provider/services", icon: "🛠️" },
-  { key: "profile", href: "/provider/profile", icon: "👤" },
+  { key: "requests", href: "/provider/requests" },
+  { key: "services", href: "/provider/services" },
+  { key: "profile", href: "/provider/profile" },
 ] as const;
 
 export function ProviderAppShell({
@@ -42,11 +42,11 @@ export function ProviderAppShell({
 
   const links = (
     <nav className="role-navigation" aria-label={t("navigationLabel")}>
-      {navigation.map(({ key, href, icon }) => {
+      {navigation.map(({ key, href }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link className={`role-nav-link${active ? " is-active" : ""}`} href={href} key={key} aria-current={active ? "page" : undefined}>
-            <span aria-hidden="true">{icon}</span><span>{t(key)}</span>
+            <span>{t(key)}</span>
           </Link>
         );
       })}

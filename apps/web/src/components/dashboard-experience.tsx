@@ -5,10 +5,10 @@ import { Link } from "@/i18n/navigation";
 import { SpeakerButton } from "./speaker-button";
 
 const actions = [
-  { key: "fuel", icon: "⛽", href: "/dashboard/stations" },
-  { key: "savings", icon: "🪙", href: "/dashboard/coming/savings" },
-  { key: "help", icon: "🧰", href: "/dashboard/coming/help" },
-  { key: "car", icon: "🚗", href: "/dashboard/coming/car" },
+  { key: "fuel", href: "/dashboard/stations" },
+  { key: "savings", href: "/dashboard/coming/savings" },
+  { key: "help", href: "/dashboard/coming/help" },
+  { key: "car", href: "/dashboard/coming/car" },
 ] as const;
 
 export function DashboardExperience() {
@@ -34,12 +34,11 @@ export function DashboardExperience() {
       </section>
 
       <nav className="action-list" aria-label={t("actionsLabel")}>
-        {actions.map(({ key, icon, href }) => {
+        {actions.map(({ key, href }) => {
           const label = t(`actions.${key}`);
           return (
             <div className="action-row" key={key}>
               <Link className="action-link" href={href}>
-                <span className="action-icon" aria-hidden="true">{icon}</span>
                 <span>{label}</span>
               </Link>
               <SpeakerButton text={label} phraseId={`dashboard-action-${key}`} />

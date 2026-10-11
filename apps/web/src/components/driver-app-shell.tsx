@@ -8,10 +8,10 @@ import { saveAutoReadPreference, signOutAction } from "@/app/actions";
 import { SpeakerButton } from "./speaker-button";
 
 const driverNavigation = [
-  { key: "stations", href: "/app/stations", icon: "⛽" },
-  { key: "truecost", href: "/app/truecost", icon: "🪙" },
-  { key: "help", href: "/app/help", icon: "🧰" },
-  { key: "vehicle", href: "/app/vehicle", icon: "🚗" },
+  { key: "stations", href: "/app/stations" },
+  { key: "truecost", href: "/app/truecost" },
+  { key: "help", href: "/app/help" },
+  { key: "vehicle", href: "/app/vehicle" },
 ] as const;
 
 const languageLocales: AppLocale[] = ["ur", "en", "ur-Latn", "pa-Arab"];
@@ -58,7 +58,7 @@ export function DriverAppShell({
 
   const navigation = (
     <nav className="driver-navigation" aria-label={t("navigationLabel")}>
-      {driverNavigation.map(({ key, href, icon }) => {
+      {driverNavigation.map(({ key, href }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link
@@ -67,7 +67,6 @@ export function DriverAppShell({
             href={href}
             aria-current={active ? "page" : undefined}
           >
-            <span className="driver-nav-icon" aria-hidden="true">{icon}</span>
             <span>{t(`navigation.${key}`)}</span>
             {active && <span className="driver-nav-active-mark">{t("active")}</span>}
           </Link>

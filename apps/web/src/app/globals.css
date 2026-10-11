@@ -748,11 +748,6 @@ p {
   color: var(--cy-paper);
 }
 
-.cy-root .driver-nav-link.is-active .driver-nav-icon {
-  border-color: var(--cy-accent);
-  background: var(--cy-accent);
-}
-
 .cy-root .driver-content,
 .cy-root .role-main > .dashboard-page,
 .cy-root .role-main > .feature-placeholder {
@@ -802,7 +797,6 @@ p {
   color: var(--cy-ink);
 }
 
-.cy-root .dashboard-tile-link > span:first-child,
 .cy-root .notice-icon {
   color: var(--cy-accent);
 }
@@ -1031,16 +1025,6 @@ p {
   line-height: 1.15;
 }
 
-.driver-nav-icon {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
-  border: 2px solid transparent;
-  border-radius: 0.65rem;
-  font-size: 1.35rem;
-}
-
 .driver-nav-link.is-active,
 .role-nav-link.is-active {
   background: #e5f2ed;
@@ -1123,10 +1107,6 @@ p {
   color: var(--ink);
   font-weight: 900;
   text-decoration: none;
-}
-
-.dashboard-tile-link > span:first-child {
-  font-size: 2rem;
 }
 
 .dashboard-tile .speaker-button {
@@ -1276,10 +1256,6 @@ p {
 
 .role-nav-link {
   flex-direction: column;
-}
-
-.role-nav-link > span:first-child {
-  font-size: 1.35rem;
 }
 
 .role-account-name {
