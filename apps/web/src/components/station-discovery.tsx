@@ -51,7 +51,7 @@ export function StationDiscovery() {
     let active = true;
     let cancelled = false;
 
-    async function loadNearby(radiusKm: number): Promise<NearbyResponse | null> {
+    async function loadNearby(radiusKm: number): Promise<NearbyResponse> {
       const params = new URLSearchParams({ radiusKm: String(radiusKm) });
       if (origin) {
         params.set("lat", String(origin.latitude));
