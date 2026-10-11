@@ -10,10 +10,10 @@
     "subtitle": "Find fuel and get help with clear information.",
     "actionsLabel": "Main actions",
     "actions": {
-      "fuel": "Petrol Kidhar?",
-      "savings": "Sasta Scene",
-      "help": "Madad Chahiye",
-      "car": "Meri Gaari"
+      "fuel": "Find Petrol",
+      "savings": "Save Money",
+      "help": "Get Help",
+      "car": "My Car"
     },
     "settings": "Settings",
     "autoRead": "Read this screen aloud automatically",
@@ -98,7 +98,7 @@
     "footerLinksLabel": "Footer"
   },
   "stations": {
-    "title": "Petrol Kidhar?",
+    "title": "Find Petrol",
     "subtitle": "Find a fuel stop. Check what we know before you go.",
     "city": "FAISALABAD",
     "signIn": "Log in",
@@ -158,10 +158,10 @@
       "guestBrowse": "You can browse stations without signing in.",
       "navigation": {
         "home": "Home",
-        "stations": "Petrol Kidhar?",
-        "truecost": "Sasta Scene",
-        "help": "Madad Chahiye",
-        "vehicle": "Meri Gaari"
+        "stations": "Find Petrol",
+        "truecost": "Save Money",
+        "help": "Get Help",
+        "vehicle": "My Car"
       }
     },
     "provider": {
@@ -306,12 +306,12 @@
     },
     "placeholders": {
       "truecost": {
-        "title": "Sasta Scene",
+        "title": "Save Money",
         "message": "Compare fuel costs and route estimates in a later step.",
         "icon": "🪙"
       },
       "help": {
-        "title": "Madad Chahiye",
+        "title": "Get Help",
         "message": "Roadside request tracking will be available in a later step.",
         "icon": "🧰"
       },
@@ -326,7 +326,7 @@
         "icon": "📋"
       },
       "vehicle": {
-        "title": "Meri Gaari",
+        "title": "My Car",
         "message": "Your vehicle and fuel log tools are coming in a later step.",
         "icon": "🚗"
       },
@@ -395,6 +395,32 @@
         "message": "Admin actions will appear here when write tools are added.",
         "icon": "🔎"
       }
+    },
+    "stationReport": {
+      "title": "Report fuel status",
+      "back": "Back to station",
+      "fuelLabel": "Fuel type",
+      "statusLabel": "What did you see?",
+      "submit": "Submit report",
+      "working": "Submitting…",
+      "success": "Report submitted for review. Thank you.",
+      "error": "The report could not be submitted. Try again.",
+      "fuels": { "petrol": "Petrol", "diesel": "Diesel", "cng": "CNG" },
+      "statuses": { "available": "Available", "unavailable": "Unavailable", "queue_reported": "Queue reported" }
+    },
+    "reportModeration": {
+      "title": "Station report moderation",
+      "emptyTitle": "No pending reports",
+      "emptyMessage": "New driver reports will appear here.",
+      "loadError": "Reports could not be loaded.",
+      "actionError": "That report could not be updated.",
+      "reportLine": "{fuel}: {status}",
+      "reportedAt": "Reported {date}",
+      "approve": "Approve",
+      "reject": "Reject",
+      "demo": "Demo data",
+      "fuels": { "petrol": "Petrol", "diesel": "Diesel", "cng": "CNG" },
+      "statuses": { "available": "Available", "unavailable": "Unavailable", "queue_reported": "Queue reported" }
     },
     "stationDetail": {
       "title": "Station details",
@@ -477,10 +503,10 @@
     "back": "Back",
     "message": "This part is coming in a later step.",
     "features": {
-      "fuel": "Petrol Kidhar?",
-      "savings": "Sasta Scene",
-      "help": "Madad Chahiye",
-      "car": "Meri Gaari"
+      "fuel": "Find Petrol",
+      "savings": "Save Money",
+      "help": "Get Help",
+      "car": "My Car"
     }
   },
   "offline": {

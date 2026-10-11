@@ -438,6 +438,32 @@
         "icon": "🔎"
       }
     },
+    "stationReport": {
+      "title": "Fuel ki surat-e-haal batayein",
+      "back": "Station par wapas",
+      "fuelLabel": "Fuel ki qisam",
+      "statusLabel": "Aap ne kya dekha?",
+      "submit": "Report bhejein",
+      "working": "Bheji ja rahi hai…",
+      "success": "Report jaanch ke liye bhej di gayi. Shukriya.",
+      "error": "Report nahi bheji ja saki. Dobara koshish karein.",
+      "fuels": { "petrol": "Petrol", "diesel": "Diesel", "cng": "CNG" },
+      "statuses": { "available": "Dastiyab", "unavailable": "Dastiyab nahi", "queue_reported": "Qatar ki report" }
+    },
+    "reportModeration": {
+      "title": "Station reports ki jaanch",
+      "emptyTitle": "Koi pending report nahi",
+      "emptyMessage": "Driver ki nayi reports yahan aayengi.",
+      "loadError": "Reports load nahi ho sakin.",
+      "actionError": "Report update nahi ho saki.",
+      "reportLine": "{fuel}: {status}",
+      "reportedAt": "{date} ko report hui",
+      "approve": "Manzoor karein",
+      "reject": "Mustarad karein",
+      "demo": "Demo data",
+      "fuels": { "petrol": "Petrol", "diesel": "Diesel", "cng": "CNG" },
+      "statuses": { "available": "Dastiyab", "unavailable": "Dastiyab nahi", "queue_reported": "Qatar ki report" }
+    },
     "stationDetail": {
       "title": "Station ki tafseel",
       "back": "Stations par wapas",

@@ -438,6 +438,32 @@
         "icon": "🔎"
       }
     },
+    "stationReport": {
+      "title": "ایندھن دی حالت دی اطلاع دیو",
+      "back": "سٹیشن تے واپس",
+      "fuelLabel": "ایندھن دی قسم",
+      "statusLabel": "تسی کی ویکھیا؟",
+      "submit": "رپورٹ بھیجو",
+      "working": "بھیجی جا رہی اے…",
+      "success": "رپورٹ جانچ لئی بھیج دتی گئی۔ شکریہ۔",
+      "error": "رپورٹ نہیں بھیجی جا سکی۔ دوبارہ کوشش کرو۔",
+      "fuels": { "petrol": "پیٹرول", "diesel": "ڈیزل", "cng": "سی این جی" },
+      "statuses": { "available": "دستیاب", "unavailable": "دستیاب نہیں", "queue_reported": "قطار دی رپورٹ" }
+    },
+    "reportModeration": {
+      "title": "سٹیشن رپورٹس دی جانچ",
+      "emptyTitle": "کوئی زیرِ التوا رپورٹ نہیں",
+      "emptyMessage": "ڈرائیور دیاں نویاں رپورٹس ایتھے آون گیاں۔",
+      "loadError": "رپورٹس نہیں کھل سکیاں۔",
+      "actionError": "رپورٹ تبدیل نہیں ہو سکی۔",
+      "reportLine": "{fuel}: {status}",
+      "reportedAt": "{date} نوں رپورٹ ہوئی",
+      "approve": "منظور کرو",
+      "reject": "رد کرو",
+      "demo": "نمونہ ڈیٹا",
+      "fuels": { "petrol": "پیٹرول", "diesel": "ڈیزل", "cng": "سی این جی" },
+      "statuses": { "available": "دستیاب", "unavailable": "دستیاب نہیں", "queue_reported": "قطار دی رپورٹ" }
+    },
     "stationDetail": {
       "title": "اسٹیشن دی تفصیل",
       "back": "اسٹیشن ول واپس",
