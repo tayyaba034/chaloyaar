@@ -24,6 +24,12 @@ export function TrueCostMap({ markers }: { markers: StationMarker[] }) {
       center: [markers[0].longitude, markers[0].latitude],
       zoom: 11,
     });
+    let fallbackApplied = false;
+    map.on("error", () => {
+      if (fallbackApplied || !process.env.NEXT_PUBLIC_MAPTILER_KEY) return;
+      fallbackApplied = true;
+      map.setStyle("https://demotiles.maplibre.org/style.json");
+    });
     map.addControl(new NavigationControl(), "top-right");
     markers.forEach((marker) => {
       const element = document.createElement("button");

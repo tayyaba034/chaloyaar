@@ -6,6 +6,7 @@ import { ArrowUpRight, GasPump, MapPin, NavigationArrow, WarningCircle } from "@
 import { Link } from "@/i18n/navigation";
 import type { FuelType, Station } from "@/lib/station-data";
 import { SpeakerButton } from "./speaker-button";
+import { StationMap } from "./station-map";
 
 type NearbyStation = Station & {
   distanceKm: number;
@@ -15,16 +16,24 @@ type NearbyStation = Station & {
     source: "user" | "station" | "admin" | null;
     reportedAt: string | null;
   };
+
   officialPrice: {
     amount: number | null;
     currency: "PKR";
     source: string | null;
     effectiveAt: string | null;
   };
+
 };
 
 const areas = ["city-centre", "susan-road", "d-ground"] as const;
 const fuelTypes = ["all", "petrol", "diesel", "cng"] as const;
+
+type NearbyResponse = {
+  stations: NearbyStation[];
+  degraded?: boolean;
+  degradedMessage?: string;
+};
 
 export function StationDiscovery() {
   const t = useTranslations("stations");
@@ -36,6 +45,7 @@ export function StationDiscovery() {
   const [error, setError] = useState("");
   const [reloadToken, setReloadToken] = useState(0);
   const [origin, setOrigin] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [degradedMessage, setDegradedMessage] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -53,11 +63,12 @@ export function StationDiscovery() {
     })
       .then(async (response) => {
         if (!response.ok) throw new Error(t("loadError"));
-        return (await response.json()) as { stations: NearbyStation[] };
+        return (await response.json()) as NearbyResponse;
       })
       .then((data) => {
         if (!active) return;
         setStations(data.stations);
+        setDegradedMessage(data.degradedMessage ?? "");
         setError("");
       })
       .catch((loadError: unknown) => {
@@ -212,7 +223,19 @@ export function StationDiscovery() {
               {[0, 1, 2].map((index) => <div className="cy-station-skeleton" key={index} />)}
             </div>
           ) : visibleStations.length ? (
-            <div className="cy-station-list">
+            <>
+              {degradedMessage && <p className="cy-station-alert" role="status">{degradedMessage}</p>}
+              <StationMap
+                center={origin ?? { latitude: 31.4181, longitude: 73.0791 }}
+                userLocation={origin}
+                markers={visibleStations.map((station) => ({
+                  name: station.name,
+                  address: station.address,
+                  latitude: station.latitude,
+                  longitude: station.longitude,
+                }))}
+              />
+              <div className="cy-station-list">
               {visibleStations.map((station) => {
                 const distance = formatter.format(station.distanceKm);
               const price = station.officialPrice.amount === null
@@ -274,13 +297,17 @@ export function StationDiscovery() {
                   </article>
                 );
               })}
-            </div>
+              </div>
+            </>
           ) : (
-            <div className="cy-station-empty">
-              <span className="cy-station-empty-icon" aria-hidden="true"><GasPump weight="fill" /></span>
-              <h3>{t("emptyTitle")}</h3>
-              <p>{t("emptyMessage")}</p>
-            </div>
+            <>
+              <StationMap center={origin ?? { latitude: 31.4181, longitude: 73.0791 }} userLocation={origin} markers={[]} />
+              <div className="cy-station-empty">
+                <span className="cy-station-empty-icon" aria-hidden="true"><GasPump weight="fill" /></span>
+                <h3>{t("emptyTitle")}</h3>
+                <p>{t("emptyMessage")}</p>
+              </div>
+            </>
           )}
         </section>
       </div>

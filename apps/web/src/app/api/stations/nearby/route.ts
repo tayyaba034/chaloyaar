@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { getLatestOgraFuelPrices } from "@/lib/ogra-prices";
-import { getStationLiveFacts, getStations, type FuelType } from "@/lib/stations";
+import { demoStations, getStationLiveFacts, getStations, type FuelType } from "@/lib/stations";
 
 const knownAreas = {
   "city-centre": { latitude: 31.4181, longitude: 73.0791 },
@@ -71,7 +71,14 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const stations = await getStations();
+    let stations = await getStations();
+    let degraded = false;
+    let degradedMessage: string | null = null;
+    if (stations.length === 0) {
+      stations = demoStations;
+      degraded = true;
+      degradedMessage = "Live station data is unavailable; showing clearly labelled demo locations.";
+    }
     const liveFacts = await getStationLiveFacts(stations.map((station) => station.id));
     if (!liveFacts.prices.petrol || !liveFacts.prices.diesel) {
       try {
@@ -114,7 +121,7 @@ export async function GET(request: NextRequest) {
       .slice(0, 50);
 
     return NextResponse.json(
-      { stations: results },
+      { stations: results, degraded, degradedMessage },
       {
         headers: {
           "Cache-Control": "public, max-age=30, stale-while-revalidate=120",
@@ -123,6 +130,21 @@ export async function GET(request: NextRequest) {
     );
   } catch (error) {
     console.error("Nearby station query failed", error);
-    return errorResponse("STATION_QUERY_FAILED", "Stations could not be loaded.", 503);
+    return NextResponse.json(
+      {
+        stations: demoStations
+          .map((station) => ({
+            ...station,
+            distanceKm: distanceKm(origin, station),
+            distanceKind: "straight_line_approximate" as const,
+            availability: { state: "unknown" as const, source: null, reportedAt: null },
+            officialPrice: { amount: null, currency: "PKR" as const, source: null, effectiveAt: null },
+          }))
+          .filter((station) => station.distanceKm <= radiusKm),
+        degraded: true,
+        degradedMessage: "Live station data is unavailable; showing clearly labelled demo locations.",
+      },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   }
 }

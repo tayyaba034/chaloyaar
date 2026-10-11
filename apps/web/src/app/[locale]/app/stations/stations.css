@@ -664,6 +664,10 @@
   animation: cy-station-loading 1.5s linear infinite;
 }
 
+.cy-station-results > .station-map {
+  margin-block-end: 1.25rem;
+}
+
 @keyframes cy-station-loading {
   to { background-position-x: -200%; }
 }
