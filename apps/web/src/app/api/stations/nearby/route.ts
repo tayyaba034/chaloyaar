@@ -86,6 +86,7 @@ export async function GET(request: NextRequest) {
       ? (requestedFuelType as FuelType)
       : "petrol";
     const results = stations
+      .filter((station) => !station.isDemo)
       .map((station) => ({
         ...station,
         distanceKm: distanceKm(origin, station),

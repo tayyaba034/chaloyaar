@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowUpRight, GasPump, MapPin, NavigationArrow, WarningCircle } from "@phosphor-icons/react";
 import { Link } from "@/i18n/navigation";
-import { demoStations, type FuelType, type Station } from "@/lib/station-data";
+import type { FuelType, Station } from "@/lib/station-data";
 import { SpeakerButton } from "./speaker-button";
 
 type NearbyStation = Station & {
@@ -64,18 +64,7 @@ export function StationDiscovery() {
         if (!active) return;
         console.error("Nearby stations could not be loaded", loadError);
         setError(t("loadError"));
-        setStations(
-          demoStations.map((station) => ({
-            ...station,
-            distanceKm: Math.sqrt(
-              (station.latitude - 31.4181) ** 2 +
-                (station.longitude - 73.0791) ** 2,
-            ) * 111,
-            distanceKind: "straight_line_approximate",
-            availability: { state: "unknown", source: null, reportedAt: null },
-            officialPrice: { amount: null, currency: "PKR", source: null, effectiveAt: null },
-          })),
-        );
+        setStations([]);
       })
       .finally(() => {
         if (active) setLoading(false);

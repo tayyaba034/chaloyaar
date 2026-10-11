@@ -41,7 +41,9 @@ function parseStation(row: Record<string, unknown>): Station | null {
 
 export async function getStations(): Promise<Station[]> {
   const { url, key } = getSupabaseConfig();
-  if (!url || !key) return demoStations;
+  if (!url || !key) {
+    throw new Error("Supabase station data is not configured.");
+  }
 
   const supabase = createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
