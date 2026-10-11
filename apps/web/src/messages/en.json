@@ -262,6 +262,22 @@
         "cancelled": "Cancelled"
       }
     },
+    "providerServices": {
+      "title": "My roadside services",
+      "intro": "Choose the services you offer and go online when you are ready to receive eligible requests.",
+      "servicesLabel": "Services offered",
+      "services": { "puncture": "Puncture help", "battery": "Battery help", "towing": "Towing" },
+      "active": "I am available for new requests",
+      "privacy": "Your private contact and location remain hidden until a request is assigned.",
+      "pendingNotice": "Your provider account is not approved yet. You can prepare services, but cannot go online.",
+      "save": "Save settings",
+      "saving": "Saving...",
+      "saved": "Provider settings saved.",
+      "saveError": "Provider settings could not be saved.",
+      "loadError": "Provider settings could not be loaded."
+      ,"message": "Manage the services you offer roadside.",
+      "icon": "🛠️"
+    },
     "provider": {
       "greeting": "Assalamu alaikum, {name}",
       "homeTitle": "Provider dashboard",
@@ -458,11 +474,6 @@
         "title": "Requests",
         "message": "Request handling will be available in a later step.",
         "icon": "🧰"
-      },
-      "providerServices": {
-        "title": "My services",
-        "message": "Service settings will be available in a later step.",
-        "icon": "🛠️"
       },
       "providerProfile": {
         "title": "Provider profile",

@@ -46,11 +46,13 @@ revoke all on public.service_prices from anon, authenticated;
 grant select on public.service_prices to anon, authenticated;
 grant insert, update, delete on public.service_prices to authenticated;
 
+drop policy if exists "Read service prices" on public.service_prices;
 create policy "Read service prices"
   on public.service_prices for select
   to anon, authenticated
   using (true);
 
+drop policy if exists "Admins manage service prices" on public.service_prices;
 create policy "Admins manage service prices"
   on public.service_prices for all
   to authenticated

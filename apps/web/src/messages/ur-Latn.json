@@ -304,6 +304,22 @@
         "cancelled": "Cancel"
       }
     },
+    "providerServices": {
+      "title": "Meri roadside services",
+      "intro": "Apni services muntakhib karein aur eligible requests lene ke liye online hon.",
+      "servicesLabel": "Pesh karda services",
+      "services": { "puncture": "Puncture help", "battery": "Battery help", "towing": "Towing" },
+      "active": "Main nayi requests ke liye dastiyab hoon",
+      "privacy": "Request assign hone tak private contact aur location posheeda rahe gi.",
+      "pendingNotice": "Aap ka provider account abhi approve nahi. Services tayyar karein magar online nahi ho sakte.",
+      "save": "Settings mehfooz karein",
+      "saving": "Mehfooz ho raha hai...",
+      "saved": "Provider settings mehfooz ho gayi.",
+      "saveError": "Provider settings mehfooz nahi ho saki.",
+      "loadError": "Provider settings nahi khul sakin."
+      ,"message": "Roadside pesh karda services ka intizam karein.",
+      "icon": "🛠️"
+    },
     "provider": {
       "greeting": "Assalamu alaikum, {name}",
       "homeTitle": "Provider dashboard",
@@ -500,11 +516,6 @@
         "title": "Requests",
         "message": "Request ka kaam aglay marhalay mein milega.",
         "icon": "🧰"
-      },
-      "providerServices": {
-        "title": "Meri services",
-        "message": "Services ki settings aglay marhalay mein milengi.",
-        "icon": "🛠️"
       },
       "providerProfile": {
         "title": "Provider profile",
