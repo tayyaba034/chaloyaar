@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
+import { TrueCostMap } from "./truecost-map";
 
 type Result = {
   fuelType: string;
@@ -20,6 +21,9 @@ type Result = {
     purchaseCost: number;
     detourFuelCost: number | null;
     totalCost: number | null;
+    latitude: number;
+    longitude: number;
+    availability: string;
   }>;
 };
 
@@ -105,11 +109,13 @@ export function TrueCostFeature() {
             <p>{result.kmPerLitre ? t("efficiency", { value: result.kmPerLitre.toFixed(1) }) : t("missingEfficiency")}</p>
           </section>
           <div className="station-list">
+            <TrueCostMap markers={result.stations.map((station) => ({ name: station.name, latitude: station.latitude, longitude: station.longitude, warning: station.availability === "unavailable" ? t("fuelFinished") : undefined }))} />
             {result.stations.map((station) => (
               <section className="dashboard-card" key={station.id}>
                 <h2>{station.name}</h2>
                 {station.address && <p>{station.address}</p>}
                 <p>{t("detour", { distance: station.detourKm.toFixed(1) })}</p>
+                {station.availability === "unavailable" && <p className="inline-alert" role="status">{t("fuelFinished")}</p>}
                 <p>{t("purchase", { amount: station.purchaseCost.toFixed(2) })}</p>
                 {station.totalCost === null ? <p>{t("partialTotal")}</p> : <p><strong>{t("total", { amount: station.totalCost.toFixed(2) })}</strong></p>}
                 {station.isDemo && <span className="demo-badge">{t("demo")}</span>}

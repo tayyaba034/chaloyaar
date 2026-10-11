@@ -76,7 +76,22 @@ export async function POST(request: NextRequest) {
     ? (Number(last) - Number(first)) / totalLitres
     : null;
   const directDistanceKm = distanceKm(origin, destination);
-  const stations = (stationsResult.data ?? [])
+  const stationRows = stationsResult.data ?? [];
+  const availabilityResult = stationRows.length
+    ? await access.supabase
+      .from("station_service_availability")
+      .select("station_id,service_type,status,updated_at")
+      .in("station_id", stationRows.map((station) => station.id))
+    : { data: [], error: null };
+  if (availabilityResult.error) {
+    console.error("TrueCost availability query failed", availabilityResult.error.message);
+    return responseError("TRUECOST_UNAVAILABLE", "The estimate is temporarily unavailable.", 503);
+  }
+  const stationAvailability = new Map<string, string>();
+  for (const item of availabilityResult.data ?? []) {
+    stationAvailability.set(`${item.station_id}:${item.service_type}`, item.status);
+  }
+  const stations = stationRows
     .filter((station) => Array.isArray(station.supported_fuels) && station.supported_fuels.includes(fuelType))
     .map((station) => {
       const stationPoint = { latitude: Number(station.latitude), longitude: Number(station.longitude) };
@@ -93,6 +108,9 @@ export async function POST(request: NextRequest) {
         name: station.name,
         address: station.address,
         isDemo: station.is_demo,
+        latitude: Number(station.latitude),
+        longitude: Number(station.longitude),
+        availability: stationAvailability.get(`${station.id}:${fuelType}`) ?? "unknown",
         directDistanceKm,
         viaStationDistanceKm,
         ...estimate,

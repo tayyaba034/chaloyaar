@@ -1531,3 +1531,26 @@ p {
     transition-duration: 0.01ms !important;
   }
 }
+.truecost-map {
+  min-height: 320px;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.truecost-marker {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #176b87;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
+}
+
+.truecost-marker.has-warning {
+  background: #b42318;
+}
