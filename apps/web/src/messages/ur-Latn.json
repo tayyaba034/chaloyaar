@@ -1,0 +1,475 @@
+{
+  "metadata": {
+    "title": "Chalo Yaar",
+    "shortName": "Chalo Yaar",
+    "description": "Fuel aur raste ki madad, saaf maloomat ke saath."
+  },
+  "home": {
+    "brand": "Chalo Yaar",
+    "title": "Fuel dhoondein, madad paein",
+    "subtitle": "Saaf maloomat ke saath petrol aur madad dhoondein.",
+    "actionsLabel": "Zaroori kaam",
+    "actions": {
+      "fuel": "Petrol Kidhar?",
+      "savings": "Sasta Scene",
+      "help": "Madad Chahiye",
+      "car": "Meri Gaari"
+    },
+    "settings": "Settings",
+    "autoRead": "Yeh screen khud awaaz mein sunein",
+    "settingsError": "Setting save nahi ho saki. Dobara koshish karein.",
+    "safety": "Chalo Yaar emergency service nahi hai. Zaroorat par qareebi emergency service se rabta karein."
+  },
+  "landing": {
+    "skipToContent": "Content par jayein",
+    "navigationLabel": "Aham menu",
+    "signIn": "Log in",
+    "signOut": "Log out",
+    "logoAlt": "Chalo Yaar ka logo: Fuel. Help. Move.",
+    "city": "Faisalabad pilot",
+    "browseStations": "Qareeb petrol dhoondein",
+    "signUp": "Account banayein",
+    "heroTitle": "Dekhein kin pumps par fuel hai, aur ye kis ne bataya.",
+    "heroSubtitle": "Qareebi stations par petrol, diesel aur CNG dekhein. Har haal ke saath report ka waqt likha hai.",
+    "preview": {
+      "ariaLabel": "Station card ki misaal",
+      "example": "Misaal",
+      "name": "Canal Road",
+      "meta": "1.8 km door",
+      "reportedRecently": "12 minute pehle report hui",
+      "reportedEarlier": "40 minute pehle report hui",
+      "expired": "Report purani ho gayi",
+      "noReport": "Abhi koi report nahi"
+    },
+    "status": {
+      "available": "Available",
+      "queue": "Line ki report",
+      "stale": "Purani report",
+      "unavailable": "Available nahi",
+      "unknown": "Unknown"
+    },
+    "facts": {
+      "label": "Chalo Yaar numbers mein",
+      "fuels": "fuel: petrol, diesel aur CNG",
+      "labels": "haal ke nishan, har ek ke saath report ka waqt",
+      "languages": "zabanein, aur har screen suni bhi ja sakti hai"
+    },
+    "legendTitle": "Unknown ka matlab hai abhi kisi ne confirm nahi kiya.",
+    "legendBody": "Har fuel ka haal 5 mein se ek nishan se dikhaya jata hai: icon, lafz aur report ka waqt. Sirf rang par bharosa nahi.",
+    "legend": {
+      "available": "Haal hi ki report ke mutabiq ye fuel mojood hai.",
+      "queue": "Fuel mojood hai, magar kisi driver ne line ki report di.",
+      "stale": "Aakhri report purani ho chuki hai. Jaane se pehle tasdeeq karein.",
+      "unavailable": "Haal hi ki report ke mutabiq ye fuel khatam hai.",
+      "unknown": "Is fuel ki abhi koi report nahi. Hum andaza lagane ke bajaye Unknown likhte hain, aur maloomat na hone ko khatam nahi samajhte."
+    },
+    "actionsTitle": "Home screen par 4 button. Bas yehi poori app hai.",
+    "actionsBody": "Bare button, asaan alfaaz aur har screen par speaker, ek haath mein phone ke liye banaya gaya.",
+    "actions": {
+      "fuel": "Qareebi stations petrol, diesel ya CNG ke liye, haal, faasle aur raaste ke saath.",
+      "help": "Puncture, battery ya towing ki darkhwast, sirf aap ke ilaqe ke approved madadgaron ko.",
+      "savings": "Fuel bharwane ka asal kharcha dekhein, wahan tak jaane ke izafi fuel samait.",
+      "car": "Har dafa fuel ka record rakhein aur mileage aur mahana kharcha dekhein."
+    },
+    "liveTag": "Abhi available",
+    "comingTag": "Jald aa raha hai",
+    "voiceTitle": "Har screen 4 zabanon mein suni ja sakti hai.",
+    "voiceBody": "Kisi bhi card par speaker dabayein. Zaban jab chahein badlein, aap ka intikhab isi phone par mehfooz rehta hai.",
+    "voiceSample": "Chalo Yaar fuel ka haal report ke waqt ke saath dikhata hai.",
+    "voiceTry": "Namoona sunein",
+    "stepsTitle": "Apni gali se pump tak, 3 qadmon mein",
+    "steps": {
+      "location": {
+        "title": "Jagah batayein ya ilaqa chunein",
+        "description": "GPS istemal karein, ya jagah na batana chahein to list se ilaqa chunein."
+      },
+      "choose": {
+        "title": "Qareebi stations dekhein",
+        "description": "Fuel, haal, report ka waqt aur faasla saath saath dekhein."
+      },
+      "go": {
+        "title": "Raasta kholein",
+        "description": "Apne phone ki map app mein seedha raasta kholein."
+      }
+    },
+    "joinTitle": "Line dekhi? Agle driver ko batayein.",
+    "joinDescription": "Account ke saath aap station par fuel ka haal report kar sakte hain aur apni gaari save kar sakte hain.",
+    "footerPilot": "Faisalabad pilot. Demo likhe stations ki maloomat namoona hai.",
+    "footerLinksLabel": "Footer"
+  },
+  "stations": {
+    "title": "Petrol Kidhar?",
+    "subtitle": "Qareeb petrol station dhoondein. Nikalne se pehle maloomat dekhein.",
+    "city": "FAISALABAD",
+    "signIn": "Log in",
+    "areaLabel": "Ilaqa chunein",
+    "areas": {
+      "city-centre": "Shehar ka markaz",
+      "susan-road": "Susan Road",
+      "d-ground": "D-Ground"
+    },
+    "useLocation": "Meri jagah istemal karein",
+    "locationUnavailable": "Is device ki jagah nahi mil saki. Koi ilaqa chunein.",
+    "locationDenied": "Aap ne jagah share nahi ki. Koi ilaqa chunein.",
+    "filtersTitle": "Fuel chunein",
+    "fuelFilter": "Fuel ke mutabiq",
+    "fuels": {
+      "all": "Sab",
+      "petrol": "Petrol",
+      "diesel": "Diesel",
+      "cng": "CNG"
+    },
+    "viewLabel": "List ya map chunein",
+    "listView": "List",
+    "mapView": "Map",
+    "nearbyTitle": "Qareeb ke stations",
+    "resultCount": "{count} jagah",
+    "loading": "Stations load ho rahe hain",
+    "loadError": "Stations load nahi ho sake. Dobara koshish karein.",
+    "emptyTitle": "Yahan station nahi mila",
+    "emptyMessage": "Doosra ilaqa chunein ya fuel filter hata dein.",
+    "unknownStatus": "Haalat maloom nahi",
+    "unknownPrice": "Sarkari qeemat maloom nahi",
+    "unverified": "Tasdeeq nahi hui",
+    "demo": "Demo data",
+    "sourceLabel": "Station ki maloomat: {source}",
+    "updatedAt": "jaanch {date}",
+    "approxDistance": "Taqreeban {distance} km (seedha fasla)",
+    "roadDistance": "Sarak se {distance} km",
+    "routeTime": "taqreeban {minutes} minute",
+    "routeError": "Sarak ka fasla nahi mila. Andazay ka fasla dikhaya hai.",
+    "checkRoute": "Rasta dekhein",
+    "directions": "Rasta kholein",
+    "mapNeedsKey": "Map aglay marhalay mein aayega. List abhi dastiyab hai.",
+    "retry": "Dobara koshish karein",
+    "sourceDetails": "Source dekhein"
+  },
+  "auth": {
+    "title": "Chalo Yaar account",
+    "signInTitle": "Wapas khush aamdeed",
+    "signUpTitle": "Apna account banayein",
+    "subtitle": "Text message ya email par aik baar ka code lein.",
+    "returnPrompt": "Aagay jane ke liye login karein. Hum aap ko usi page par wapas le aayenge.",
+    "usePassword": "Email aur password se login",
+    "useOneTimeCode": "Aik martaba code istemal karein",
+    "passwordLabel": "Password",
+    "signInWithPassword": "Password se login karein",
+    "passwordError": "Is email aur password se login nahi ho saka. Check kar ke dobara koshish karein.",
+    "modeLabel": "Account ka kaam",
+    "methodLabel": "Code ka tareeqa chunein",
+    "signIn": "Log in",
+    "signUp": "Account banayein",
+    "phone": "Phone",
+    "email": "Email",
+    "phoneLabel": "Country code ke saath phone number",
+    "emailLabel": "Email address",
+    "phonePlaceholder": "+92 3XX XXXXXXX",
+    "emailPlaceholder": "you@example.com",
+    "sendCode": "Code bhejein",
+    "sending": "Bheja ja raha hai…",
+    "codeSent": "Code bhej diya hai. Apne messages dekhein.",
+    "codeLabel": "Aik baar ka code",
+    "enterCode": "{identity} par bheja gaya code likhein.",
+    "verifyCode": "Code confirm karein",
+    "verifying": "Check ho raha hai…",
+    "sendError": "Code nahi bhej sake. Tafseel check kar ke phir koshish karein.",
+    "verifyError": "Yeh code nahi chala. Check kar ke phir koshish karein.",
+    "notConfigured": "Login abhi connect nahi hai. Chalanay ke liye Supabase settings add karein.",
+    "changeIdentity": "Doosra phone ya email istemal karein",
+    "terms": "Aap ki maloomat sirf login ke liye hai. Chalo Yaar emergency service nahi hai.",
+    "continueAsGuest": "Bina account ke dekhte rahein",
+    "visualTitle": "Account se Chalo Yaar mein 3 cheezein milti hain",
+    "benefits": {
+      "report": "Station par fuel ka haal report karein taake agle driver ko pata ho.",
+      "car": "Apni gaari save karein aur mileage aur fuel ka kharcha dekhein.",
+      "help": "Puncture, battery ya towing ki madad mangein."
+    },
+    "backHome": "Wapas home par"
+  },
+  "shell": {
+    "driver": {
+      "navigationLabel": "Driver navigation",
+      "active": "Yahan",
+      "autoRead": "Awaaz mein sunein",
+      "settingsError": "Setting save nahi ho saki. Dobara koshish karein.",
+      "profileMenu": "Profile menu",
+      "profile": "Mera account",
+      "settings": "Settings",
+      "logout": "Log out",
+      "signIn": "Log in",
+      "guestBrowse": "Stations dekhne ke liye login zaroori nahi.",
+      "navigation": {
+        "home": "Ghar",
+        "stations": "Petrol Kidhar?",
+        "truecost": "Sasta Scene",
+        "help": "Madad Chahiye",
+        "vehicle": "Meri Gaari"
+      }
+    },
+    "provider": {
+      "navigationLabel": "Provider navigation",
+      "requests": "Requests",
+      "services": "Meri services",
+      "profile": "Profile",
+      "logout": "Log out",
+      "pendingTitle": "Tasdeeq baqi hai",
+      "pendingMessage": "Aap ke provider profile ki jaanch ho rahi hai. Abhi requests nahi dekh sakte.",
+      "suspendedTitle": "Provider access rok di gayi",
+      "suspendedMessage": "Aap ka provider account rok diya gaya hai. Madad ke liye Chalo Yaar se rabta karein.",
+      "homeTitle": "Provider dashboard"
+    },
+    "admin": {
+      "navigationLabel": "Admin navigation",
+      "overview": "Overview",
+      "fuelPrices": "Fuel prices",
+      "stations": "Stations",
+      "reports": "Reports",
+      "providers": "Providers",
+      "requests": "Requests",
+      "coverage": "Ilaaqay",
+      "audit": "Tabdeeliyon ka record",
+      "coverageWarning": "Maloomat mehdood hai. Kami ki tasdeeq nahi.",
+      "homeTitle": "Admin overview"
+    }
+  },
+  "dashboard": {
+    "driver": {
+      "greeting": "Assalamu alaikum, {name}",
+      "greetingGuest": "Assalamu alaikum",
+      "summary": "Aap ka Chalo Yaar dashboard.",
+      "loading": "Dashboard ki maloomat aa rahi hai",
+      "nearestTitle": "Qareebi petrol station",
+      "noStation": "Petrol ki tasdeeq shuda maloomat wala station abhi nahi.",
+      "distance": "Faisalabad City Centre se taqreeban {distance} km (seedha fasla)",
+      "age": "Aakhri report: {age}",
+      "noReportTime": "Fuel availability ki report nahi.",
+      "source": "Source: {source}",
+      "sources": {
+        "user": "driver ki report",
+        "station": "station ki report",
+        "admin": "admin ki jaanch"
+      },
+      "noCurrentReport": "Maujooda report nahi",
+      "available": "Dastiyab",
+      "unknown": "Unknown",
+      "stale": "Purani ittila",
+      "unavailable": "Dastiyab nahi",
+      "queueReported": "Qatar ki ittila",
+      "demo": "Demo data",
+      "activeRequestTitle": "Aap ki madad ki request",
+      "monthlySpend": "Is mahinay ka fuel kharch",
+      "monthlySpendValue": "Rs {amount}",
+      "monthlySpendEmpty": "Is mahinay koi log nahi. Pehla fuel log add karein.",
+      "kmPerLitre": "Ausat fuel istemal",
+      "kmPerLitreValue": "{value} km/L",
+      "kmPerLitreEmpty": "km/L dekhne ke liye odometer reading add karein.",
+      "officialPrice": "Sarkari fuel price",
+      "officialPriceLine": "Rs {price}/L · sarkari rate · laagu {date} · check {time}",
+      "officialPriceUnknown": "Sarkari price abhi darj nahi.",
+      "noData": "Abhi maloomat nahi",
+      "loadError": "Dashboard load nahi ho saka. Dobara koshish karein.",
+      "retry": "Dobara koshish karein",
+      "report": "Station ki ittila dein",
+      "seeStations": "Stations dekhein",
+      "addFuelLog": "Fuel log add karein",
+      "viewRequest": "Request dekhein",
+      "serviceLabel": "Service: {service}",
+      "services": {
+        "puncture": "Puncture help",
+        "battery": "Battery help",
+        "towing": "Towing"
+      },
+      "requestStatuses": {
+        "requested": "Request bhej di",
+        "quoted": "Quote mil gaya",
+        "confirmed": "Confirm ho gaya",
+        "en_route": "Provider raste mein hai",
+        "completed": "Mukammal",
+        "cancelled": "Cancel"
+      }
+    },
+    "provider": {
+      "greeting": "Assalamu alaikum, {name}",
+      "homeTitle": "Provider dashboard",
+      "approvedBanner": "Provider verify ho gaya",
+      "loading": "Requests aa rahi hain",
+      "today": "Aaj ki requests",
+      "emptyTitle": "Abhi koi request nahi",
+      "emptyMessage": "Aap ki services ki approved requests yahan dikhengi.",
+      "serviceLabel": "Service: {service}",
+      "accept": "Qabool karein",
+      "decline": "Inkaar karein",
+      "enRoute": "Raste mein",
+      "completed": "Mukammal",
+      "notReady": "Request ke buttons aglay marhalay mein chalenge.",
+      "locationPrivate": "Qabool karne se pehle customer ki location aur contact chhupay rahenge.",
+      "loadError": "Requests load nahi ho sakin. Dobara koshish karein.",
+      "demo": "Demo data",
+      "services": {
+        "puncture": "Puncture help",
+        "battery": "Battery help",
+        "towing": "Towing"
+      },
+      "requestStatuses": {
+        "requested": "Nayi request",
+        "quoted": "Quote bhej diya",
+        "confirmed": "Confirm ho gaya",
+        "en_route": "Raste mein",
+        "completed": "Mukammal",
+        "cancelled": "Cancel"
+      }
+    },
+    "admin": {
+      "newReports": "Nayi reports",
+      "pendingProviders": "Tasdeeq ke muntazir providers",
+      "openComplaints": "Khuli complaints",
+      "lastFuelPrice": "Aakhri sarkari price update",
+      "noPrice": "Sarkari price darj nahi",
+      "oldPrice": "Sarkari price purani ho sakti hai. Effective date check karein.",
+      "loadError": "Overview load nahi hua. Dobara koshish karein.",
+      "noData": "Abhi maloomat nahi",
+      "loading": "Overview aa raha hai"
+    },
+    "placeholders": {
+      "truecost": {
+        "title": "Sasta Scene",
+        "message": "Fuel cost aur raste ka muqabla aglay marhalay mein hoga.",
+        "icon": "🪙"
+      },
+      "help": {
+        "title": "Madad Chahiye",
+        "message": "Raste ki madad ki requests aglay marhalay mein hongi.",
+        "icon": "🧰"
+      },
+      "helpNew": {
+        "title": "Raste par madad mangein",
+        "message": "Puncture, battery aur towing requests baad mein aayengi.",
+        "icon": "🧰"
+      },
+      "helpDetail": {
+        "title": "Request ki tafseel",
+        "message": "Madad feature tayyar hone par request ki tafseel yahan aayegi.",
+        "icon": "📋"
+      },
+      "vehicle": {
+        "title": "Meri Gaari",
+        "message": "Gaari aur fuel log tools aglay marhalay mein aayenge.",
+        "icon": "🚗"
+      },
+      "vehicleLog": {
+        "title": "Fuel log add karein",
+        "message": "Fuel log aglay marhalay mein aayega.",
+        "icon": "🧾"
+      },
+      "settings": {
+        "title": "Settings",
+        "message": "Zaban aur audio preferences menu mein hain. Mazeed settings baad mein aayengi.",
+        "icon": "⚙️"
+      },
+      "stationReport": {
+        "title": "Station ki ittila dein",
+        "message": "Station ki report aglay marhalay mein bheji ja sakegi.",
+        "icon": "📝"
+      },
+      "providerRequests": {
+        "title": "Requests",
+        "message": "Request ka kaam aglay marhalay mein milega.",
+        "icon": "🧰"
+      },
+      "providerServices": {
+        "title": "Meri services",
+        "message": "Services ki settings aglay marhalay mein milengi.",
+        "icon": "🛠️"
+      },
+      "providerProfile": {
+        "title": "Provider profile",
+        "message": "Profile ki tafseel aglay marhalay mein milegi.",
+        "icon": "👤"
+      },
+      "adminFuelPrices": {
+        "title": "Fuel prices",
+        "message": "Sarkari price add karna aur purani prices dekhna aglay marhalay mein hoga.",
+        "icon": "⛽"
+      },
+      "adminStations": {
+        "title": "Stations",
+        "message": "Station verify aur theek karna aglay marhalay mein hoga.",
+        "icon": "📍"
+      },
+      "adminReports": {
+        "title": "Reports",
+        "message": "Report check karne ki list aglay marhalay mein milegi.",
+        "icon": "📝"
+      },
+      "adminProviders": {
+        "title": "Providers",
+        "message": "Provider approve ya suspend karne ke tools aglay marhalay mein honge.",
+        "icon": "🧰"
+      },
+      "adminRequests": {
+        "title": "Requests",
+        "message": "Requests ka jaiza aglay marhalay mein milega.",
+        "icon": "📋"
+      },
+      "adminCoverage": {
+        "title": "Coverage",
+        "message": "Maloomat mehdood hai. Kami ki tasdeeq nahi.",
+        "icon": "🗺️"
+      },
+      "adminAudit": {
+        "title": "Audit log",
+        "message": "Admin ke kaam, jab write tools aayenge, yahan dikhengay.",
+        "icon": "🔎"
+      }
+    },
+    "stationDetail": {
+      "title": "Station ki tafseel",
+      "back": "Stations par wapas",
+      "notFound": "Yeh station nahi mila.",
+      "report": "Ittila dein",
+      "directions": "Rasta kholein",
+      "priceUnknown": "Sarkari price: Unknown",
+      "statusUnknown": "Fuel ki haalat: Unknown",
+      "source": "Source: {source}",
+      "demo": "Demo data"
+    }
+  },
+  "language": {
+    "title": "Apni zaban chunein",
+    "description": "Woh zaban chunein jismein aap app istemal karna chahte hain.",
+    "change": "Zaban",
+    "error": "Zaban save nahi ho saki. Dobara koshish karein.",
+    "names": {
+      "ur": "اردو",
+      "en": "English",
+      "ur-Latn": "Roman Urdu",
+      "pa-Arab": "پنجابی"
+    }
+  },
+  "voice": {
+    "button": "Awaaz mein sunein",
+    "unavailable": "Is device par is zaban ki awaaz mojood nahi.",
+    "error": "Awaaz nahi chal saki. Aap matn parh sakte hain."
+  },
+  "states": {
+    "loading": "Page load ho raha hai",
+    "errorTitle": "Yeh page load nahi ho saka",
+    "errorMessage": "Dobara koshish karein. Aap ki saved maloomat nahi badli.",
+    "retry": "Dobara koshish karein"
+  },
+  "placeholder": {
+    "back": "Wapas",
+    "message": "Yeh hissa aglay marhalay mein aayega.",
+    "features": {
+      "fuel": "Petrol Kidhar?",
+      "savings": "Sasta Scene",
+      "help": "Madad Chahiye",
+      "car": "Meri Gaari"
+    }
+  },
+  "offline": {
+    "title": "Internet nahi hai",
+    "message": "Kuch maloomat ke liye internet chahiye. Connection milne par dobara koshish karein.",
+    "retry": "Dobara koshish karein"
+  }
+}

@@ -1,0 +1,316 @@
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/figtree";
+
+/*
+ * Shared brand layer for the public pages (landing and auth).
+ * Palette comes from the Chalo Yaar logo: olive road verge,
+ * terracotta pin, brown wordmark, on an olive-tinted paper.
+ * Radius rule: interactive controls are pills, content panels 1.75rem,
+ * inner cards 1.25rem, small labels 0.5rem.
+ */
+.cy-root {
+  --cy-paper: #f2f2ea;
+  --cy-surface: #fbfbf6;
+  --cy-ink: #33241a;
+  --cy-body: #5a5144;
+  --cy-line: #d9d9cb;
+  --cy-olive: #6f8160;
+  --cy-olive-deep: #44533a;
+  --cy-olive-wash: #e3e8d6;
+  --cy-accent: #ad5320;
+  --cy-accent-hover: #93451a;
+  --cy-accent-wash: #f6e2d3;
+  --cy-shadow: 0 1.5rem 3.5rem -1.5rem rgb(68 83 58 / 35%);
+  --cy-font-display: "Bricolage Grotesque Variable", "Noto Naskh Arabic", Tahoma, sans-serif;
+  --cy-font-body: "Figtree Variable", "Noto Naskh Arabic", Tahoma, sans-serif;
+  --cy-lh-display: 1.02;
+  --cy-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  min-height: 100dvh;
+  overflow-x: clip;
+  background: var(--cy-paper);
+  color: var(--cy-ink);
+  font-family: var(--cy-font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* Naskh script needs room above and below; Latin display faces do not cover it. */
+[dir="rtl"] .cy-root {
+  --cy-font-display: "Noto Naskh Arabic", Tahoma, sans-serif;
+  --cy-font-body: "Noto Naskh Arabic", Tahoma, sans-serif;
+  --cy-lh-display: 1.55;
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+
+html:has(.cy-root) {
+  scroll-padding-top: 5.5rem;
+}
+
+.cy-root a,
+.cy-root button {
+  touch-action: manipulation;
+}
+
+.cy-skip {
+  position: absolute;
+  z-index: 6;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 1rem;
+  border-radius: 999px;
+  background: var(--cy-ink);
+  padding: 0.7rem 1.2rem;
+  color: var(--cy-paper);
+  font-weight: 700;
+  translate: 0 -200%;
+}
+
+.cy-skip:focus-visible {
+  translate: 0 0;
+}
+
+.cy-root h1,
+.cy-root h2,
+.cy-root h3,
+.cy-root p {
+  margin: 0;
+}
+
+.cy-root h1,
+.cy-root h2 {
+  font-family: var(--cy-font-display);
+  font-weight: 700;
+  line-height: var(--cy-lh-display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+[dir="rtl"] .cy-root h1,
+[dir="rtl"] .cy-root h2 {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.cy-container {
+  width: min(100% - 2rem, 76rem);
+  margin-inline: auto;
+}
+
+.cy-flip {
+  flex: none;
+}
+
+[dir="rtl"] .cy-flip {
+  transform: scaleX(-1);
+}
+
+/* Buttons */
+.cy-button {
+  display: inline-flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding-inline: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 200ms var(--cy-ease),
+    border-color 200ms var(--cy-ease),
+    transform 200ms var(--cy-ease);
+}
+
+.cy-button:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.cy-button svg {
+  font-size: 1.15em;
+  transition: translate 250ms var(--cy-ease);
+}
+
+.cy-button:hover svg {
+  translate: 0.2rem 0;
+}
+
+[dir="rtl"] .cy-button:hover svg {
+  translate: -0.2rem 0;
+}
+
+.cy-button--accent {
+  background: var(--cy-accent);
+  color: #fffaf4;
+}
+
+.cy-button--accent:hover {
+  background: var(--cy-accent-hover);
+}
+
+.cy-button--dark {
+  min-height: 3rem;
+  background: var(--cy-ink);
+  color: var(--cy-paper);
+}
+
+.cy-button--dark:hover {
+  background: var(--cy-olive-deep);
+}
+
+.cy-button--outline {
+  border-color: var(--cy-ink);
+  color: var(--cy-ink);
+}
+
+.cy-button--outline:hover {
+  background: var(--cy-ink);
+  color: var(--cy-paper);
+}
+
+.cy-button--ghost-light {
+  border-color: rgb(242 242 234 / 55%);
+  color: var(--cy-paper);
+}
+
+.cy-button--ghost-light:hover {
+  border-color: var(--cy-paper);
+  background: rgb(242 242 234 / 10%);
+}
+
+/* The shared speaker control, restyled to sit with pill buttons. */
+.cy-root .speaker-button {
+  width: 3.5rem;
+  min-width: 3.5rem;
+  min-height: 3.5rem;
+  border: 2px solid var(--cy-line);
+  border-radius: 999px;
+  background: var(--cy-surface);
+}
+
+.cy-root .speaker-button:hover {
+  border-color: var(--cy-olive);
+}
+
+.cy-root .voice-message:empty {
+  display: none;
+}
+
+/* Header */
+.cy-header {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  border-block-end: 1px solid transparent;
+  background: var(--cy-paper);
+}
+
+.cy-header-inner {
+  display: flex;
+  min-height: 4.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cy-brand {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--cy-ink);
+  text-decoration: none;
+}
+
+.cy-brand-mark {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--cy-accent);
+  color: #fffaf4;
+  font-size: 1.3rem;
+}
+
+.cy-brand-word {
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.cy-brand-word span {
+  color: var(--cy-olive);
+}
+
+.cy-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cy-nav-link {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  gap: 0.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  padding-inline: 0.9rem;
+  color: var(--cy-ink);
+  cursor: pointer;
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cy-nav-link:hover {
+  background: var(--cy-olive-wash);
+}
+
+/* Small text tags, e.g. live vs coming-next features. */
+.cy-tag {
+  border-radius: 0.5rem;
+  background: var(--cy-paper);
+  padding: 0.2rem 0.6rem;
+  color: var(--cy-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cy-tag--live {
+  background: var(--cy-accent-wash);
+  color: #7a3510;
+}
+
+/* Status chips: icon + word, colour as a third cue. */
+.cy-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cy-status--available { background: #e0efd9; color: #24572d; }
+.cy-status--queue { background: #f8ecc4; color: #5f4300; }
+.cy-status--stale { background: #fbe3d2; color: #873a0d; }
+.cy-status--unavailable { background: #f9dfdb; color: #8a261d; }
+.cy-status--unknown { background: #e6e5de; color: #43413b; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cy-root *,
+  .cy-root *::before,
+  .cy-root *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

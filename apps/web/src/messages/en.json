@@ -1,0 +1,475 @@
+{
+  "metadata": {
+    "title": "Chalo Yaar",
+    "shortName": "Chalo Yaar",
+    "description": "Fuel discovery and roadside help with clear information."
+  },
+  "home": {
+    "brand": "Chalo Yaar",
+    "title": "Fuel. Roadside help. Sorted.",
+    "subtitle": "Find fuel and get help with clear information.",
+    "actionsLabel": "Main actions",
+    "actions": {
+      "fuel": "Petrol Kidhar?",
+      "savings": "Sasta Scene",
+      "help": "Madad Chahiye",
+      "car": "Meri Gaari"
+    },
+    "settings": "Settings",
+    "autoRead": "Read this screen aloud automatically",
+    "settingsError": "Your setting could not be saved. Please try again.",
+    "safety": "Chalo Yaar is not an emergency service. Contact local emergency services when needed."
+  },
+  "landing": {
+    "skipToContent": "Skip to content",
+    "navigationLabel": "Main navigation",
+    "signIn": "Log in",
+    "signOut": "Log out",
+    "logoAlt": "Chalo Yaar logo: Fuel. Help. Move.",
+    "city": "Faisalabad pilot",
+    "browseStations": "Find fuel nearby",
+    "signUp": "Create account",
+    "heroTitle": "See which pumps have fuel, and who said so.",
+    "heroSubtitle": "Check petrol, diesel and CNG at nearby stations. Every status shows the time it was reported.",
+    "preview": {
+      "ariaLabel": "Example of a station card",
+      "example": "Example",
+      "name": "Canal Road",
+      "meta": "1.8 km away",
+      "reportedRecently": "Reported 12 min ago",
+      "reportedEarlier": "Reported 40 min ago",
+      "expired": "Report expired",
+      "noReport": "No report yet"
+    },
+    "status": {
+      "available": "Available",
+      "queue": "Queue reported",
+      "stale": "Stale",
+      "unavailable": "Unavailable",
+      "unknown": "Unknown"
+    },
+    "facts": {
+      "label": "Chalo Yaar in numbers",
+      "fuels": "fuels tracked: petrol, diesel and CNG",
+      "labels": "status labels, each with a report time",
+      "languages": "languages, and every screen can be read aloud"
+    },
+    "legendTitle": "Unknown means nobody has confirmed it yet.",
+    "legendBody": "Every fuel status uses one of 5 labels: an icon, a word and the report time. Colour is never the only clue.",
+    "legend": {
+      "available": "A recent report says this fuel is in stock.",
+      "queue": "Fuel is there, but a driver reported a line.",
+      "stale": "The last report has expired. Check before you drive over.",
+      "unavailable": "A recent report says this fuel has run out.",
+      "unknown": "No one has reported this fuel yet. We show Unknown instead of guessing, and we never treat missing data as empty."
+    },
+    "actionsTitle": "4 buttons on the home screen. That is the whole app.",
+    "actionsBody": "Big targets, plain words and a speaker on every screen, built for a phone in one hand.",
+    "actions": {
+      "fuel": "Nearby stations for petrol, diesel or CNG, with status, distance and directions.",
+      "help": "Puncture, battery or towing, sent only to approved providers in your area.",
+      "savings": "Compare the real cost of a fill-up, including the extra fuel to drive there.",
+      "car": "Log each refuel to track mileage and monthly fuel spend."
+    },
+    "liveTag": "Live now",
+    "comingTag": "Coming next",
+    "voiceTitle": "Every screen can be read aloud, in 4 languages.",
+    "voiceBody": "Tap the speaker on any card. Change language whenever you like; your choice stays saved on this phone.",
+    "voiceSample": "Chalo Yaar shows fuel status with the time it was reported.",
+    "voiceTry": "Hear a sample",
+    "stepsTitle": "From your street to the pump in 3 steps",
+    "steps": {
+      "location": {
+        "title": "Share location or pick an area",
+        "description": "Use GPS, or choose your area from the list if you prefer not to share."
+      },
+      "choose": {
+        "title": "Compare nearby stations",
+        "description": "See fuels, status, report time and distance side by side."
+      },
+      "go": {
+        "title": "Open directions",
+        "description": "Hand off to the maps app already on your phone."
+      }
+    },
+    "joinTitle": "Seen a queue? Tell the next driver.",
+    "joinDescription": "With an account you can report fuel status at a station and save your car.",
+    "footerPilot": "A Faisalabad pilot. Stations marked Demo use sample data.",
+    "footerLinksLabel": "Footer"
+  },
+  "stations": {
+    "title": "Petrol Kidhar?",
+    "subtitle": "Find a fuel stop. Check what we know before you go.",
+    "city": "FAISALABAD",
+    "signIn": "Log in",
+    "areaLabel": "Choose an area",
+    "areas": {
+      "city-centre": "City Centre",
+      "susan-road": "Susan Road",
+      "d-ground": "D-Ground"
+    },
+    "useLocation": "Use my location",
+    "locationUnavailable": "Location is not available on this device. Choose an area instead.",
+    "locationDenied": "Location was not shared. Choose an area instead.",
+    "filtersTitle": "Pick your fuel",
+    "fuelFilter": "Filter by fuel",
+    "fuels": {
+      "all": "All",
+      "petrol": "Petrol",
+      "diesel": "Diesel",
+      "cng": "CNG"
+    },
+    "viewLabel": "Choose list or map",
+    "listView": "List",
+    "mapView": "Map",
+    "nearbyTitle": "Fuel stops around you",
+    "resultCount": "{count} places",
+    "loading": "Loading stations",
+    "loadError": "Stations could not be loaded. Please try again.",
+    "emptyTitle": "No stations found here",
+    "emptyMessage": "Try another area or remove the fuel filter.",
+    "unknownStatus": "Status unknown",
+    "unknownPrice": "Official price unknown",
+    "unverified": "Not verified",
+    "demo": "Demo data",
+    "sourceLabel": "Station info: {source}",
+    "updatedAt": "checked {date}",
+    "approxDistance": "About {distance} km away (straight-line estimate)",
+    "roadDistance": "{distance} km by road",
+    "routeTime": "about {minutes} min",
+    "routeError": "Road distance could not be checked. Showing an approximate distance.",
+    "checkRoute": "Check route",
+    "directions": "Open directions",
+    "mapNeedsKey": "The map is coming in a later step. The station list is available now.",
+    "retry": "Try again",
+    "sourceDetails": "View source"
+  },
+  "shell": {
+    "driver": {
+      "navigationLabel": "Driver navigation",
+      "active": "Here",
+      "autoRead": "Read aloud",
+      "settingsError": "Your setting could not be saved. Please try again.",
+      "profileMenu": "Profile menu",
+      "profile": "My account",
+      "settings": "Settings",
+      "logout": "Log out",
+      "signIn": "Log in",
+      "guestBrowse": "You can browse stations without signing in.",
+      "navigation": {
+        "home": "Home",
+        "stations": "Petrol Kidhar?",
+        "truecost": "Sasta Scene",
+        "help": "Madad Chahiye",
+        "vehicle": "Meri Gaari"
+      }
+    },
+    "provider": {
+      "navigationLabel": "Provider navigation",
+      "requests": "Requests",
+      "services": "My services",
+      "profile": "Profile",
+      "logout": "Log out",
+      "pendingTitle": "Pending verification",
+      "pendingMessage": "Your provider profile is being checked. You cannot see or accept requests yet.",
+      "suspendedTitle": "Provider access paused",
+      "suspendedMessage": "Your provider account is paused. Contact Chalo Yaar support for help.",
+      "homeTitle": "Provider dashboard"
+    },
+    "admin": {
+      "navigationLabel": "Admin navigation",
+      "overview": "Overview",
+      "fuelPrices": "Fuel prices",
+      "stations": "Stations",
+      "reports": "Reports",
+      "providers": "Providers",
+      "requests": "Requests",
+      "coverage": "Coverage",
+      "audit": "Audit log",
+      "coverageWarning": "Limited information, not a confirmed shortage.",
+      "homeTitle": "Admin overview"
+    }
+  },
+  "dashboard": {
+    "driver": {
+      "greeting": "Assalamu alaikum, {name}",
+      "greetingGuest": "Assalamu alaikum",
+      "summary": "Your Chalo Yaar dashboard.",
+      "loading": "Loading dashboard information",
+      "nearestTitle": "Nearest petrol station",
+      "noStation": "No station with confirmed petrol information is available yet.",
+      "distance": "About {distance} km from Faisalabad City Centre (straight-line estimate)",
+      "age": "Last report: {age}",
+      "noReportTime": "No fuel availability report yet.",
+      "source": "Source: {source}",
+      "sources": {
+        "user": "driver report",
+        "station": "station report",
+        "admin": "admin check"
+      },
+      "noCurrentReport": "No current report",
+      "available": "Available",
+      "unknown": "Unknown",
+      "stale": "Stale",
+      "unavailable": "Unavailable",
+      "queueReported": "Queue reported",
+      "demo": "Demo data",
+      "activeRequestTitle": "Your roadside request",
+      "monthlySpend": "This month's fuel spend",
+      "monthlySpendValue": "Rs {amount}",
+      "monthlySpendEmpty": "No fuel logs this month. Add your first fill-up.",
+      "kmPerLitre": "Average fuel use",
+      "kmPerLitreValue": "{value} km/L",
+      "kmPerLitreEmpty": "Add odometer readings to see km/L.",
+      "officialPrice": "Official fuel price",
+      "officialPriceLine": "Rs {price}/L · official rate · effective {date} · checked {time}",
+      "officialPriceUnknown": "Official price not entered yet.",
+      "noData": "No data yet",
+      "loadError": "Dashboard information could not be loaded. Try again.",
+      "retry": "Try again",
+      "report": "Report station information",
+      "seeStations": "Browse stations",
+      "addFuelLog": "Add a fuel log",
+      "viewRequest": "View request",
+      "serviceLabel": "Service: {service}",
+      "services": {
+        "puncture": "Puncture help",
+        "battery": "Battery help",
+        "towing": "Towing"
+      },
+      "requestStatuses": {
+        "requested": "Request sent",
+        "quoted": "Quote received",
+        "confirmed": "Confirmed",
+        "en_route": "Provider is on the way",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "provider": {
+      "greeting": "Assalamu alaikum, {name}",
+      "homeTitle": "Provider dashboard",
+      "approvedBanner": "Provider verified",
+      "loading": "Loading requests",
+      "today": "Today's requests",
+      "emptyTitle": "No requests right now",
+      "emptyMessage": "Approved requests for your services will appear here.",
+      "serviceLabel": "Service: {service}",
+      "accept": "Accept",
+      "decline": "Decline",
+      "enRoute": "On the way",
+      "completed": "Completed",
+      "notReady": "Request actions will be enabled in a later step.",
+      "locationPrivate": "Customer location and contact stay hidden until you accept an eligible request.",
+      "loadError": "Requests could not be loaded. Try again.",
+      "demo": "Demo data",
+      "services": {
+        "puncture": "Puncture help",
+        "battery": "Battery help",
+        "towing": "Towing"
+      },
+      "requestStatuses": {
+        "requested": "New request",
+        "quoted": "Quote sent",
+        "confirmed": "Confirmed",
+        "en_route": "On the way",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "admin": {
+      "newReports": "New reports",
+      "pendingProviders": "Pending providers",
+      "openComplaints": "Open complaints",
+      "lastFuelPrice": "Last official price update",
+      "noPrice": "No official price entered",
+      "oldPrice": "This official price may be old. Check its effective date.",
+      "loadError": "Overview could not be loaded. Try again.",
+      "noData": "No data yet",
+      "loading": "Loading overview"
+    },
+    "placeholders": {
+      "truecost": {
+        "title": "Sasta Scene",
+        "message": "Compare fuel costs and route estimates in a later step.",
+        "icon": "🪙"
+      },
+      "help": {
+        "title": "Madad Chahiye",
+        "message": "Roadside request tracking will be available in a later step.",
+        "icon": "🧰"
+      },
+      "helpNew": {
+        "title": "Ask for roadside help",
+        "message": "Puncture, battery and towing requests will be added in a later step.",
+        "icon": "🧰"
+      },
+      "helpDetail": {
+        "title": "Request details",
+        "message": "Request details will appear here after the help feature is ready.",
+        "icon": "📋"
+      },
+      "vehicle": {
+        "title": "Meri Gaari",
+        "message": "Your vehicle and fuel log tools are coming in a later step.",
+        "icon": "🚗"
+      },
+      "vehicleLog": {
+        "title": "Add a fuel log",
+        "message": "Fuel logging will be available in a later step.",
+        "icon": "🧾"
+      },
+      "settings": {
+        "title": "Settings",
+        "message": "Language and audio preferences are available in this menu. More settings are coming later.",
+        "icon": "⚙️"
+      },
+      "stationReport": {
+        "title": "Report station information",
+        "message": "Station reporting will be available in a later step.",
+        "icon": "📝"
+      },
+      "providerRequests": {
+        "title": "Requests",
+        "message": "Request handling will be available in a later step.",
+        "icon": "🧰"
+      },
+      "providerServices": {
+        "title": "My services",
+        "message": "Service settings will be available in a later step.",
+        "icon": "🛠️"
+      },
+      "providerProfile": {
+        "title": "Provider profile",
+        "message": "Provider profile details will be available in a later step.",
+        "icon": "👤"
+      },
+      "adminFuelPrices": {
+        "title": "Fuel prices",
+        "message": "Official price entry and price history will be available in a later step.",
+        "icon": "⛽"
+      },
+      "adminStations": {
+        "title": "Stations",
+        "message": "Station verification and corrections will be available in a later step.",
+        "icon": "📍"
+      },
+      "adminReports": {
+        "title": "Reports",
+        "message": "The report moderation queue will be available in a later step.",
+        "icon": "📝"
+      },
+      "adminProviders": {
+        "title": "Providers",
+        "message": "Provider approval and suspension tools will be available in a later step.",
+        "icon": "🧰"
+      },
+      "adminRequests": {
+        "title": "Requests",
+        "message": "Request oversight tools will be available in a later step.",
+        "icon": "📋"
+      },
+      "adminCoverage": {
+        "title": "Coverage",
+        "message": "Limited information, not a confirmed shortage.",
+        "icon": "🗺️"
+      },
+      "adminAudit": {
+        "title": "Audit log",
+        "message": "Admin actions will appear here when write tools are added.",
+        "icon": "🔎"
+      }
+    },
+    "stationDetail": {
+      "title": "Station details",
+      "back": "Back to stations",
+      "notFound": "This station could not be found.",
+      "report": "Report information",
+      "directions": "Open directions",
+      "priceUnknown": "Official price: Unknown",
+      "statusUnknown": "Fuel status: Unknown",
+      "source": "Source: {source}",
+      "demo": "Demo data"
+    }
+  },
+  "auth": {
+    "title": "Your Chalo Yaar account",
+    "signInTitle": "Welcome back",
+    "signUpTitle": "Create your account",
+    "subtitle": "Get a one-time code by text message or email.",
+    "returnPrompt": "Log in to continue. We will bring you back to the page you wanted.",
+    "usePassword": "Use email and password",
+    "useOneTimeCode": "Use a one-time code instead",
+    "passwordLabel": "Password",
+    "signInWithPassword": "Log in with password",
+    "passwordError": "We could not log you in with that email and password. Check them and try again.",
+    "modeLabel": "Account action",
+    "methodLabel": "Choose how to get a code",
+    "signIn": "Log in",
+    "signUp": "Create account",
+    "phone": "Phone",
+    "email": "Email",
+    "phoneLabel": "Phone number with country code",
+    "emailLabel": "Email address",
+    "phonePlaceholder": "+92 3XX XXXXXXX",
+    "emailPlaceholder": "you@example.com",
+    "sendCode": "Send my code",
+    "sending": "Sending…",
+    "codeSent": "Code sent. Check your messages.",
+    "codeLabel": "One-time code",
+    "enterCode": "Enter the code sent to {identity}.",
+    "verifyCode": "Confirm code",
+    "verifying": "Checking…",
+    "sendError": "We could not send the code. Check the details and try again.",
+    "verifyError": "That code did not work. Check it and try again.",
+    "notConfigured": "Sign-in is not connected yet. Add your Supabase settings to enable it.",
+    "changeIdentity": "Use a different phone or email",
+    "terms": "We only use your details to sign you in. Chalo Yaar is not an emergency service.",
+    "continueAsGuest": "Keep browsing without an account",
+    "visualTitle": "3 things an account adds to Chalo Yaar",
+    "benefits": {
+      "report": "Report fuel status at a station so the next driver knows.",
+      "car": "Save your car to track mileage and fuel spend.",
+      "help": "Request puncture, battery or towing help."
+    },
+    "backHome": "Back to home"
+  },
+  "language": {
+    "title": "Choose your language",
+    "description": "Pick the language you want to use.",
+    "change": "Language",
+    "error": "Your language could not be saved. Please try again.",
+    "names": {
+      "ur": "اردو",
+      "en": "English",
+      "ur-Latn": "Roman Urdu",
+      "pa-Arab": "پنجابی"
+    }
+  },
+  "voice": {
+    "button": "Read aloud",
+    "unavailable": "Audio is not available for this language on this device.",
+    "error": "Audio could not be played. You can still read the text."
+  },
+  "states": {
+    "loading": "Loading this page",
+    "errorTitle": "This page did not load",
+    "errorMessage": "Please try again. Your saved information has not been changed.",
+    "retry": "Try again"
+  },
+  "placeholder": {
+    "back": "Back",
+    "message": "This part is coming in a later step.",
+    "features": {
+      "fuel": "Petrol Kidhar?",
+      "savings": "Sasta Scene",
+      "help": "Madad Chahiye",
+      "car": "Meri Gaari"
+    }
+  },
+  "offline": {
+    "title": "You're offline",
+    "message": "Some information needs an internet connection. Try again when you're back online.",
+    "retry": "Try again"
+  }
+}

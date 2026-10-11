@@ -1,0 +1,11 @@
+node_modules/
+.cache/
+.next/
+out/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+*.pem
+.DS_Store

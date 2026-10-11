@@ -1,0 +1,846 @@
+@import "../../brand.css";
+
+.cy-stations {
+  padding-block: 1rem 5rem;
+}
+
+.cy-station-app-shell .driver-topbar {
+  border-block-end-color: var(--cy-line);
+  background: rgb(242 242 234 / 96%);
+}
+
+.cy-station-app-shell .driver-topbar .brand {
+  color: var(--cy-ink);
+  font-family: var(--cy-font-display);
+}
+
+.cy-station-app-shell .driver-topbar .brand-mark {
+  background: var(--cy-olive-deep);
+  color: var(--cy-paper);
+}
+
+.cy-station-app-shell .driver-topbar select {
+  border-color: var(--cy-line);
+  border-radius: 999px;
+  background: var(--cy-surface);
+  color: var(--cy-ink);
+  font-family: var(--cy-font-body);
+}
+
+.cy-station-app-shell .driver-topbar .speaker-button {
+  border-color: var(--cy-line);
+  border-radius: 50%;
+  background: var(--cy-surface);
+}
+
+.cy-station-app-shell .driver-topbar .header-signup-link {
+  border-radius: 999px;
+  background: var(--cy-accent);
+  color: #fffaf4;
+  font-family: var(--cy-font-body);
+  text-decoration: none;
+}
+
+.cy-station-app-shell .guest-browse-note {
+  display: none;
+}
+
+.cy-station-hero,
+.cy-station-content {
+  width: min(100% - 2.5rem, 76rem);
+}
+.cy-station-card-actions svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.cy-station-hero {
+  position: relative;
+  display: grid;
+  min-height: 22rem;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.7fr);
+  align-items: center;
+  overflow: hidden;
+  margin-block-start: 1.3rem;
+  border: 1px solid rgb(68 83 58 / 9%);
+  border-radius: 2rem;
+  background:
+    radial-gradient(ellipse at 94% 8%, rgb(246 226 211 / 72%), transparent 32%),
+    radial-gradient(ellipse at 5% 100%, rgb(227 232 214 / 85%), transparent 48%),
+    #f7f6ee;
+  padding: clamp(1.5rem, 5vw, 4rem);
+}
+
+.cy-station-hero-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: 1.1rem;
+  max-width: 39rem;
+}
+
+.cy-station-hero-copy .cy-eyebrow {
+  gap: 0.45rem;
+}
+
+.cy-station-hero-copy .cy-eyebrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cy-station-hero h1 {
+  max-width: 15ch;
+  font-size: clamp(2.7rem, 5.7vw, 5rem);
+}
+
+[dir="rtl"] .cy-station-hero h1 {
+  font-size: clamp(2.45rem, 5vw, 4.2rem);
+}
+
+.cy-station-hero-copy > p {
+  max-width: 34rem;
+  color: var(--cy-body);
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+}
+
+.cy-station-hero-art {
+  position: relative;
+  width: min(100%, 21rem);
+  aspect-ratio: 1;
+  justify-self: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgb(227 232 214 / 75%) 0 28%, transparent 28.5%),
+    repeating-radial-gradient(circle at center, transparent 0 2.1rem, rgb(68 83 58 / 10%) 2.15rem 2.22rem, transparent 2.27rem 3.9rem);
+}
+
+.cy-station-orbit {
+  position: absolute;
+  inset: 15%;
+  border: 1px dashed rgb(68 83 58 / 22%);
+  border-radius: 50%;
+}
+
+.cy-station-orbit--inner {
+  inset: 31%;
+  border-style: solid;
+  border-color: rgb(68 83 58 / 15%);
+}
+
+.cy-station-map-center,
+.cy-station-map-pin {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0.7rem 1.5rem rgb(51 36 26 / 15%);
+}
+
+.cy-station-map-center {
+  top: 50%;
+  left: 50%;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 0.35rem solid var(--cy-surface);
+  border-radius: 1.55rem 1.55rem 1.55rem 0.4rem;
+  background: var(--cy-accent);
+  color: white;
+  font-size: 2rem;
+  transform: translate(-50%, -60%) rotate(-45deg);
+}
+
+.cy-station-map-center svg {
+  transform: rotate(45deg);
+}
+
+.cy-station-map-pin {
+  width: 2.9rem;
+  height: 2.9rem;
+  border: 0.25rem solid var(--cy-surface);
+  border-radius: 1rem;
+  background: var(--cy-olive-deep);
+  color: var(--cy-paper);
+  font-size: 1.25rem;
+}
+
+.cy-station-map-pin--one {
+  top: 15%;
+  left: 47%;
+}
+
+.cy-station-map-pin--two {
+  right: 7%;
+  bottom: 34%;
+  background: var(--cy-accent);
+}
+
+.cy-station-map-pin--three {
+  bottom: 10%;
+  left: 28%;
+}
+
+.cy-station-hero-speak {
+  position: absolute;
+  inset-block-start: 1.1rem;
+  inset-inline-end: 1.1rem;
+}
+
+.cy-stations .speaker-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cy-stations .speaker-button {
+  width: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
+  border: 1px solid var(--cy-line);
+  border-radius: 50%;
+  background: var(--cy-surface);
+  color: var(--cy-ink);
+  font-size: 1.1rem;
+  transition: border-color 180ms var(--cy-ease), transform 180ms var(--cy-ease);
+}
+
+.cy-stations .speaker-button:hover {
+  transform: translateY(-2px);
+  border-color: var(--cy-olive-deep);
+}
+
+.cy-stations .voice-message {
+  max-width: 13rem;
+  color: var(--cy-body);
+  font-size: 0.8rem;
+}
+
+.cy-station-content {
+  position: relative;
+  z-index: 2;
+}
+
+.cy-station-search-panel {
+  display: flex;
+  min-height: 6.3rem;
+  align-items: center;
+  gap: 1rem;
+  margin-block: -1.8rem 2.7rem;
+  border: 1px solid rgb(68 83 58 / 10%);
+  border-radius: 1.5rem;
+  background: var(--cy-surface);
+  padding: 0.85rem 1rem;
+  box-shadow: 0 1rem 2.5rem -1.6rem rgb(51 36 26 / 34%);
+}
+
+.cy-station-origin-icon,
+.cy-station-section-icon {
+  display: grid;
+  width: 3.3rem;
+  height: 3.3rem;
+  flex: 0 0 3.3rem;
+  place-items: center;
+  border-radius: 1.1rem;
+  background: var(--cy-olive-wash);
+  color: var(--cy-olive-deep);
+  font-size: 1.5rem;
+}
+
+.cy-station-area-field {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 0.15rem;
+}
+
+.cy-station-area-field label {
+  color: var(--cy-body);
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.cy-station-area-field select {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  color: var(--cy-ink);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cy-station-area-field select:focus-visible {
+  border-radius: 0.3rem;
+}
+
+.cy-station-search-divider {
+  width: 1px;
+  height: 3rem;
+  background: var(--cy-line);
+}
+
+.cy-station-location-button {
+  min-height: 3.25rem;
+  padding-inline: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.cy-station-location-button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.cy-station-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-block-end: 2.8rem;
+}
+
+.cy-station-filter-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.cy-station-section-icon {
+  width: 2.8rem;
+  height: 2.8rem;
+  flex-basis: 2.8rem;
+  border-radius: 0.95rem;
+  font-size: 1.25rem;
+}
+
+.cy-station-filter-heading h2,
+.cy-station-results-heading h2 {
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+}
+
+.cy-station-filter-heading p,
+.cy-station-results-heading p {
+  color: var(--cy-body);
+  font-size: 0.9rem;
+}
+
+.cy-station-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 0.5rem;
+}
+
+.cy-station-filter {
+  display: inline-flex;
+  min-height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--cy-line);
+  border-radius: 999px;
+  background: var(--cy-surface);
+  padding: 0.35rem 1rem;
+  color: var(--cy-body);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: border-color 180ms var(--cy-ease), background 180ms var(--cy-ease), color 180ms var(--cy-ease), transform 180ms var(--cy-ease);
+}
+
+.cy-station-filter:hover {
+  transform: translateY(-1px);
+  border-color: var(--cy-olive);
+}
+
+.cy-station-filter svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.cy-station-filter.is-selected {
+  border-color: var(--cy-ink);
+  background: var(--cy-ink);
+  color: var(--cy-paper);
+}
+
+.cy-station-filter-dot,
+.cy-station-badge-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.cy-station-cng-icon {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.cy-station-results-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-block-end: 1.1rem;
+  border-block-start: 1px solid var(--cy-line);
+  padding-block-start: 1.8rem;
+}
+
+.cy-station-results-kicker {
+  display: block;
+  margin-block-end: 0.25rem;
+  color: var(--cy-olive-deep);
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+}
+
+[dir="rtl"] .cy-station-results-kicker {
+  letter-spacing: 0;
+}
+
+.cy-station-results-heading p {
+  margin-block-start: 0.3rem;
+}
+
+.cy-station-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.cy-station-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: start;
+  gap: 0.9rem;
+  min-width: 0;
+  border: 1px solid var(--cy-line);
+  border-radius: 1.45rem;
+  background: var(--cy-surface);
+  padding: 1.15rem;
+  box-shadow: 0 0.8rem 2rem -1.3rem rgb(51 36 26 / 30%);
+  transition: transform 200ms var(--cy-ease), box-shadow 200ms var(--cy-ease), border-color 200ms var(--cy-ease);
+}
+
+.cy-station-card:hover {
+  transform: translateY(-3px);
+  border-color: #c4c9b5;
+  box-shadow: 0 1.1rem 2.5rem -1.2rem rgb(51 36 26 / 34%);
+}
+
+.cy-station-card-mark {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: 1rem;
+  background: var(--cy-accent-wash);
+  color: var(--cy-accent);
+  font-size: 1.4rem;
+}
+
+.cy-station-card-body {
+  min-width: 0;
+}
+
+.cy-station-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cy-station-card-name {
+  min-width: 0;
+}
+
+.cy-station-card-name h3 {
+  margin: 0;
+  font-family: var(--cy-font-display);
+  font-size: 1.13rem;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.cy-station-card-name h3 a {
+  color: var(--cy-ink);
+  text-decoration: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.cy-station-card-name h3 a:hover {
+  color: var(--cy-accent-hover);
+  text-decoration: underline;
+}
+
+.cy-station-card-name p {
+  margin-block-start: 0.2rem;
+  color: var(--cy-body);
+  font-size: 0.88rem;
+}
+
+.cy-station-card .speaker-button {
+  width: 2.55rem;
+  min-width: 2.55rem;
+  min-height: 2.55rem;
+  flex-basis: 2.55rem;
+  font-size: 0.95rem;
+}
+
+.cy-station-badges,
+.cy-station-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-block-start: 0.8rem;
+}
+
+.cy-station-badge {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--cy-line);
+  border-radius: 999px;
+  background: #f4f3eb;
+  padding-inline: 0.65rem;
+  color: var(--cy-body);
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+
+.cy-station-badge--demo {
+  border-color: #e8c7ac;
+  background: var(--cy-accent-wash);
+  color: #6a2e00;
+}
+
+.cy-station-badge-dot {
+  color: #9a6a20;
+}
+
+.cy-station-facts {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--cy-ink);
+  font-size: 0.85rem;
+}
+
+.cy-station-facts > span {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.cy-station-facts svg,
+.cy-station-price-symbol {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 1rem;
+  margin-block-start: 0.2rem;
+  color: var(--cy-olive-deep);
+}
+
+.cy-station-price-symbol {
+  display: inline-grid;
+  place-items: center;
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.cy-station-source {
+  margin-block: 0.75rem 0;
+  color: var(--cy-body);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.cy-station-source a {
+  color: var(--cy-olive-deep);
+  font-weight: 700;
+  text-underline-offset: 0.15em;
+}
+
+.cy-station-card-actions {
+  display: flex;
+  margin-block-start: 0.85rem;
+}
+
+.cy-button--outline {
+  min-height: 2.65rem;
+  gap: 0.4rem;
+  border-color: var(--cy-line);
+  background: transparent;
+  padding-inline: 0.9rem;
+  color: var(--cy-ink);
+  font-size: 0.83rem;
+}
+
+.cy-button--outline:hover {
+  border-color: var(--cy-olive-deep);
+  background: var(--cy-olive-wash);
+}
+
+.cy-station-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-block-end: 1rem;
+  border: 1px solid #e8c7ac;
+  border-radius: 1rem;
+  background: var(--cy-accent-wash);
+  padding: 0.75rem 1rem;
+  color: #6a2e00;
+  font-size: 0.9rem;
+}
+
+.cy-station-alert > svg {
+  flex: 0 0 1.2rem;
+  font-size: 1.2rem;
+}
+
+.cy-station-alert button {
+  border: 0;
+  background: transparent;
+  padding: 0.2rem 0.35rem;
+  color: inherit;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.cy-station-empty {
+  display: grid;
+  min-height: 16rem;
+  justify-items: center;
+  align-content: center;
+  gap: 0.65rem;
+  border: 1px dashed #c4c9b5;
+  border-radius: 1.5rem;
+  background: rgb(251 251 246 / 68%);
+  padding: 2rem;
+  text-align: center;
+}
+
+.cy-station-empty-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border-radius: 1.2rem;
+  background: var(--cy-olive-wash);
+  color: var(--cy-olive-deep);
+  font-size: 1.6rem;
+}
+
+.cy-station-empty h3 {
+  margin: 0;
+  font-family: var(--cy-font-display);
+  font-size: 1.25rem;
+}
+
+.cy-station-empty p {
+  max-width: 33rem;
+  margin: 0;
+  color: var(--cy-body);
+}
+
+.cy-station-skeleton {
+  min-height: 15rem;
+  border: 1px solid var(--cy-line);
+  border-radius: 1.45rem;
+  background: linear-gradient(100deg, #e9e8dc 20%, #f7f6ee 40%, #e9e8dc 60%);
+  background-size: 200% 100%;
+  animation: cy-station-loading 1.5s linear infinite;
+}
+
+@keyframes cy-station-loading {
+  to { background-position-x: -200%; }
+}
+
+@media (max-width: 760px) {
+  .cy-station-hero {
+    min-height: 19rem;
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.65fr);
+    gap: 0.5rem;
+    padding: 2rem;
+  }
+
+  .cy-station-hero-art {
+    width: min(100%, 15rem);
+  }
+
+  .cy-station-map-pin {
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1rem;
+  }
+
+  .cy-station-map-center {
+    width: 3.7rem;
+    height: 3.7rem;
+    font-size: 1.65rem;
+  }
+
+  .cy-station-filters {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cy-station-filter-row {
+    justify-content: start;
+  }
+
+  .cy-station-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .cy-stations {
+    padding-block-start: 0.5rem;
+  }
+
+  .cy-station-hero,
+  .cy-station-content {
+    width: min(100% - 1.25rem, 76rem);
+  }
+
+  .cy-station-hero {
+    min-height: 20rem;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-block-start: 0.85rem;
+    border-radius: 1.5rem;
+    padding: 2rem 1.2rem 0.75rem;
+  }
+
+  .cy-station-hero-copy {
+    gap: 0.8rem;
+    padding-inline-end: 1.8rem;
+  }
+
+  .cy-station-hero h1 {
+    font-size: clamp(2.35rem, 11vw, 3.35rem);
+  }
+
+  [dir="rtl"] .cy-station-hero h1 {
+    font-size: clamp(2.1rem, 9.5vw, 3rem);
+  }
+
+  .cy-station-hero-art {
+    position: absolute;
+    inset-block-end: -4.5rem;
+    inset-inline-end: -2.4rem;
+    width: 12rem;
+    opacity: 0.58;
+  }
+
+  .cy-station-map-pin--one {
+    top: 15%;
+    left: 47%;
+  }
+
+  .cy-station-hero-speak {
+    inset-block-start: 0.75rem;
+    inset-inline-end: 0.75rem;
+  }
+
+  .cy-station-search-panel {
+    min-height: auto;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-block: -1.2rem 2rem;
+    border-radius: 1.2rem;
+    padding: 0.8rem;
+  }
+
+  .cy-station-origin-icon {
+    width: 2.8rem;
+    height: 2.8rem;
+    flex-basis: 2.8rem;
+    border-radius: 0.9rem;
+  }
+
+  .cy-station-search-divider {
+    display: none;
+  }
+
+  .cy-station-location-button {
+    width: 100%;
+  }
+
+  .cy-station-filters {
+    margin-block-end: 2rem;
+  }
+
+  .cy-station-filter-row {
+    width: 100%;
+    gap: 0.4rem;
+  }
+
+  .cy-station-filter {
+    min-height: 2.7rem;
+    gap: 0.35rem;
+    padding-inline: 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .cy-station-results-heading {
+    padding-block-start: 1.3rem;
+  }
+
+  .cy-station-card {
+    gap: 0.7rem;
+    border-radius: 1.2rem;
+    padding: 0.85rem;
+  }
+
+  .cy-station-card-mark {
+    width: 2.55rem;
+    height: 2.55rem;
+    border-radius: 0.85rem;
+    font-size: 1.2rem;
+  }
+
+  .cy-station-card-name h3 {
+    font-size: 1rem;
+  }
+
+  .cy-station-badges {
+    gap: 0.3rem;
+  }
+
+  .cy-station-badge {
+    min-height: 1.6rem;
+    padding-inline: 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .cy-station-alert {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cy-station-card,
+  .cy-station-filter,
+  .cy-stations .speaker-button {
+    transition: none;
+  }
+
+  .cy-station-skeleton {
+    animation: none;
+  }
+}

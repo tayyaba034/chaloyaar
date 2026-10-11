@@ -1,0 +1,397 @@
+@import "./brand.css";
+
+/* Sign-in and sign-up: olive brand panel beside a single form card. */
+.cy-auth {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.85fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Brand panel */
+.cy-auth-panel {
+  position: sticky;
+  top: 1rem;
+  display: flex;
+  height: calc(100dvh - 2rem);
+  min-height: 34rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 1.75rem;
+  background: var(--cy-olive-deep);
+  padding: clamp(1.5rem, 3.5vw, 3rem) clamp(1.5rem, 3.5vw, 3rem) clamp(6.5rem, 11vw, 10rem);
+  color: var(--cy-paper);
+}
+
+.cy-auth-brand {
+  width: fit-content;
+  color: var(--cy-paper);
+}
+
+.cy-auth-brand .cy-brand-word span {
+  color: #c9d3b4;
+}
+
+.cy-auth-panel-body {
+  display: grid;
+  gap: 1.75rem;
+  max-width: 30rem;
+}
+
+.cy-auth-panel-title {
+  font-family: var(--cy-font-display);
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: var(--cy-lh-display);
+  text-wrap: balance;
+}
+
+[dir="rtl"] .cy-auth-panel-title {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.cy-auth-benefits {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cy-auth-benefits li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.35rem 1rem;
+  border-block-start: 1px solid rgb(242 242 234 / 16%);
+  padding-block: 1rem;
+}
+
+.cy-auth-benefits li > span:nth-child(2) {
+  color: rgb(242 242 234 / 92%);
+  font-weight: 550;
+  line-height: 1.45;
+}
+
+.cy-auth-benefits .cy-tag {
+  grid-column: 2;
+  justify-self: start;
+}
+
+.cy-auth-benefit-icon {
+  display: grid;
+  grid-row: span 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(242 242 234 / 12%);
+  font-size: 1.25rem;
+}
+
+.cy-auth-wordmark {
+  position: absolute;
+  z-index: -1;
+  inset-block-end: -0.12em;
+  inset-inline-start: -0.04em;
+  color: rgb(242 242 234 / 7%);
+  font-family: var(--cy-font-display);
+  font-size: clamp(6rem, 12vw, 11rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Form side */
+.cy-auth-main {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  justify-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem clamp(0rem, 3vw, 2rem) 2rem;
+}
+
+.cy-auth-back {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-self: start;
+  gap: 0.45rem;
+  border-radius: 999px;
+  padding-inline: 0.9rem;
+  color: var(--cy-ink);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.cy-auth-back:hover {
+  background: var(--cy-olive-wash);
+}
+
+.cy-auth-card {
+  display: grid;
+  align-self: center;
+  align-content: start;
+  gap: 1.25rem;
+  width: min(100%, 30rem);
+  border: 1px solid var(--cy-line);
+  border-radius: 1.75rem;
+  background: var(--cy-surface);
+  padding: clamp(1.25rem, 4vw, 2.25rem);
+  box-shadow: var(--cy-shadow);
+}
+
+.cy-segmented {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem;
+  border-radius: 999px;
+  background: var(--cy-paper);
+  padding: 0.3rem;
+}
+
+.cy-segmented a,
+.cy-segmented button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cy-body);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background-color 200ms var(--cy-ease),
+    color 200ms var(--cy-ease);
+}
+
+.cy-segmented a:hover,
+.cy-segmented button:hover {
+  color: var(--cy-ink);
+}
+
+.cy-segmented .is-selected {
+  background: var(--cy-ink);
+  color: var(--cy-paper);
+}
+
+.cy-segmented .is-selected:hover {
+  color: var(--cy-paper);
+}
+
+.cy-segmented--method {
+  background: var(--cy-olive-wash);
+}
+
+.cy-segmented--method button[aria-pressed="true"] {
+  background: var(--cy-surface);
+  color: var(--cy-ink);
+  box-shadow: 0 0.25rem 0.75rem -0.35rem rgb(68 83 58 / 45%);
+}
+
+.cy-auth-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cy-auth-heading h1 {
+  margin-block-end: 0.4rem;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+}
+
+[dir="rtl"] .cy-auth-heading h1 {
+  font-size: clamp(1.8rem, 3.6vw, 2.3rem);
+}
+
+.cy-auth-heading p,
+.cy-auth-note {
+  color: var(--cy-body);
+}
+
+.cy-auth-note {
+  font-size: 0.98rem;
+}
+
+.cy-auth-alert {
+  border-inline-start: 4px solid var(--cy-accent);
+  border-radius: 0.5rem;
+  background: var(--cy-accent-wash);
+  padding: 0.75rem 1rem;
+  color: #5a2809;
+  font-size: 0.95rem;
+}
+
+.cy-auth-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.cy-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.cy-field label {
+  font-weight: 700;
+}
+
+.cy-field input {
+  width: 100%;
+  min-height: 3.5rem;
+  border: 2px solid var(--cy-line);
+  border-radius: 999px;
+  background: var(--cy-paper);
+  padding-inline: 1.25rem;
+  color: var(--cy-ink);
+  direction: ltr;
+  font: inherit;
+  text-align: start;
+  transition:
+    border-color 200ms var(--cy-ease),
+    background-color 200ms var(--cy-ease);
+}
+
+.cy-field input::placeholder {
+  color: #7a7263;
+}
+
+.cy-field input:hover {
+  border-color: #c4c4b2;
+}
+
+.cy-field input:focus-visible {
+  border-color: var(--cy-olive-deep);
+  background: var(--cy-surface);
+}
+
+.cy-field input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.cy-code-input {
+  font-size: 1.5rem !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.45em;
+  text-align: center !important;
+}
+
+.cy-auth-submit {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.cy-auth-submit:disabled {
+  background: var(--cy-line);
+  color: var(--cy-body);
+  cursor: not-allowed;
+}
+
+.cy-text-button {
+  justify-self: start;
+  min-height: 3rem;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--cy-ink);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-color: var(--cy-line);
+  text-underline-offset: 0.3em;
+}
+
+.cy-text-button:hover {
+  text-decoration-color: var(--cy-accent);
+}
+
+.cy-auth-feedback {
+  border-radius: 0.5rem;
+  background: var(--cy-olive-wash);
+  padding: 0.75rem 1rem;
+  color: var(--cy-olive-deep);
+  font-weight: 600;
+}
+
+.cy-auth-footer {
+  display: grid;
+  gap: 0.5rem;
+  border-block-start: 1px solid var(--cy-line);
+  padding-block-start: 1rem;
+}
+
+.cy-auth-guest {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 3rem;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--cy-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cy-auth-guest svg {
+  transition: translate 250ms var(--cy-ease);
+}
+
+.cy-auth-guest:hover svg {
+  translate: 0.2rem 0;
+}
+
+[dir="rtl"] .cy-auth-guest:hover svg {
+  translate: -0.2rem 0;
+}
+
+.cy-auth-terms {
+  color: var(--cy-body);
+  font-size: 0.88rem;
+}
+
+/* Tablet and phone: the panel shrinks to a header band above the form. */
+@media (max-width: 900px) {
+  .cy-auth {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0.75rem;
+  }
+
+  .cy-auth-panel {
+    position: relative;
+    top: 0;
+    height: auto;
+    min-height: 0;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .cy-auth-panel-body,
+  .cy-auth-wordmark {
+    display: none;
+  }
+
+  .cy-auth-main {
+    padding: 0 0 1.5rem;
+    gap: 0.75rem;
+  }
+
+  .cy-auth-card {
+    align-self: start;
+  }
+}

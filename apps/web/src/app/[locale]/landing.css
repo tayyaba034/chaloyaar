@@ -1,0 +1,869 @@
+@import "./brand.css";
+
+/* Hero */
+.cy-hero {
+  display: grid;
+  min-height: min(calc(100dvh - 4.5rem), 54rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem);
+}
+
+.cy-hero-copy {
+  display: grid;
+  justify-items: start;
+  gap: 1.4rem;
+}
+
+.cy-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  background: var(--cy-olive-wash);
+  padding: 0.35rem 0.9rem 0.35rem 0.7rem;
+  color: var(--cy-olive-deep);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+[dir="rtl"] .cy-eyebrow {
+  padding: 0.25rem 0.7rem 0.25rem 0.9rem;
+  letter-spacing: 0;
+}
+
+.cy-hero h1 {
+  max-width: 17ch;
+  font-size: clamp(2.5rem, 4.6vw, 4.25rem);
+}
+
+[dir="rtl"] .cy-hero h1 {
+  font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+}
+
+.cy-hero-lede {
+  max-width: 34rem;
+  color: var(--cy-body);
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+}
+
+.cy-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Hero visual: giant wordmark behind a tilted phone running the stations screen. */
+.cy-hero-visual {
+  position: relative;
+  display: grid;
+  min-height: 36rem;
+  place-items: center;
+  isolation: isolate;
+}
+
+.cy-hero-wordmark {
+  position: absolute;
+  z-index: -1;
+  inset: -3% -6% auto -6%;
+  display: grid;
+  color: #dde4cc;
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  font-size: clamp(4.5rem, 9vw, 8.5rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.82;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.cy-hero-wordmark span:last-child {
+  justify-self: end;
+  margin-block-start: 58%;
+}
+
+.cy-phone {
+  width: min(100%, 21rem);
+  margin: 4.5rem 0 0;
+  border-radius: 2.75rem;
+  background: var(--cy-ink);
+  padding: 0.6rem;
+  box-shadow:
+    var(--cy-shadow),
+    0 0 0 1px rgb(51 36 26 / 20%);
+}
+
+.cy-phone-screen {
+  overflow: hidden;
+  border-radius: 2.25rem;
+  background: var(--cy-olive);
+}
+
+.cy-phone-top {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.7rem 1.25rem 2.1rem;
+  color: var(--cy-paper);
+}
+
+.cy-phone-notch {
+  width: 5.5rem;
+  height: 1.4rem;
+  margin: 0 auto 0.6rem;
+  border-radius: 999px;
+  background: var(--cy-ink);
+}
+
+.cy-phone-title {
+  font-family: var(--cy-font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.cy-phone-area {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 999px;
+  background: rgb(242 242 234 / 18%);
+  padding: 0.15rem 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.cy-phone-sheet {
+  display: grid;
+  gap: 0.8rem;
+  margin-block-start: -1.1rem;
+  border-radius: 1.75rem 1.75rem 0 0;
+  background: var(--cy-paper);
+  padding: 1.1rem 0.85rem 1.25rem;
+}
+
+.cy-phone-filters {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.cy-phone-filters span {
+  border: 1px solid var(--cy-line);
+  border-radius: 999px;
+  background: var(--cy-surface);
+  padding: 0.2rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.cy-phone-filters .is-on {
+  border-color: var(--cy-ink);
+  background: var(--cy-ink);
+  color: var(--cy-paper);
+}
+
+.cy-phone-ghost {
+  height: 4.5rem;
+  border-radius: 1.25rem;
+  background: var(--cy-surface);
+  opacity: 0.7;
+}
+
+.cy-preview-card {
+  border-radius: 1.25rem;
+  background: var(--cy-surface);
+  padding: 0.9rem;
+  box-shadow: 0 0.6rem 1.4rem -0.8rem rgb(68 83 58 / 40%);
+}
+
+.cy-preview-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cy-preview-icon {
+  display: grid;
+  width: 2.3rem;
+  height: 2.3rem;
+  place-items: center;
+  border-radius: 0.75rem;
+  background: var(--cy-accent-wash);
+  color: var(--cy-accent);
+  font-size: 1.15rem;
+}
+
+.cy-preview-name {
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.cy-preview-meta {
+  color: var(--cy-body);
+  font-size: 0.78rem;
+}
+
+.cy-preview-example {
+  align-self: start;
+  border-radius: 0.5rem;
+  background: #fff1e4;
+  padding: 0.05rem 0.45rem;
+  color: #6a2e00;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.cy-preview-rows {
+  display: grid;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cy-preview-rows li {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-block-start: 1px solid var(--cy-line);
+}
+
+.cy-preview-fuel {
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.cy-preview-status {
+  display: grid;
+  justify-items: end;
+  gap: 0.05rem;
+}
+
+.cy-preview-status small {
+  color: var(--cy-body);
+  font-size: 0.7rem;
+}
+
+.cy-hero-help {
+  position: absolute;
+  inset-block-end: 6%;
+  inset-inline-start: 0;
+  display: grid;
+  gap: 0.35rem;
+  border-radius: 1.25rem;
+  background: var(--cy-surface);
+  padding: 0.85rem 1rem;
+  box-shadow: var(--cy-shadow);
+}
+
+.cy-hero-help p {
+  font-family: var(--cy-font-display);
+  font-weight: 700;
+}
+
+.cy-hero-help-icons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.cy-hero-help-icons svg {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  background: var(--cy-olive-wash);
+  padding: 0.45rem;
+  color: var(--cy-olive-deep);
+}
+
+.cy-hero-help small {
+  color: var(--cy-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Facts band */
+.cy-facts {
+  background: var(--cy-olive-deep);
+  color: var(--cy-paper);
+}
+
+.cy-facts-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1.2fr;
+  margin-block: 0;
+  padding-block: clamp(2rem, 4vw, 3rem);
+}
+
+.cy-fact {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-inline: clamp(0.5rem, 2vw, 2rem);
+}
+
+.cy-fact + .cy-fact {
+  border-inline-start: 1px solid rgb(242 242 234 / 20%);
+}
+
+.cy-fact dt {
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: #f0c7a6;
+}
+
+.cy-fact dd {
+  max-width: 14rem;
+  margin: 0;
+  color: rgb(242 242 234 / 88%);
+  font-weight: 550;
+  line-height: 1.4;
+}
+
+/* Section shell */
+.cy-section {
+  padding-block: clamp(4.5rem, 9vw, 7.5rem);
+}
+
+.cy-section-head {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  max-width: 44rem;
+  margin-block-end: clamp(2rem, 4vw, 3.25rem);
+}
+
+.cy-section-head h2 {
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+}
+
+[dir="rtl"] .cy-section-head h2 {
+  font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+}
+
+.cy-section-head p {
+  max-width: 62ch;
+  color: var(--cy-body);
+  font-size: 1.125rem;
+}
+
+/* Status legend: Unknown leads, the other four sit in a hairline grid. */
+.cy-legend {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  grid-template-rows: repeat(2, auto);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--cy-line);
+  border-radius: 1.75rem;
+  background: var(--cy-line);
+}
+
+.cy-legend-cell {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 0.9rem;
+  min-height: 11rem;
+  background: var(--cy-surface);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  transition: background-color 250ms var(--cy-ease);
+}
+
+.cy-legend-cell:hover {
+  background: var(--cy-paper);
+}
+
+.cy-legend-cell p {
+  max-width: 30ch;
+  color: var(--cy-body);
+}
+
+.cy-legend-cell--unknown {
+  grid-row: span 2;
+  align-content: end;
+  background: var(--cy-olive-wash);
+}
+
+.cy-legend-cell--unknown:hover {
+  background: #d9e0c9;
+}
+
+.cy-legend-cell--unknown .cy-status {
+  font-size: 1.15rem;
+  padding: 0.35rem 0.8rem;
+}
+
+.cy-legend-cell--unknown p {
+  color: var(--cy-ink);
+  font-family: var(--cy-font-display);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* App actions: four full-width rows, like the app's home screen. */
+.cy-actions-section {
+  background: var(--cy-surface);
+}
+
+.cy-actions {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: 2px solid var(--cy-ink);
+}
+
+.cy-action {
+  display: grid;
+  grid-template-columns: auto minmax(12rem, 0.9fr) minmax(0, 1.4fr) auto auto;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  border-block-end: 1px solid var(--cy-line);
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) clamp(0.5rem, 1.5vw, 1rem);
+  color: var(--cy-ink);
+  text-decoration: none;
+  transition: background-color 250ms var(--cy-ease);
+}
+
+.cy-action:hover {
+  background: var(--cy-olive-wash);
+}
+
+.cy-action-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border-radius: 1rem;
+  background: var(--cy-paper);
+  color: var(--cy-olive-deep);
+  font-size: 1.8rem;
+}
+
+.cy-action-name {
+  font-family: var(--cy-font-display);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.cy-action-text {
+  color: var(--cy-body);
+}
+
+.cy-action-arrow {
+  font-size: 1.4rem;
+  transition: translate 250ms var(--cy-ease);
+}
+
+.cy-action:hover .cy-action-arrow {
+  translate: 0.3rem 0;
+}
+
+[dir="rtl"] .cy-action:hover .cy-action-arrow {
+  translate: -0.3rem 0;
+}
+
+/* Voice: the four language names set large, each in its own script. */
+.cy-voice {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.cy-voice-copy {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+
+.cy-voice-copy h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+[dir="rtl"] .cy-voice-copy h2 {
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+}
+
+.cy-voice-copy p {
+  color: var(--cy-body);
+  font-size: 1.125rem;
+}
+
+.cy-voice-try {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block-start: 0.5rem;
+  font-weight: 700;
+}
+
+.cy-voice-names {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.cy-voice-name {
+  display: flex;
+  min-height: 9rem;
+  align-items: end;
+  border-radius: 1.75rem;
+  background: var(--cy-olive-wash);
+  padding: 1.25rem 1.5rem;
+  color: var(--cy-olive-deep);
+  font-family: var(--cy-font-display);
+  font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.cy-voice-name[dir="rtl"] {
+  font-family: "Noto Naskh Arabic", Tahoma, sans-serif;
+  font-weight: 600;
+}
+
+.cy-voice-name[dir="ltr"] {
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.cy-voice-name:nth-child(1) {
+  background: var(--cy-olive-deep);
+  color: var(--cy-paper);
+}
+
+.cy-voice-name:nth-child(4) {
+  background: var(--cy-accent-wash);
+  color: #7a3510;
+}
+
+.cy-voice-name:nth-child(2) {
+  translate: 0 1.5rem;
+}
+
+.cy-voice-name:nth-child(4) {
+  translate: 0 1.5rem;
+}
+
+/* Steps: an ordered route with a dashed road between markers. */
+.cy-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cy-steps::before {
+  position: absolute;
+  inset-block-start: 1.75rem;
+  inset-inline: 2rem 2rem;
+  border-block-start: 3px dashed var(--cy-line);
+  content: "";
+}
+
+.cy-steps li > div {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.cy-step-marker {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+  min-height: 3.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block-end: 0.75rem;
+  border-radius: 999px;
+  background: var(--cy-ink);
+  padding-inline: 1.1rem 1.25rem;
+  color: var(--cy-paper);
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.cy-steps li:last-child .cy-step-marker {
+  background: var(--cy-accent);
+}
+
+.cy-steps h3 {
+  font-family: var(--cy-font-display);
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.cy-steps p {
+  max-width: 32ch;
+  color: var(--cy-body);
+}
+
+/* Join panel with the logo medallion sitting on its top edge. */
+.cy-join-wrap {
+  padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 8vw, 6rem);
+}
+
+.cy-join {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  border-radius: 1.75rem;
+  background: var(--cy-olive-deep);
+  padding: clamp(4.5rem, 8vw, 6rem) clamp(1.25rem, 5vw, 4rem) clamp(2.5rem, 5vw, 4rem);
+  color: var(--cy-paper);
+  text-align: center;
+}
+
+.cy-join-medallion {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+  width: 7.5rem;
+  height: 7.5rem;
+  overflow: hidden;
+  border: 0.4rem solid var(--cy-paper);
+  border-radius: 50%;
+  background: var(--cy-paper);
+  translate: -50% -50%;
+}
+
+[dir="rtl"] .cy-join-medallion {
+  translate: 50% -50%;
+}
+
+.cy-join-medallion img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scale: 1.35;
+}
+
+.cy-join h2 {
+  max-width: 18ch;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+}
+
+[dir="rtl"] .cy-join h2 {
+  font-size: clamp(1.8rem, 3.8vw, 2.8rem);
+}
+
+.cy-join p {
+  max-width: 44ch;
+  color: rgb(242 242 234 / 85%);
+  font-size: 1.15rem;
+}
+
+.cy-join-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-block-start: 0.75rem;
+}
+
+/* Footer */
+.cy-footer {
+  border-block-start: 1px solid var(--cy-line);
+  padding-block: 2.5rem 3rem;
+}
+
+.cy-footer-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem 2rem;
+}
+
+.cy-footer-brand {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.cy-footer-brand p {
+  color: var(--cy-body);
+}
+
+.cy-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.25rem;
+}
+
+.cy-footer-links a,
+.cy-footer-links button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--cy-ink);
+  cursor: pointer;
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-color: var(--cy-line);
+  text-underline-offset: 0.3em;
+}
+
+.cy-footer-links a:hover,
+.cy-footer-links button:hover {
+  text-decoration-color: var(--cy-accent);
+}
+
+.cy-safety {
+  grid-column: 1 / -1;
+  border-inline-start: 4px solid var(--cy-accent);
+  border-radius: 0.5rem;
+  background: var(--cy-accent-wash);
+  padding: 0.85rem 1rem;
+  color: #5a2809;
+  font-size: 0.95rem;
+}
+
+/* Tablet */
+@media (max-width: 960px) {
+  .cy-hero {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cy-hero-visual {
+    min-height: 32rem;
+  }
+
+  .cy-action {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "icon name arrow"
+      "icon text arrow"
+      "icon tag arrow";
+    row-gap: 0.4rem;
+  }
+
+  .cy-action-icon { grid-area: icon; align-self: start; }
+  .cy-action-name { grid-area: name; }
+  .cy-action-text { grid-area: text; }
+  .cy-tag { grid-area: tag; justify-self: start; }
+  .cy-action-arrow { grid-area: arrow; }
+
+  .cy-voice {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Phone */
+@media (max-width: 720px) {
+  .cy-container {
+    width: min(100% - 2rem, 76rem);
+  }
+
+  .cy-hide-mobile {
+    display: none;
+  }
+
+  .cy-nav-link {
+    padding-inline: 0.7rem;
+  }
+
+  .cy-hero-actions {
+    width: 100%;
+  }
+
+  .cy-hero-actions .cy-button {
+    flex: 1 1 12rem;
+  }
+
+  .cy-hero-visual {
+    min-height: 30rem;
+  }
+
+  .cy-hero-help {
+    display: none;
+  }
+
+  .cy-phone {
+    margin-block-start: 2.5rem;
+  }
+
+  .cy-facts-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .cy-fact {
+    padding-inline: 0;
+  }
+
+  .cy-fact + .cy-fact {
+    border-inline-start: 0;
+    border-block-start: 1px solid rgb(242 242 234 / 20%);
+    padding-block-start: 1.25rem;
+  }
+
+  .cy-legend {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cy-legend-cell {
+    min-height: 0;
+  }
+
+  .cy-legend-cell--unknown {
+    grid-row: auto;
+  }
+
+  .cy-voice-name:nth-child(2),
+  .cy-voice-name:nth-child(4) {
+    translate: none;
+  }
+
+  .cy-voice-name {
+    min-height: 6.5rem;
+  }
+
+  .cy-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cy-steps::before {
+    inset-block: 1.75rem 2rem;
+    inset-inline: 1.75rem auto;
+    border-block-start: 0;
+    border-inline-start: 3px dashed var(--cy-line);
+  }
+
+  .cy-footer-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .cy-brand-word {
+    font-size: 1.15rem;
+  }
+
+  .cy-nav-language {
+    font-size: 0;
+    gap: 0;
+  }
+
+  .cy-nav-language svg {
+    font-size: 1.3rem;
+  }
+}
