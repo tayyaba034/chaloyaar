@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDiscoveryAvailability, getNearbyStations } from "@/lib/stations";
 import { parseStationSearch, type StationSearch } from "@/lib/station-search";
+import { discoveryFacts, matchesDiscoveryFuel } from "@/lib/station-discovery-facts";
 
 const headers = { "Cache-Control": "private, no-store" };
 
@@ -11,13 +12,14 @@ async function search(input: Record<string, unknown>) {
     return NextResponse.json({ error: { code: "VALIDATION_ERROR", message: (error as Error).message } }, { status: 400, headers });
   }
   try {
-    const stations = await getNearbyStations(query);
+    // Also protect clients connected to the earlier RPC until the reviewed migration is applied.
+    const stations = (await getNearbyStations(query)).filter(station => matchesDiscoveryFuel(station, query.fuelType));
     const facts = await getDiscoveryAvailability(stations.map((station) => station.id), query.fuelType ?? "petrol");
     return NextResponse.json({
       radiusKm: query.radiusKm,
       stations: stations.map((station) => ({
         ...station,
-        availability: facts[station.id] ?? { state: "unknown", source: null, reportedAt: null, expiresAt: null },
+        availability: discoveryFacts(station, query.fuelType ?? "petrol", facts[station.id]),
       })),
     }, { headers });
   } catch {

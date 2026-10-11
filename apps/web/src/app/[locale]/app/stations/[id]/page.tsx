@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { SpeakerButton } from "@/components/speaker-button";
 import { getDiscoveryAvailability, getStationById } from "@/lib/stations";
 import { StationInformation } from "@/components/station-information";
+import { discoveryFacts } from "@/lib/station-discovery-facts";
 import { isAppLocale } from "@/i18n/routing";
 import "../stations.css";
 
@@ -22,7 +23,7 @@ export default async function AppStationDetailsPage({
   const query = await searchParams;
   const fuel = query.fuelType === "diesel" || query.fuelType === "cng" ? query.fuelType : "petrol";
   const facts = await getDiscoveryAvailability([station.id], fuel);
-  const availability = facts[station.id] ?? { state: "unknown" as const, source: null, reportedAt: null, expiresAt: null };
+  const availability = discoveryFacts(station, fuel, facts[station.id]);
   const stationsT = await getTranslations("stations.discovery");
 
   return (

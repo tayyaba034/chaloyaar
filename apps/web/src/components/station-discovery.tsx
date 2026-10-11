@@ -15,6 +15,7 @@ import { SpeakerButton } from "./speaker-button";
 import { StationMap } from "./station-map";
 import { StationInformation, type DiscoveryAvailability } from "./station-information";
 import { stationAreas } from "@/lib/station-search";
+import { isVerifiedStation, matchesDiscoveryFuel } from "@/lib/station-discovery-facts";
 
 type NearbyStation = Station & {
   distanceKm: number;
@@ -103,7 +104,7 @@ export function StationDiscovery() {
   const visibleStations = useMemo(() => {
     return stations.filter(
       (station) =>
-        (fuel === "all" || station.supportedFuels.includes(fuel as FuelType)) &&
+        matchesDiscoveryFuel(station, fuel === "all" ? null : fuel as FuelType) &&
         `${station.name} ${station.address ?? ""}`
           .toLowerCase()
           .includes(search.trim().toLowerCase()),
@@ -312,6 +313,12 @@ export function StationDiscovery() {
         </section>
 
         <section className="cy-station-results" aria-live="polite">
+          {!loading && !error && !visibleStations.some(station => isVerifiedStation(station)) && (
+            <div className="cy-station-empty" role="status">
+              <h3>{t("discovery.noVerifiedTitle")}</h3>
+              <p>{t("discovery.noVerifiedMessage")}</p>
+            </div>
+          )}
           {fuel === "all" && (
             <p className="driver-small">
               {t("discovery.petrolReports")}
@@ -350,7 +357,7 @@ export function StationDiscovery() {
               center={origin ?? stationAreas[area]}
               userLocation={origin}
               markers={visibleStations.map((station) => ({
-                name: station.name,
+                name: `${station.name} (${t(isVerifiedStation(station) ? "discovery.verified" : "discovery.unverified")})`,
                 address: station.address,
                 latitude: station.latitude,
                 longitude: station.longitude,

@@ -1,4 +1,4 @@
--- All fixtures are temporary. Run with supabase db query --linked --file supabase/tests/station_discovery.sql.
+-- Synthetic fixtures only: run against isolated local/staging PostGIS, never live records.
 begin;
 insert into public.stations(id, name, location, supported_fuels, source, verification_status, is_demo)
 values
@@ -22,7 +22,7 @@ begin
   if first_id <> '55555555-5555-4555-8555-555555555501' then raise exception 'FAIL: nearest order'; end if;
   select count(*) into result_count from public.nearby_stations(0,0,15,null);
   if result_count <> 50 then raise exception 'FAIL: search beyond 100 records / result limit'; end if;
-  if (select count(*) from public.nearby_stations(0,0,15,'petrol')) <> 1 then raise exception 'FAIL: demo/rejected/outside/unknown fuel filters'; end if;
+  if (select count(*) from public.nearby_stations(0,0,15,'petrol')) <> 0 then raise exception 'FAIL: unverified/demo/rejected/outside/unknown fuel filters'; end if;
   if (select count(*) from public.nearby_stations(0,0,1,null)) <> 1 then raise exception 'FAIL: radius'; end if;
   if exists(select 1 from public.station_latest_reports(array['55555555-5555-4555-8555-555555555501']::uuid[],'petrol') where expires_at > now() or source_type <> 'station') then raise exception 'FAIL: pending/future reports leaked'; end if;
   if (select count(*) from public.station_latest_reports(array['55555555-5555-4555-8555-555555555501']::uuid[],'petrol')) <> 1 then raise exception 'FAIL: expired evidence should survive as stale'; end if;
