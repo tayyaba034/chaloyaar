@@ -14,6 +14,7 @@ import {
 } from "@phosphor-icons/react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
+import { getSupabaseConfig } from "@/lib/supabase-config";
 import { SpeakerButton } from "./speaker-button";
 
 type AuthMethod = "email" | "phone";
@@ -39,9 +40,8 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   const [codeSent, setCodeSent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
-  const configured =
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  const { url: supabaseUrl, key: supabaseKey } = getSupabaseConfig();
+  const configured = Boolean(supabaseUrl && supabaseKey);
 
   async function sendCode(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

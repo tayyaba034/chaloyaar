@@ -31,7 +31,7 @@ export function AdminAppShell({ children }: { children: ReactNode }) {
     </nav>
   );
   return (
-    <div className="role-app-shell admin-app-shell">
+    <div className="role-app-shell admin-app-shell cy-root">
       <aside className="role-sidebar">
         <Link className="brand" href="/admin"><span aria-hidden="true">⛽</span> Chalo Yaar</Link>
         {links}

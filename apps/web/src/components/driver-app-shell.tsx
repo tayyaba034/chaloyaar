@@ -77,7 +77,7 @@ export function DriverAppShell({
   );
 
   return (
-    <div className={`driver-app-shell${authenticated ? " has-driver-sidebar" : ""}${isStationPage ? " cy-root cy-station-app-shell" : ""}`}>
+    <div className={`driver-app-shell cy-root${authenticated ? " has-driver-sidebar" : ""}${isStationPage ? " cy-station-app-shell" : ""}`}>
       {authenticated && <aside className="driver-sidebar">{navigation}</aside>}
       <div className="driver-app-column">
         <header className="driver-topbar">

@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { isAppLocale, routing } from "./i18n/routing";
 import { isAppRole, resolveRoleAccess, type AuthProfile } from "./lib/role-access";
+import { getSupabaseConfig } from "./lib/supabase-config";
 
 const internationalize = createMiddleware(routing);
 
@@ -17,12 +18,11 @@ export async function proxy(request: NextRequest) {
   const guestStationBrowse = /^\/app\/stations(?:\/[^/]+)?$/.test(pathname);
   if (!protectedArea || guestStationBrowse) return response;
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const { url, key } = getSupabaseConfig();
   let profile: AuthProfile | null = null;
 
-  if (url && anonKey) {
-    const supabase = createServerClient(url, anonKey, {
+  if (url && key) {
+    const supabase = createServerClient(url, key, {
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet) => {

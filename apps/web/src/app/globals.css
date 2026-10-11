@@ -1,6 +1,7 @@
 @import "@fontsource/noto-naskh-arabic/arabic-400.css";
 @import "@fontsource/noto-naskh-arabic/arabic-600.css";
 @import "tailwindcss";
+@import "./[locale]/brand.css";
 
 :root {
   color-scheme: light;
@@ -679,6 +680,183 @@ p {
 .driver-app-shell,
 .role-app-shell {
   min-height: 100vh;
+}
+
+.cy-root.driver-app-shell,
+.cy-root.role-app-shell {
+  background: var(--cy-paper);
+  color: var(--cy-ink);
+  font-family: var(--cy-font-body);
+}
+
+.cy-root .driver-topbar,
+.cy-root .role-mobile-header {
+  border-color: var(--cy-line);
+  background: color-mix(in srgb, var(--cy-paper) 92%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.cy-root .brand {
+  color: var(--cy-ink);
+  font-family: var(--cy-font-display);
+}
+
+.cy-root .brand-mark {
+  border-radius: 0.9rem;
+  background: var(--cy-accent);
+}
+
+.cy-root .driver-topbar select,
+.cy-root .profile-menu summary {
+  border-color: var(--cy-line);
+  border-radius: 999px;
+  background: var(--cy-surface);
+  color: var(--cy-ink);
+}
+
+.cy-root .speaker-button {
+  border-color: var(--cy-line);
+  border-radius: 999px;
+  background: var(--cy-surface);
+  color: var(--cy-ink);
+}
+
+.cy-root .speaker-button:hover {
+  border-color: var(--cy-accent);
+}
+
+.cy-root .driver-sidebar,
+.cy-root .role-sidebar {
+  border-color: var(--cy-line);
+  background: var(--cy-olive-deep);
+}
+
+.cy-root .driver-sidebar .brand,
+.cy-root .role-sidebar .brand,
+.cy-root .role-account-name {
+  color: var(--cy-paper);
+}
+
+.cy-root .driver-nav-link,
+.cy-root .role-nav-link {
+  color: rgb(242 242 234 / 78%);
+}
+
+.cy-root .driver-nav-link.is-active,
+.cy-root .role-nav-link.is-active {
+  background: var(--cy-olive);
+  color: var(--cy-paper);
+}
+
+.cy-root .driver-nav-link.is-active .driver-nav-icon {
+  border-color: var(--cy-accent);
+  background: var(--cy-accent);
+}
+
+.cy-root .driver-content,
+.cy-root .role-main > .dashboard-page,
+.cy-root .role-main > .feature-placeholder {
+  width: min(100% - 1.5rem, 72rem);
+}
+
+.cy-root .dashboard-page {
+  gap: 1.25rem;
+}
+
+.cy-root .dashboard-greeting h1,
+.cy-root .dashboard-card h2,
+.cy-root .dashboard-card h3 {
+  font-family: var(--cy-font-display);
+}
+
+.cy-root .dashboard-greeting h1 {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  letter-spacing: -0.04em;
+}
+
+.cy-root .dashboard-card,
+.cy-root .notice-card,
+.cy-root .dashboard-tile {
+  border-color: var(--cy-line);
+  border-radius: 1.5rem;
+  background: var(--cy-surface);
+  box-shadow: var(--cy-shadow);
+}
+
+.cy-root .dashboard-card {
+  padding: clamp(1.1rem, 3vw, 1.65rem);
+}
+
+.cy-root .dashboard-tile {
+  transition: translate 180ms var(--cy-ease), box-shadow 180ms var(--cy-ease);
+}
+
+.cy-root .dashboard-tile:hover {
+  translate: 0 -0.2rem;
+  box-shadow: 0 1.5rem 2.5rem -1.5rem rgb(68 83 58 / 45%);
+}
+
+.cy-root .dashboard-tile-link,
+.cy-root .dashboard-card h2,
+.cy-root .dashboard-card h3 {
+  color: var(--cy-ink);
+}
+
+.cy-root .dashboard-tile-link > span:first-child,
+.cy-root .notice-icon {
+  color: var(--cy-accent);
+}
+
+.cy-root .dashboard-big-number {
+  color: var(--cy-olive-deep);
+  font-family: var(--cy-font-display);
+}
+
+.cy-root .status-available {
+  background: var(--cy-olive-wash);
+  color: var(--cy-olive-deep);
+}
+
+.cy-root .inline-alert {
+  border-color: var(--cy-accent);
+  background: var(--cy-accent-wash);
+  color: var(--cy-ink);
+}
+
+.cy-root .provider-verified-banner {
+  border-radius: 999px;
+}
+
+.cy-root .provider-request-card,
+.cy-root .station-list > .dashboard-card {
+  border: 1px solid var(--cy-line);
+  border-radius: 1.25rem;
+  background: var(--cy-paper);
+  padding: 1rem;
+}
+
+.cy-root .provider-request-actions button,
+.cy-root .station-list button {
+  min-height: 3.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cy-ink);
+  color: var(--cy-paper);
+  padding-inline: 1rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.cy-root .provider-request-actions button:disabled,
+.cy-root .station-list button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.cy-root .role-main > .role-navigation,
+.cy-root .driver-app-column > .driver-navigation {
+  border-color: var(--cy-line);
+  background: var(--cy-surface);
 }
 
 .driver-app-shell {

@@ -50,7 +50,7 @@ export function StationAdminDashboard() {
   }
 
   return (
-    <main className="dashboard-page">
+    <main className="dashboard-page cy-root">
       <section className="dashboard-greeting">
         <div>
           <p className="eyebrow">STATION ADMIN</p>

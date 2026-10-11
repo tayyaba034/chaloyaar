@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { demoStations, type FuelType, type Station } from "./station-data";
+import { getSupabaseConfig } from "./supabase-config";
 
 export { demoStations };
 export type { FuelType, Station };
@@ -39,11 +40,10 @@ function parseStation(row: Record<string, unknown>): Station | null {
 }
 
 export async function getStations(): Promise<Station[]> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anonKey) return demoStations;
+  const { url, key } = getSupabaseConfig();
+  if (!url || !key) return demoStations;
 
-  const supabase = createClient(url, anonKey, {
+  const supabase = createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   const { data, error } = await supabase
@@ -82,11 +82,10 @@ function isFuelType(value: unknown): value is FuelType {
 }
 
 export async function getStationLiveFacts(stationIds: string[]): Promise<StationLiveFacts> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anonKey || stationIds.length === 0) return { prices: {}, availability: {} };
+  const { url, key } = getSupabaseConfig();
+  if (!url || !key || stationIds.length === 0) return { prices: {}, availability: {} };
 
-  const supabase = createClient(url, anonKey, {
+  const supabase = createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   const now = new Date().toISOString();

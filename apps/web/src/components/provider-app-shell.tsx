@@ -27,7 +27,7 @@ export function ProviderAppShell({
     const title = suspended ? t("suspendedTitle") : t("pendingTitle");
     const message = suspended ? t("suspendedMessage") : t("pendingMessage");
     return (
-      <main className="provider-pending-screen">
+      <main className="provider-pending-screen cy-root">
         <section className="notice-card" aria-labelledby="provider-verification-title">
           <span className="notice-icon" aria-hidden="true">{suspended ? "⛔" : "⏳"}</span>
           <div className="dashboard-card-heading">
@@ -54,7 +54,7 @@ export function ProviderAppShell({
   );
 
   return (
-    <div className="role-app-shell">
+    <div className="role-app-shell cy-root">
       <aside className="role-sidebar">
         <Link className="brand" href="/provider"><span aria-hidden="true">⛽</span> Chalo Yaar</Link>
         {links}
