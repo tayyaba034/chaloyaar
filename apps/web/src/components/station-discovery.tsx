@@ -13,22 +13,13 @@ import { Link } from "@/i18n/navigation";
 import type { FuelType, Station } from "@/lib/station-data";
 import { SpeakerButton } from "./speaker-button";
 import { StationMap } from "./station-map";
+import { StationInformation, type DiscoveryAvailability } from "./station-information";
+import { stationAreas } from "@/lib/station-search";
 
 type NearbyStation = Station & {
   distanceKm: number;
   distanceKind: "straight_line_approximate";
-  availability: {
-    state: "available" | "unavailable" | "queue_reported" | "unknown" | "stale";
-    source: "user" | "station" | "admin" | null;
-    reportedAt: string | null;
-  };
-
-  officialPrice: {
-    amount: number | null;
-    currency: "PKR";
-    source: string | null;
-    effectiveAt: string | null;
-  };
+  availability: DiscoveryAvailability;
 };
 
 const areas = ["city-centre", "susan-road", "d-ground"] as const;
@@ -36,8 +27,7 @@ const fuelTypes = ["all", "petrol", "diesel", "cng"] as const;
 
 type NearbyResponse = {
   stations: NearbyStation[];
-  degraded?: boolean;
-  degradedMessage?: string;
+  radiusKm: number;
 };
 
 export function StationDiscovery() {
@@ -56,24 +46,21 @@ export function StationDiscovery() {
   const [search, setSearch] = useState("");
   const [view, setView] = useState<"list" | "map">("list");
   const [manualArea, setManualArea] = useState("");
-  const [degradedMessage, setDegradedMessage] = useState("");
+  const [radiusKm, setRadiusKm] = useState(15);
+  const [locating, setLocating] = useState(false);
 
   useEffect(() => {
     let active = true;
     let cancelled = false;
+    const controller = new AbortController();
 
     async function loadNearby(radiusKm: number): Promise<NearbyResponse> {
-      const params = new URLSearchParams({ radiusKm: String(radiusKm) });
-      if (origin) {
-        params.set("lat", String(origin.latitude));
-        params.set("lng", String(origin.longitude));
-      } else {
-        params.set("areaId", area);
-      }
-      if (fuel !== "all") params.set("fuelType", fuel);
-
-      const response = await fetch(`/api/stations/nearby?${params}`, {
-        signal: AbortSignal.timeout(12_000),
+      const response = await fetch("/api/stations/nearby", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ radiusKm, ...(origin ? { lat: origin.latitude, lng: origin.longitude } : { areaId: area }), ...(fuel !== "all" ? { fuelType: fuel } : {}) }),
+        cache: "no-store",
+        signal: AbortSignal.any([controller.signal, AbortSignal.timeout(12_000)]),
       });
       if (!response.ok) throw new Error(t("loadError"));
       return (await response.json()) as NearbyResponse;
@@ -87,18 +74,17 @@ export function StationDiscovery() {
 
           if (data.stations.length > 0 || radiusKm >= 30) {
             setStations(data.stations);
-            setDegradedMessage(data.degradedMessage ?? "");
+            setRadiusKm(data.radiusKm);
             setError("");
             return;
           }
         }
         if (!active || cancelled) return;
         setStations([]);
-        setDegradedMessage("");
         setError("");
       } catch (loadError: unknown) {
         if (!active || cancelled) return;
-        console.error("Nearby stations could not be loaded", loadError);
+        void loadError;
         setError(t("loadError"));
         setStations([]);
       } finally {
@@ -110,6 +96,7 @@ export function StationDiscovery() {
     return () => {
       active = false;
       cancelled = true;
+      controller.abort();
     };
   }, [area, fuel, origin, reloadToken, t]);
 
@@ -128,16 +115,19 @@ export function StationDiscovery() {
       setError(t("locationUnavailable"));
       return;
     }
+    setLocating(true);
+    setError("");
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLoading(true);
+        setLocating(false);
         setOrigin({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
       },
-      (locationError) => {
-        console.error("Location permission or lookup failed", locationError);
+      () => {
+        setLocating(false);
         setError(t("locationDenied"));
       },
       { maximumAge: 60_000, timeout: 10_000 },
@@ -189,15 +179,15 @@ export function StationDiscovery() {
           className="driver-actions driver-area-search"
           onSubmit={(event) => {
             event.preventDefault();
+            const normaliseArea = (value: string) => value.trim().toLocaleLowerCase().replace(/[\s-]+/g, "");
             const match = areas.find(
               (id) =>
-                t(`areas.${id}`).toLocaleLowerCase() ===
-                  manualArea.trim().toLocaleLowerCase() ||
-                id === manualArea.trim().toLowerCase(),
+                normaliseArea(t(`areas.${id}`)) === normaliseArea(manualArea) ||
+                normaliseArea(id) === normaliseArea(manualArea),
             );
             if (!match) {
               setError(
-                "Manual area search currently supports City Centre, Susan Road, and D Ground. Choose one or use current location.",
+                t("discovery.areaHint"),
               );
               return;
             }
@@ -209,7 +199,7 @@ export function StationDiscovery() {
           }}
         >
           <label className="driver-field">
-            Enter a Faisalabad area
+            {t("discovery.enterArea")}
             <input
               value={manualArea}
               onChange={(event) => setManualArea(event.target.value)}
@@ -224,9 +214,11 @@ export function StationDiscovery() {
           </label>
           <button className="driver-secondary" type="submit">
             <MapPin />
-            Search area
+            {t("discovery.searchArea")}
           </button>
         </form>
+        <p className="driver-small">{t("discovery.areaHint")}</p>
+        <p className="driver-small">{t("discovery.locationPrivacy")}</p>
         <section
           className="cy-station-search-panel"
           aria-label={t("areaLabel")}
@@ -243,6 +235,7 @@ export function StationDiscovery() {
                 setLoading(true);
                 setArea(event.currentTarget.value as (typeof areas)[number]);
                 setOrigin(null);
+                setReloadToken((token) => token + 1);
               }}
             >
               {areas.map((areaId) => (
@@ -257,20 +250,21 @@ export function StationDiscovery() {
             className="cy-button cy-button--accent cy-station-location-button"
             type="button"
             onClick={useMyLocation}
+            disabled={locating}
           >
             <NavigationArrow weight="fill" aria-hidden="true" />
-            {t("useLocation")}
+            {locating ? t("discovery.locating") : t("useLocation")}
           </button>
         </section>
 
         <section className="cy-station-filters" aria-label={t("filtersTitle")}>
           <label className="driver-field">
-            Station or street
+            {t("discovery.stationSearch")}
             <input
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search the loaded stations"
+              placeholder={t("discovery.stationSearchHint")}
             />
           </label>
           <div className="cy-station-filter-heading">
@@ -296,6 +290,7 @@ export function StationDiscovery() {
                 onClick={() => {
                   setLoading(true);
                   setFuel(fuelType);
+                  setReloadToken((token) => token + 1);
                 }}
               >
                 {fuelType === "all" && (
@@ -319,15 +314,14 @@ export function StationDiscovery() {
         <section className="cy-station-results" aria-live="polite">
           {fuel === "all" && (
             <p className="driver-small">
-              All supported fuels; availability and price shown for petrol.
-              Select Diesel or CNG for their reports.
+              {t("discovery.petrolReports")}
             </p>
           )}
           <div className="driver-actions">
             <div
               className="cy-station-filter-row"
               role="group"
-              aria-label="Station view"
+              aria-label={t("viewLabel")}
             >
               <button
                 type="button"
@@ -335,7 +329,7 @@ export function StationDiscovery() {
                 aria-pressed={view === "list"}
                 onClick={() => setView("list")}
               >
-                List
+                {t("listView")}
               </button>
               <button
                 type="button"
@@ -343,7 +337,7 @@ export function StationDiscovery() {
                 aria-pressed={view === "map"}
                 onClick={() => setView("map")}
               >
-                Map
+                {t("mapView")}
               </button>
             </div>
             <Link href="/app/truecost" className="driver-secondary">
@@ -351,9 +345,9 @@ export function StationDiscovery() {
               <ArrowUpRight />
             </Link>
           </div>
-          {view === "map" && !loading && (
+          {view === "map" && !loading && !error && (
             <StationMap
-              center={origin ?? { latitude: 31.4181, longitude: 73.0791 }}
+              center={origin ?? stationAreas[area]}
               userLocation={origin}
               markers={visibleStations.map((station) => ({
                 name: station.name,
@@ -372,6 +366,7 @@ export function StationDiscovery() {
               <span className="cy-station-results-kicker">{t("city")}</span>
               <h2>{t("nearbyTitle")}</h2>
               <p>{t("resultCount", { count: visibleStations.length })}</p>
+              <p>{t("discovery.radius", { radius: radiusKm })}</p>
             </div>
             <SpeakerButton
               text={`${t("nearbyTitle")}. ${t("resultCount", { count: visibleStations.length })}`}
@@ -406,29 +401,10 @@ export function StationDiscovery() {
             </div>
           ) : visibleStations.length ? (
             <>
-              {degradedMessage && (
-                <p className="cy-station-alert" role="status">
-                  {degradedMessage}
-                </p>
-              )}
               <div className="cy-station-list">
                 {visibleStations.map((station) => {
                   const distance = formatter.format(station.distanceKm);
-                  const price =
-                    station.officialPrice.amount === null
-                      ? t("unknownPrice")
-                      : `${station.officialPrice.currency} ${formatter.format(station.officialPrice.amount)} per litre`;
-                  const availability =
-                    station.availability.state === "stale"
-                      ? "Stale"
-                      : station.availability.state === "unknown"
-                        ? t("unknownStatus")
-                        : station.availability.state === "available"
-                          ? "Available"
-                          : station.availability.state === "unavailable"
-                            ? "Unavailable"
-                            : "Queue reported";
-                  const spoken = `${station.name}. ${availability}. ${price}. ${t("approxDistance", { distance })}`;
+                  const spoken = `${station.name}. ${t("approxDistance", { distance })}`;
                   return (
                     <article className="cy-station-card" key={station.id}>
                       <div className="cy-station-card-mark" aria-hidden="true">
@@ -438,7 +414,7 @@ export function StationDiscovery() {
                         <div className="cy-station-card-heading">
                           <div className="cy-station-card-name">
                             <h3>
-                              <Link href={`/app/stations/${station.id}`}>
+                              <Link href={`/app/stations/${station.id}?fuelType=${fuel === "all" ? "petrol" : fuel}`}>
                                 {station.name}
                               </Link>
                             </h3>
@@ -449,63 +425,13 @@ export function StationDiscovery() {
                             phraseId={`station-${station.id}`}
                           />
                         </div>
-                        <div className="cy-station-badges">
-                          {station.isDemo && (
-                            <span className="cy-station-badge cy-station-badge--demo">
-                              {t("demo")}
-                            </span>
-                          )}
-                          <span
-                            className={`cy-station-badge cy-station-badge--${station.availability.state}`}
-                          >
-                            <span className="cy-station-badge-dot" />
-                            {availability}
-                          </span>
-                        </div>
+                        <StationInformation key={`${station.id}-${station.availability.expiresAt}`} station={station} availability={station.availability} />
                         <div className="cy-station-facts">
                           <span>
                             <NavigationArrow aria-hidden="true" />
                             {t("approxDistance", { distance })}
                           </span>
-                          <span>
-                            <span
-                              className="cy-station-price-symbol"
-                              aria-hidden="true"
-                            >
-                              ₨
-                            </span>
-                            {price}
-                          </span>
                         </div>
-                        <p className="cy-station-source">
-                          Report source:{" "}
-                          {station.availability.source ?? "Unknown"}. Last
-                          reported:{" "}
-                          {station.availability.reportedAt
-                            ? new Date(
-                                station.availability.reportedAt,
-                              ).toLocaleString()
-                            : "Unknown"}
-                          .{" "}
-                          {station.officialPrice.source
-                            ? `Official price: ${station.officialPrice.source}. Effective: ${station.officialPrice.effectiveAt ? new Date(station.officialPrice.effectiveAt).toLocaleString() : "Unknown"}`
-                            : t("sourceLabel", { source: station.source })}
-                          {station.updatedAt
-                            ? ` · ${t("updatedAt", { date: new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(new Date(station.updatedAt)) })}`
-                            : ""}
-                          {station.sourceUrl && (
-                            <>
-                              {" · "}
-                              <a
-                                href={station.sourceUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                {t("sourceDetails")}
-                              </a>
-                            </>
-                          )}
-                        </p>
                         <div className="cy-station-card-actions">
                           <a
                             className="cy-button cy-button--outline"
@@ -530,6 +456,7 @@ export function StationDiscovery() {
               </span>
               <h3>{t("emptyTitle")}</h3>
               <p>{t("emptyMessage")}</p>
+              {fuel !== "all" && <p>{t("discovery.noFuelMetadata")}</p>}
             </div>
           )}
         </section>

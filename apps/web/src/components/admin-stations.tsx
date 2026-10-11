@@ -12,12 +12,18 @@ type Station = {
   verification_status: string;
   is_demo: boolean;
   source: string;
+  source_url: string | null;
+  latitude: number | string;
+  longitude: number | string;
+  verified_at: string | null;
 };
 const fuels = ["petrol", "diesel", "cng"] as const;
 const statuses = ["unverified", "pending", "verified", "rejected"] as const;
 
 export function AdminStations() {
   const t = useTranslations("dashboard.adminStations");
+  const detailsT = useTranslations("stations.discovery");
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [stations, setStations] = useState<Station[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState("");
@@ -54,6 +60,11 @@ export function AdminStations() {
         address: station.address ?? "",
         supportedFuels: station.supported_fuels,
         verificationStatus: station.verification_status,
+        latitude: station.latitude,
+        longitude: station.longitude,
+        source: station.source,
+        sourceUrl: station.source_url ?? "",
+        detailsChecked: checked[station.id] === true,
       }),
     }).catch(() => null);
     setBusy("");
@@ -62,9 +73,12 @@ export function AdminStations() {
       return;
     }
     setMessage(t("updated"));
+    setChecked((current) => ({ ...current, [station.id]: false }));
+    await load();
   }
 
   function update(id: string, field: keyof Station, value: string | string[]) {
+    setChecked((current) => ({ ...current, [id]: false }));
     setStations((current) => current.map((station) => station.id === id ? { ...station, [field]: value } : station));
   }
 
@@ -82,8 +96,13 @@ export function AdminStations() {
             <label>{t("address")}<input value={station.address ?? ""} onChange={(event) => update(station.id, "address", event.currentTarget.value)} /></label>
             <fieldset><legend>{t("fuelsLabel")}</legend>{fuels.map((fuel) => <label key={fuel}><input type="checkbox" checked={station.supported_fuels.includes(fuel)} onChange={(event) => update(station.id, "supported_fuels", event.currentTarget.checked ? [...station.supported_fuels, fuel] : station.supported_fuels.filter((item) => item !== fuel))} />{t(`fuels.${fuel}`)}</label>)}</fieldset>
             <label>{t("status")}<select value={station.verification_status} onChange={(event) => update(station.id, "verification_status", event.currentTarget.value)}>{statuses.map((status) => <option key={status} value={status}>{t(`statuses.${status}`)}</option>)}</select></label>
-            <p>{t("source")}: {station.source}</p>
-            <button type="button" disabled={busy === station.id} onClick={() => void save(station)}>{busy === station.id ? t("saving") : t("save")}</button>
+            <label>{detailsT("latitude")}<input type="number" min="-90" max="90" step="any" value={station.latitude} onChange={(event) => update(station.id, "latitude", event.currentTarget.value)} /></label>
+            <label>{detailsT("longitude")}<input type="number" min="-180" max="180" step="any" value={station.longitude} onChange={(event) => update(station.id, "longitude", event.currentTarget.value)} /></label>
+            <label>{t("source")}<input maxLength={200} value={station.source} onChange={(event) => update(station.id, "source", event.currentTarget.value)} /></label>
+            <label>{detailsT("sourceUrl")}<input type="url" maxLength={2000} value={station.source_url ?? ""} onChange={(event) => update(station.id, "source_url", event.currentTarget.value)} /></label>
+            <p>{detailsT("lastVerified")}: {station.verified_at ? new Date(station.verified_at).toLocaleString() : detailsT("notVerified")}</p>
+            {station.verification_status === "verified" && <label><input type="checkbox" checked={checked[station.id] === true} onChange={(event) => { const isChecked = event.currentTarget.checked; setChecked((current) => ({ ...current, [station.id]: isChecked })); }} />{detailsT("checked")}</label>}
+            <button type="button" disabled={busy === station.id || (station.verification_status === "verified" && !checked[station.id])} onClick={() => void save(station)}>{busy === station.id ? t("saving") : t("save")}</button>
           </section>
         ))}
       </div>}

@@ -3,6 +3,12 @@ import { resolveAvailabilityStatus } from "./availability";
 
 describe("resolveAvailabilityStatus", () => {
   const now = new Date("2026-10-11T12:00:00.000Z");
+  it("never treats a malformed expiry as current evidence", () => {
+    expect(resolveAvailabilityStatus({ reported_status: "available", expires_at: "invalid" }, now)).toBe("unknown");
+  });
+  it("expires at the exact deadline", () => {
+    expect(resolveAvailabilityStatus({ reported_status: "available", expires_at: now.toISOString() }, now)).toBe("stale");
+  });
 
   it("keeps missing availability as Unknown, never Unavailable", () => {
     expect(resolveAvailabilityStatus(null, now)).toBe("unknown");

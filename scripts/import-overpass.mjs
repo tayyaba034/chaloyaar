@@ -90,7 +90,7 @@ const response = await fetch(
       apikey: serviceRoleKey,
       Authorization: `Bearer ${serviceRoleKey}`,
       "Content-Type": "application/json",
-      Prefer: "resolution=merge-duplicates,return=minimal",
+      Prefer: "resolution=ignore-duplicates,return=minimal",
     },
     body: JSON.stringify(rows),
   },
@@ -100,4 +100,4 @@ if (!response.ok) {
   throw new Error(`Supabase import failed (${response.status}): ${await response.text()}`);
 }
 
-console.log(`Imported/updated ${rows.length} OpenStreetMap stations.`);
+console.log(`Submitted ${rows.length} OpenStreetMap leads. Existing records were preserved; new records remain unverified.`);

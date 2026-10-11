@@ -15,6 +15,8 @@ export function resolveAvailabilityStatus(
   now: Date = new Date(),
 ): AvailabilityStatus {
   if (!report) return "unknown";
-  if (new Date(report.expires_at).getTime() <= now.getTime()) return "stale";
+  const expiry = new Date(report.expires_at).getTime();
+  if (!Number.isFinite(expiry)) return "unknown";
+  if (expiry <= now.getTime()) return "stale";
   return report.reported_status;
 }

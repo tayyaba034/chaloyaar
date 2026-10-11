@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { demoStations, type FuelType, type Station } from "./station-data";
 import { getSupabaseConfig } from "./supabase-config";
 import { resolveAvailabilityStatus } from "./availability";
+import type { StationSearch } from "./station-search";
 
 export { demoStations };
 export type { FuelType, Station };
@@ -37,7 +38,56 @@ function parseStation(row: Record<string, unknown>): Station | null {
     source: typeof row.source === "string" ? row.source : "Unknown",
     sourceUrl: typeof row.source_url === "string" ? row.source_url : null,
     updatedAt: typeof row.updated_at === "string" ? row.updated_at : null,
+    verifiedAt: typeof row.verified_at === "string" ? row.verified_at : null,
   };
+}
+
+function stationClient() {
+  const { url, key } = getSupabaseConfig();
+  if (!url || !key) throw new Error("Supabase station data is not configured.");
+  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+}
+
+export async function getStationById(id: string): Promise<Station | null> {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) return null;
+  const { data, error } = await stationClient().from("station_public")
+    .select("id,name,brand,address,latitude,longitude,supported_fuels,verification_status,is_demo,source,source_url,updated_at,verified_at")
+    .eq("id", id).eq("is_demo", false).neq("verification_status", "rejected").maybeSingle();
+  if (error) throw new Error("Station details are temporarily unavailable.");
+  return data ? parseStation(data) : null;
+}
+
+export async function getNearbyStations(search: StationSearch) {
+  const { data, error } = await stationClient().rpc("nearby_stations", {
+    search_latitude: search.latitude, search_longitude: search.longitude,
+    radius_km: search.radiusKm, requested_fuel: search.fuelType,
+  });
+  if (error) throw new Error("Nearby station data is temporarily unavailable.");
+  return (data as Record<string, unknown>[]).flatMap((row) => {
+    const station = parseStation(row);
+    return station ? [{ ...station, distanceKm: Number(row.distance_km), distanceKind: "straight_line_approximate" as const }] : [];
+  });
+}
+
+export async function getDiscoveryAvailability(stationIds: string[], fuel: FuelType) {
+  const facts: Record<string, {
+    state: ReturnType<typeof resolveAvailabilityStatus>;
+    source: "user" | "station" | "admin";
+    reportedAt: string;
+    expiresAt: string;
+  }> = {};
+  if (!stationIds.length) return facts;
+  const { data, error } = await stationClient().rpc("station_latest_reports", {
+    station_ids: stationIds, requested_fuel: fuel,
+  });
+  if (error) throw new Error("Station reports are temporarily unavailable.");
+  for (const row of data ?? []) {
+    facts[row.station_id] = {
+      state: resolveAvailabilityStatus(row), source: row.source_type,
+      reportedAt: row.reported_at, expiresAt: row.expires_at,
+    };
+  }
+  return facts;
 }
 
 export async function getStations(): Promise<Station[]> {

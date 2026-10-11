@@ -13,6 +13,7 @@ export type Station = {
   source: string;
   sourceUrl: string | null;
   updatedAt: string | null;
+  verifiedAt?: string | null;
 };
 
 export const demoStations: Station[] = [

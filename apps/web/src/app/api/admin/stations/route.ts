@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireApiRole } from "@/lib/api-auth";
+import { parseStationSearch } from "@/lib/station-search";
 
 const validFuels = new Set(["petrol", "diesel", "cng"]);
 const validStatuses = new Set(["unverified", "pending", "verified", "rejected"]);
@@ -13,7 +14,7 @@ export async function GET() {
   if ("response" in access) return access.response;
   const { data, error } = await access.supabase
     .from("station_public")
-    .select("id,name,brand,address,latitude,longitude,supported_fuels,verification_status,is_demo,source,source_url,updated_at")
+    .select("id,name,brand,address,latitude,longitude,supported_fuels,verification_status,is_demo,source,source_url,updated_at,verified_at")
     .order("name")
     .limit(200);
   if (error) {
@@ -36,16 +37,29 @@ export async function POST(request: NextRequest) {
   const address = typeof payload.address === "string" ? payload.address : "";
   const fuels = Array.isArray(payload.supportedFuels) ? payload.supportedFuels.filter((fuel): fuel is string => typeof fuel === "string") : [];
   const verificationStatus = typeof payload.verificationStatus === "string" ? payload.verificationStatus : "";
+  let coordinates;
+  try { coordinates = parseStationSearch({ lat: payload.latitude, lng: payload.longitude }); }
+  catch { return errorResponse("VALIDATION_ERROR", "Enter a valid station pin."); }
+  const source = typeof payload.source === "string" ? payload.source.trim() : "";
+  const sourceUrl = typeof payload.sourceUrl === "string" ? payload.sourceUrl.trim() : "";
+  if (!source || source.length > 200 || sourceUrl.length > 2000 || (sourceUrl && !/^https?:\/\//i.test(sourceUrl)) || (verificationStatus === "verified" && payload.detailsChecked !== true)) {
+    return errorResponse("VALIDATION_ERROR", "Enter a source and confirm checked details before verifying.");
+  }
   if (!stationId || !name || name.length > 200 || fuels.some((fuel) => !validFuels.has(fuel)) || !validStatuses.has(verificationStatus)) {
     return errorResponse("VALIDATION_ERROR", "Enter a valid name, fuel list and verification status.");
   }
-  const { data, error } = await access.supabase.rpc("admin_update_station", {
+  const { data, error } = await access.supabase.rpc("admin_update_station_details", {
     target_station_id: stationId,
     target_name: name,
     target_brand: brand,
     target_address: address,
     target_supported_fuels: fuels,
     target_verification_status: verificationStatus,
+    target_latitude: coordinates.latitude,
+    target_longitude: coordinates.longitude,
+    target_source: source,
+    target_source_url: sourceUrl,
+    details_checked: payload.detailsChecked === true,
   });
   if (error) {
     console.error("Admin station update failed", error.message);

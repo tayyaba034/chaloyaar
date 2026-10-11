@@ -98,6 +98,51 @@
     "footerLinksLabel": "Footer"
   },
   "stations": {
+    "discovery": {
+      "enterArea": "Enter a Faisalabad area",
+      "searchArea": "Search area",
+      "areaHint": "Pilot areas: City Centre, Susan Road and D Ground. Other areas are not supported yet.",
+      "locationPrivacy": "Location is optional. Search coordinates are used for this lookup, not saved to your account. Opening the map shares the viewed area with the map service.",
+      "locating": "Finding location...",
+      "stationSearch": "Station or street",
+      "stationSearchHint": "Search the loaded stations",
+      "petrolReports": "Showing petrol reports. Select a fuel to see its reports.",
+      "radius": "Within {radius} km; up to 50 nearest results.",
+      "noFuelMetadata": "This filter needs recorded fuel types. Missing fuel details do not mean fuel is unavailable. Try All.",
+      "unknown": "Unknown",
+      "verified": "Details verified",
+      "unverified": "Unverified station details",
+      "fuels": "Recorded fuel types",
+      "fuelsNames": {
+        "petrol": "Petrol",
+        "diesel": "Diesel",
+        "cng": "CNG"
+      },
+      "source": "Information source",
+      "viewSource": "View source",
+      "lastVerified": "Last human verification",
+      "notVerified": "Not verified",
+      "reportSource": "Availability source",
+      "reportedAt": "Observed",
+      "expiresAt": "Expires",
+      "notGuaranteed": "Reports are time-limited, not a guarantee of fuel on arrival.",
+      "states": {
+        "available": "Reported available",
+        "unavailable": "Reported unavailable",
+        "queue_reported": "Queue reported",
+        "unknown": "Availability unknown",
+        "stale": "Stale report"
+      },
+      "sources": {
+        "user": "Community report",
+        "station": "Station confirmation",
+        "admin": "Admin report"
+      },
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "sourceUrl": "Source link",
+      "checked": "I checked the pin, fuel types and station details."
+    },
     "title": "Find Petrol",
     "subtitle": "Find a fuel stop. Check what we know before you go.",
     "city": "FAISALABAD",

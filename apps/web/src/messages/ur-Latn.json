@@ -98,6 +98,51 @@
     "footerLinksLabel": "Footer"
   },
   "stations": {
+    "discovery": {
+      "enterArea": "Faisalabad ka area likhein",
+      "searchArea": "Area dhoondein",
+      "areaHint": "Pilot areas: City Centre, Susan Road aur D Ground. Doosre areas abhi shamil nahi.",
+      "locationPrivacy": "Location dena optional hai. Search coordinates account mein save nahi hote. Map kholne par nazar aane wala area map service ko jata hai.",
+      "locating": "Location dhoond rahe hain...",
+      "stationSearch": "Station ya sarak",
+      "stationSearchHint": "Loaded stations mein dhoondein",
+      "petrolReports": "Petrol ki reports dikh rahi hain. Doosra fuel chun kar uski reports dekhein.",
+      "radius": "{radius} km ke andar; zyada se zyada 50 qareebi results.",
+      "noFuelMetadata": "Is filter ko recorded fuel types chahiye. Details na hona fuel na hone ka saboot nahi. All chunein.",
+      "unknown": "Maloom nahi",
+      "verified": "Details verified",
+      "unverified": "Station details verify nahi hue",
+      "fuels": "Recorded fuel types",
+      "fuelsNames": {
+        "petrol": "Petrol",
+        "diesel": "Diesel",
+        "cng": "CNG"
+      },
+      "source": "Maloomat ka source",
+      "viewSource": "Source dekhein",
+      "lastVerified": "Aakhri insani verification",
+      "notVerified": "Verify nahi hua",
+      "reportSource": "Availability ka source",
+      "reportedAt": "Dekha gaya",
+      "expiresAt": "Expiry",
+      "notGuaranteed": "Reports mehdood waqt ke liye hain; pohanchne par fuel ki guarantee nahi.",
+      "states": {
+        "available": "Available report hua",
+        "unavailable": "Unavailable report hua",
+        "queue_reported": "Qatar report hui",
+        "unknown": "Availability maloom nahi",
+        "stale": "Purani report"
+      },
+      "sources": {
+        "user": "Community report",
+        "station": "Station ki tasdeeq",
+        "admin": "Admin report"
+      },
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "sourceUrl": "Source link",
+      "checked": "Maine pin, fuel types aur station details check ki hain."
+    },
     "title": "Petrol Kidhar?",
     "subtitle": "Qareeb petrol station dhoondein. Nikalne se pehle maloomat dekhein.",
     "city": "FAISALABAD",
