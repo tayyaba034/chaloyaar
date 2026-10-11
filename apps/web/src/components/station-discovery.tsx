@@ -49,39 +49,56 @@ export function StationDiscovery() {
 
   useEffect(() => {
     let active = true;
-    const params = new URLSearchParams({ radiusKm: "15" });
-    if (origin) {
-      params.set("lat", String(origin.latitude));
-      params.set("lng", String(origin.longitude));
-    } else {
-      params.set("areaId", area);
-    }
-    if (fuel !== "all") params.set("fuelType", fuel);
+    let cancelled = false;
 
-    void fetch(`/api/stations/nearby?${params}`, {
-      signal: AbortSignal.timeout(12_000),
-    })
-      .then(async (response) => {
-        if (!response.ok) throw new Error(t("loadError"));
-        return (await response.json()) as NearbyResponse;
-      })
-      .then((data) => {
-        if (!active) return;
-        setStations(data.stations);
-        setDegradedMessage(data.degradedMessage ?? "");
+    async function loadNearby(radiusKm: number): Promise<NearbyResponse | null> {
+      const params = new URLSearchParams({ radiusKm: String(radiusKm) });
+      if (origin) {
+        params.set("lat", String(origin.latitude));
+        params.set("lng", String(origin.longitude));
+      } else {
+        params.set("areaId", area);
+      }
+      if (fuel !== "all") params.set("fuelType", fuel);
+
+      const response = await fetch(`/api/stations/nearby?${params}`, {
+        signal: AbortSignal.timeout(12_000),
+      });
+      if (!response.ok) throw new Error(t("loadError"));
+      return (await response.json()) as NearbyResponse;
+    }
+
+    async function run() {
+      try {
+        for (const radiusKm of [15, 30]) {
+          const data = await loadNearby(radiusKm);
+          if (!active || cancelled) return;
+
+          if (data.stations.length > 0 || radiusKm >= 30) {
+            setStations(data.stations);
+            setDegradedMessage(data.degradedMessage ?? "");
+            setError("");
+            return;
+          }
+        }
+        if (!active || cancelled) return;
+        setStations([]);
+        setDegradedMessage("");
         setError("");
-      })
-      .catch((loadError: unknown) => {
-        if (!active) return;
+      } catch (loadError: unknown) {
+        if (!active || cancelled) return;
         console.error("Nearby stations could not be loaded", loadError);
         setError(t("loadError"));
         setStations([]);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
+      } finally {
+        if (active && !cancelled) setLoading(false);
+      }
+    }
+
+    void run();
     return () => {
       active = false;
+      cancelled = true;
     };
   }, [area, fuel, origin, reloadToken, t]);
 
