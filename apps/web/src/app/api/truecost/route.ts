@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireApiRole } from "@/lib/api-auth";
 import { calculateEstimate, distanceKm, type Point } from "@/lib/truecost";
+import { getDrivingRoute } from "@/lib/routing";
 
 const fuelTypes = new Set(["petrol", "diesel", "cng"]);
 
@@ -75,7 +76,8 @@ export async function POST(request: NextRequest) {
   const kmPerLitre = first !== undefined && last !== undefined && Number(last) > Number(first) && totalLitres > 0
     ? (Number(last) - Number(first)) / totalLitres
     : null;
-  const directDistanceKm = distanceKm(origin, destination);
+  const route = await getDrivingRoute(origin, destination);
+  const directDistanceKm = route?.distanceKm ?? distanceKm(origin, destination);
   const stationRows = stationsResult.data ?? [];
   const availabilityResult = stationRows.length
     ? await access.supabase
@@ -134,10 +136,13 @@ export async function POST(request: NextRequest) {
       effectiveAt: price.effective_at,
       isDemo: price.is_demo,
     },
-    routing: "approximate",
+    routing: route?.source ?? "approximate",
+    routeDurationMinutes: route?.durationMinutes ?? null,
     stations,
     assumptions: [
-      "Distances use straight-line approximation; no ETA is provided.",
+      route
+        ? "The origin-to-destination distance and duration use a road route. Station detours are ranked using straight-line approximations."
+        : "Distances use straight-line approximation; no ETA is provided.",
       kmPerLitre === null ? "Total detour cost is unavailable until you have valid fuel and odometer history." : "Detour fuel cost uses your recorded average efficiency.",
       "No discount has been applied because no verified redeemable offer is configured.",
     ],

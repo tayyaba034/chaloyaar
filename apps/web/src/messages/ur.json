@@ -461,6 +461,8 @@
       "resultTitle": "تخمینے کی معلومات",
       "price": "سرکاری حوالہ قیمت: فی لیٹر {amount} ({source})",
       "directDistance": "سیدھا فاصلہ: {distance} کلومیٹر",
+      "roadRouting": "سڑک کا راستہ ({provider}): تقریباً {minutes} منٹ",
+      "approximateRouting": "صرف اندازاً راستہ؛ آمد کا وقت دستیاب نہیں۔",
       "efficiency": "درج کارکردگی: {value} کلومیٹر فی لیٹر",
       "missingEfficiency": "درج شدہ کارکردگی کے بغیر اضافی خرچ جزوی ہے۔",
       "detour": "اضافی راستہ: {distance} کلومیٹر",

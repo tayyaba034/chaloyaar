@@ -419,6 +419,8 @@
       "resultTitle": "Estimate inputs",
       "price": "Official reference price: {amount} per litre ({source})",
       "directDistance": "Direct distance: {distance} km",
+      "roadRouting": "Road route via {provider}: about {minutes} min",
+      "approximateRouting": "Approximate route only; no ETA is available.",
       "efficiency": "Recorded efficiency: {value} km/L",
       "missingEfficiency": "Total detour cost is partial until you have fuel and odometer history.",
       "detour": "Additional route distance: {distance} km",

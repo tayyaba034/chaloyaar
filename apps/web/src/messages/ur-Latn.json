@@ -461,6 +461,8 @@
       "resultTitle": "Estimate ki maloomat",
       "price": "Sarkari reference price: {amount} fi litre ({source})",
       "directDistance": "Seedha fasla: {distance} km",
+      "roadRouting": "Road route ({provider}): taqreeban {minutes} minutes",
+      "approximateRouting": "Sirf andazay ka route; ETA dastiyab nahi.",
       "efficiency": "Darj karkardagi: {value} km/L",
       "missingEfficiency": "Darj karkardagi ke baghair detour cost partial hai.",
       "detour": "Izafi raste ka fasla: {distance} km",

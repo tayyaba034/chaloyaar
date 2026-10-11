@@ -10,7 +10,8 @@ type Result = {
   directDistanceKm: number;
   kmPerLitre: number | null;
   price: { amount: number; source: string; effectiveAt: string; isDemo: boolean };
-  routing: "approximate";
+  routing: "osrm" | "openrouteservice" | "approximate";
+  routeDurationMinutes: number | null;
   assumptions: string[];
   stations: Array<{
     id: string;
@@ -106,6 +107,9 @@ export function TrueCostFeature() {
             <h2>{t("resultTitle")}</h2>
             <p>{t("price", { amount: result.price.amount.toFixed(2), source: result.price.source })}</p>
             <p>{t("directDistance", { distance: result.directDistanceKm.toFixed(1) })}</p>
+            <p>{result.routing === "approximate"
+              ? t("approximateRouting")
+              : t("roadRouting", { provider: result.routing.toUpperCase(), minutes: result.routeDurationMinutes?.toFixed(0) ?? "—" })}</p>
             <p>{result.kmPerLitre ? t("efficiency", { value: result.kmPerLitre.toFixed(1) }) : t("missingEfficiency")}</p>
           </section>
           <div className="station-list">
