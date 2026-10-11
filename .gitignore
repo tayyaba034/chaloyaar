@@ -9,3 +9,4 @@ coverage/
 !.env.example
 *.pem
 .DS_Store
+apps/web/public/maplibre/

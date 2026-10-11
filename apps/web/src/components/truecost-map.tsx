@@ -6,6 +6,8 @@ import {
   NavigationControl,
   Popup,
   LngLatBounds,
+  getVersion,
+  setWorkerUrl,
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 type StationMarker = {
@@ -29,26 +31,38 @@ export function TrueCostMap({
 }) {
   const container = useRef<HTMLDivElement>(null);
   const [failed, setFailed] = useState(false);
+  const [accessDenied, setAccessDenied] = useState(false);
   const key = process.env.NEXT_PUBLIC_MAPTILER_KEY;
   useEffect(() => {
     const origin = center ?? markers[0];
     if (!container.current || !origin || !key) return;
     let map: Map | undefined;
     let ready = false;
+    let hadError = false;
+    let active = true;
+    const reset = window.setTimeout(() => {
+      setFailed(false);
+      setAccessDenied(false);
+    }, 0);
     const timer = window.setTimeout(() => {
       if (!ready) setFailed(true);
     }, 18000);
     try {
+      setWorkerUrl(`/maplibre/${getVersion()}/maplibre-gl-worker.mjs`);
       map = new Map({
         container: container.current,
-        style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${key}`,
+        style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(key)}`,
         center: [origin.longitude, origin.latitude],
         zoom: 12,
         cooperativeGestures: true,
       });
       map.addControl(new NavigationControl(), "top-right");
-      map.on("error", () => {
-        if (!ready) setFailed(true);
+      map.on("error", (event) => {
+        if (!active) return;
+        hadError = true;
+        const status = (event.error as Error & { status?: number }).status;
+        if (status === 401 || status === 403) setAccessDenied(true);
+        setFailed(true);
       });
       const bounds = new LngLatBounds();
       markers.forEach((marker) => {
@@ -77,9 +91,11 @@ export function TrueCostMap({
         bounds.extend([point[0], point[1]]),
       );
       map.once("load", () => {
+        if (!active) return;
         ready = true;
         clearTimeout(timer);
-        setFailed(false);
+        if (!hadError) setFailed(false);
+        map!.resize();
         if (routeGeometry) {
           map!.addSource("driver-route", {
             type: "geojson",
@@ -96,9 +112,11 @@ export function TrueCostMap({
           map!.fitBounds(bounds, { padding: 50, maxZoom: 14, duration: 0 });
       });
     } catch {
-      window.setTimeout(() => setFailed(true), 0);
+      window.setTimeout(() => { if (active) setFailed(true); }, 0);
     }
     return () => {
+      active = false;
+      clearTimeout(reset);
       clearTimeout(timer);
       map?.remove();
     };
@@ -114,7 +132,9 @@ export function TrueCostMap({
         <div className="driver-map-fallback" role="status">
           <strong>Map unavailable</strong>
           <p>
-            {key
+            {accessDenied
+              ? "The map service denied access. The account owner needs to check the key, allowed hosts and plan permissions."
+              : key
               ? "The map service or WebGL could not load."
               : "A map service key is not configured."}{" "}
             Use the station list and directions links below.

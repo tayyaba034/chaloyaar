@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node ../../scripts/prepare-map-worker.mjs",
     "dev": "next dev",
+    "prebuild": "node ../../scripts/prepare-map-worker.mjs",
     "build": "next build",
+    "prestart": "node ../../scripts/prepare-map-worker.mjs",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run"
