@@ -14,11 +14,26 @@ const query = `[out:json][timeout:60];
 );
 out center tags;`;
 
-const overpassResponse = await fetch(overpassUrl, {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-  body: new URLSearchParams({ data: query }),
-});
+const fallbackQuery = `[out:json][timeout:120];
+node["amenity"="fuel"](31.30,72.95,31.55,73.25);
+out center tags;`;
+
+async function fetchOverpass(overpassQuery) {
+  const requestUrl = new URL(overpassUrl);
+  requestUrl.searchParams.set("data", overpassQuery);
+  return fetch(requestUrl, {
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "ChaloYaar-station-import/1.0",
+    },
+  });
+}
+
+let overpassResponse = await fetchOverpass(query);
+if (!overpassResponse.ok) {
+  console.warn(`Overpass full station query failed (${overpassResponse.status}); retrying node stations.`);
+  overpassResponse = await fetchOverpass(fallbackQuery);
+}
 if (!overpassResponse.ok) {
   throw new Error(`Overpass request failed (${overpassResponse.status}): ${await overpassResponse.text()}`);
 }

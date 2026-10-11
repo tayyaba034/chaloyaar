@@ -74,43 +74,76 @@ export function TrueCostFeature() {
   return (
     <main className="dashboard-page">
       <section className="dashboard-greeting">
-        <h1>{t("title")}</h1>
-        <p>{t("intro")}</p>
+        <div>
+          <p className="dashboard-eyebrow">{t("calculate")}</p>
+          <h1>{t("title")}</h1>
+        </div>
+        <p className="dashboard-intro">{t("intro")}</p>
       </section>
-      <section className="dashboard-card">
+      <section className="dashboard-card truecost-form-card">
         <form className="dashboard-form" onSubmit={submit}>
-          <div className="form-row">
-            <label>{t("originLatitude")}<input name="originLatitude" type="number" step="any" required /></label>
-            <label>{t("originLongitude")}<input name="originLongitude" type="number" step="any" required /></label>
+          <div className="truecost-form-section">
+            <div className="truecost-section-heading">
+              <span className="truecost-step">1</span>
+              <div>
+                <h2>{t("routeSectionTitle")}</h2>
+                <p>{t("routeSectionDescription")}</p>
+              </div>
+            </div>
+            <div className="truecost-location-grid">
+              <fieldset className="truecost-location">
+                <legend>{t("originTitle")}</legend>
+                <div className="form-row">
+                  <label>{t("originLatitude")}<input name="originLatitude" type="number" step="any" required /></label>
+                  <label>{t("originLongitude")}<input name="originLongitude" type="number" step="any" required /></label>
+                </div>
+                <button className="secondary-button" type="button" onClick={() => fillLocation("origin")}>{t("useLocation")}</button>
+              </fieldset>
+              <fieldset className="truecost-location">
+                <legend>{t("destinationTitle")}</legend>
+                <div className="form-row">
+                  <label>{t("destinationLatitude")}<input name="destinationLatitude" type="number" step="any" required /></label>
+                  <label>{t("destinationLongitude")}<input name="destinationLongitude" type="number" step="any" required /></label>
+                </div>
+                <button className="secondary-button" type="button" onClick={() => fillLocation("destination")}>{t("useDestinationLocation")}</button>
+              </fieldset>
+            </div>
           </div>
-          <button type="button" onClick={() => fillLocation("origin")}>{t("useLocation")}</button>
-          <div className="form-row">
-            <label>{t("destinationLatitude")}<input name="destinationLatitude" type="number" step="any" required /></label>
-            <label>{t("destinationLongitude")}<input name="destinationLongitude" type="number" step="any" required /></label>
+          <div className="truecost-form-section">
+            <div className="truecost-section-heading">
+              <span className="truecost-step">2</span>
+              <div>
+                <h2>{t("fuelSectionTitle")}</h2>
+                <p>{t("fuelSectionDescription")}</p>
+              </div>
+            </div>
+            <div className="truecost-fuel-grid">
+              <label>{t("fuelType")}
+                <select name="fuelType" defaultValue="petrol">
+                  <option value="petrol">{t("fuels.petrol")}</option>
+                  <option value="diesel">{t("fuels.diesel")}</option>
+                  <option value="cng">{t("fuels.cng")}</option>
+                </select>
+              </label>
+              <label>{t("litres")}<input name="litres" type="number" min="0.1" max="500" step="0.1" defaultValue="20" required /></label>
+            </div>
           </div>
-          <button type="button" onClick={() => fillLocation("destination")}>{t("useDestinationLocation")}</button>
-          <label>{t("fuelType")}
-            <select name="fuelType" defaultValue="petrol">
-              <option value="petrol">{t("fuels.petrol")}</option>
-              <option value="diesel">{t("fuels.diesel")}</option>
-              <option value="cng">{t("fuels.cng")}</option>
-            </select>
-          </label>
-          <label>{t("litres")}<input name="litres" type="number" min="0.1" max="500" step="0.1" defaultValue="20" required /></label>
-          <button type="submit" disabled={loading}>{loading ? t("calculating") : t("calculate")}</button>
+          <button className="primary-button truecost-submit" type="submit" disabled={loading}>{loading ? t("calculating") : t("calculate")}</button>
         </form>
       </section>
       {message && <p className="inline-alert" role="alert">{message}</p>}
       {result && (
         <>
-          <section className="dashboard-card">
+          <section className="dashboard-card truecost-summary">
             <h2>{t("resultTitle")}</h2>
-            <p>{t("price", { amount: result.price.amount.toFixed(2), source: result.price.source })}</p>
-            <p>{t("directDistance", { distance: result.directDistanceKm.toFixed(1) })}</p>
-            <p>{result.routing === "approximate"
-              ? t("approximateRouting")
-              : t("roadRouting", { provider: result.routing.toUpperCase(), minutes: result.routeDurationMinutes?.toFixed(0) ?? "—" })}</p>
-            <p>{result.kmPerLitre ? t("efficiency", { value: result.kmPerLitre.toFixed(1) }) : t("missingEfficiency")}</p>
+            <div className="truecost-summary-grid">
+              <p>{t("price", { amount: result.price.amount.toFixed(2), source: result.price.source })}</p>
+              <p>{t("directDistance", { distance: result.directDistanceKm.toFixed(1) })}</p>
+              <p>{result.routing === "approximate"
+                ? t("approximateRouting")
+                : t("roadRouting", { provider: result.routing.toUpperCase(), minutes: result.routeDurationMinutes?.toFixed(0) ?? "—" })}</p>
+              <p>{result.kmPerLitre ? t("efficiency", { value: result.kmPerLitre.toFixed(1) }) : t("missingEfficiency")}</p>
+            </div>
           </section>
           <div className="station-list">
             <TrueCostMap markers={result.stations.map((station) => ({ name: station.name, latitude: station.latitude, longitude: station.longitude, warning: station.availability === "unavailable" ? t("fuelFinished") : undefined }))} />
