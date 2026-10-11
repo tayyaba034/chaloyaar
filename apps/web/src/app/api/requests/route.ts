@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireApiRole } from "@/lib/api-auth";
+import { isUuid } from "@/lib/driver-records";
 
 const serviceTypes = new Set(["puncture", "battery", "towing"]);
 
@@ -16,7 +17,7 @@ export async function GET() {
 
   const { data, error } = await access.supabase
     .from("service_requests")
-    .select("id,service_type,status,latitude,longitude,notes,created_at,updated_at,is_demo")
+    .select("id,service_type,status,latitude,longitude,notes,created_at,updated_at,is_demo,quote_amount_pkr,assigned_provider_id,vehicle_id")
     .eq("user_id", access.profile.id)
     .order("created_at", { ascending: false })
     .limit(20);
@@ -50,6 +51,10 @@ export async function POST(request: NextRequest) {
   const latitude = payload.latitude;
   const longitude = payload.longitude;
   const notes = payload.notes;
+  const phone = typeof payload.contactPhone === "string" ? payload.contactPhone.trim() : "";
+  if (!isUuid(payload.quoteId) || payload.confirmedQuote !== true) return errorResponse("QUOTE_REQUIRED","Review and confirm a current verified provider quote before submitting.",422);
+  if (!/^[+0-9 ()-]{7,30}$/.test(phone)) return errorResponse("VALIDATION_ERROR","Enter a valid contact phone for the provider.",400);
+  if (payload.vehicleId && !isUuid(payload.vehicleId)) return errorResponse("VALIDATION_ERROR","Choose a valid vehicle.",400);
 
   if (
     typeof serviceType !== "string" ||
@@ -75,9 +80,12 @@ export async function POST(request: NextRequest) {
       latitude,
       longitude,
       notes: typeof notes === "string" && notes.trim() ? notes.trim() : null,
+      quote_id: payload.quoteId,
+      vehicle_id: payload.vehicleId || null,
+      contact_phone: phone,
       is_demo: false,
     })
-    .select("id,service_type,status,latitude,longitude,notes,created_at,updated_at,is_demo")
+    .select("id,service_type,status,latitude,longitude,notes,created_at,updated_at,is_demo,quote_amount_pkr,assigned_provider_id,vehicle_id")
     .single();
 
   if (error) {

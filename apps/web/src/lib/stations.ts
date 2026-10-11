@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { demoStations, type FuelType, type Station } from "./station-data";
 import { getSupabaseConfig } from "./supabase-config";
+import { resolveAvailabilityStatus } from "./availability";
 
 export { demoStations };
 export type { FuelType, Station };
@@ -73,7 +74,7 @@ export type StationLiveFacts = {
     effectiveAt: string;
   }>>;
   availability: Record<string, Partial<Record<FuelType, {
-    state: "available" | "unavailable" | "queue_reported";
+    state: "available" | "unavailable" | "queue_reported" | "stale";
     source: "user" | "station" | "admin";
     reportedAt: string;
   }>>>;
@@ -95,15 +96,16 @@ export async function getStationLiveFacts(stationIds: string[]): Promise<Station
     supabase
       .from("fuel_prices")
       .select("fuel_type,price_per_litre,source_name,effective_at")
+      .eq("is_demo",false)
       .lte("effective_at", now)
       .order("effective_at", { ascending: false })
       .limit(20),
     supabase
       .from("availability_reports")
-      .select("station_id,fuel_type,reported_status,source_type,reported_at")
+      .select("station_id,fuel_type,reported_status,source_type,reported_at,expires_at")
+      .eq("is_demo",false)
       .in("station_id", stationIds)
       .eq("moderation_status", "approved")
-      .gt("expires_at", now)
       .order("reported_at", { ascending: false })
       .limit(300),
   ]);
@@ -145,7 +147,7 @@ export async function getStationLiveFacts(stationIds: string[]): Promise<Station
     const stationFacts = availability[row.station_id] ??= {};
     if (!stationFacts[fuelType]) {
       stationFacts[fuelType] = {
-        state: reportedStatus,
+        state: resolveAvailabilityStatus({ reported_status:reportedStatus,expires_at:row.expires_at }) as "available"|"unavailable"|"queue_reported"|"stale",
         source: sourceType,
         reportedAt: row.reported_at,
       };

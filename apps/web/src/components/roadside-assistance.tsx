@@ -1,166 +1,500 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  Check,
+  NavigationArrow,
+  MagnifyingGlass,
+  X,
+  ArrowLeft,
+} from "@phosphor-icons/react";
 import { Link, useRouter } from "@/i18n/navigation";
+import type { DriverVehicle } from "@/lib/driver-records";
+import { driverMutation, useDriverResource } from "./use-driver-resource";
 
-type ServiceType = "puncture" | "battery" | "towing";
-type Request = {
+type RequestRecord = {
   id: string;
-  service_type: ServiceType;
+  service_type: string;
   status: string;
-  latitude: number;
-  longitude: number;
   notes: string | null;
   created_at: string;
-  updated_at: string;
   is_demo: boolean;
+  quote_amount_pkr: number | null;
+  assigned_provider_id: string | null;
 };
-
-const services: ServiceType[] = ["puncture", "battery", "towing"];
+type Quote = {
+  id: string;
+  provider_id: string;
+  amount_pkr: number;
+  verified_at: string;
+  expires_at: string;
+};
+const services = [
+  { value: "puncture", label: "Puncture / tyre help" },
+  { value: "battery", label: "Battery jump-start" },
+  { value: "towing", label: "Towing" },
+];
+const statusLabel = (status: string) =>
+  status === "confirmed" ? "Accepted" : status.replaceAll("_", " ");
 
 export function RoadsideAssistance({ requestId }: { requestId?: string }) {
-  const t = useTranslations("dashboard.driver");
+  const history = useDriverResource<{ requests: RequestRecord[] }>(
+    "/api/requests",
+  );
+  const detail = useDriverResource<{ request: RequestRecord }>(
+    requestId ? `/api/requests/${requestId}` : null,
+  );
+  const vehicles = useDriverResource<{ vehicles: DriverVehicle[] }>(
+    "/api/driver/vehicles",
+  );
+  const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
-  const [request, setRequest] = useState<Request | null>(null);
-  const [serviceType, setServiceType] = useState<ServiceType>("puncture");
-  const [notes, setNotes] = useState("");
-  const [loading, setLoading] = useState(Boolean(requestId));
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState("");
-
+  const [busy, setBusy] = useState(false),
+    [message, setMessage] = useState("");
+  const [quotes, setQuotes] = useState<Quote[] | null>(null);
+  const [pickup, setPickup] = useState<Record<string, string> | null>(null);
+  const [selected, setSelected] = useState("");
+  const [sample, setSample] = useState<string | null>(null);
+  const [confirmCancel, setConfirmCancel] = useState(false);
   useEffect(() => {
     if (!requestId) return;
-    let active = true;
-    const loadRequest = () => fetch(`/api/requests/${requestId}`, { cache: "no-store" })
-      .then(async (response) => {
-        if (!response.ok) throw new Error("Request could not be loaded.");
-        return (await response.json()) as { request: Request };
-      })
-      .then((result) => {
-        if (active) setRequest(result.request);
-      })
-      .catch((error: unknown) => {
-        console.error("Roadside request could not be loaded", error);
-        if (active) setMessage(t("requestLoadError"));
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-    void loadRequest();
-    const interval = window.setInterval(() => void loadRequest(), 15_000);
-    return () => {
-      active = false;
-      window.clearInterval(interval);
-    };
-  }, [requestId, t]);
-
-  async function createRequest() {
+    const timer = window.setInterval(detail.refresh, 15000);
+    return () => window.clearInterval(timer);
+  }, [requestId, detail.refresh]);
+  function location() {
     if (!navigator.geolocation) {
-      setMessage(t("locationUnavailable"));
+      setMessage("Location is unavailable. Enter pickup coordinates instead.");
       return;
     }
-    setBusy(true);
-    setMessage("");
+    setMessage("Looking up your location...");
     navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const response = await fetch("/api/requests", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              serviceType,
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              notes,
-            }),
-          });
-          const result = (await response.json()) as { request?: Request; error?: { message?: string } };
-          if (!response.ok || !result.request) throw new Error(result.error?.message ?? t("requestCreateError"));
-          router.replace(`/app/help/${result.request.id}`);
-          router.refresh();
-        } catch (error) {
-          console.error("Roadside request could not be created", error);
-          setMessage(t("requestCreateError"));
-        } finally {
-          setBusy(false);
+      ({ coords }) => {
+        const form = formRef.current;
+        if (form) {
+          (form.elements.namedItem("latitude") as HTMLInputElement).value =
+            String(coords.latitude);
+          (form.elements.namedItem("longitude") as HTMLInputElement).value =
+            String(coords.longitude);
         }
+        setQuotes(null);
+        setPickup(null);
+        setMessage(
+          "Pickup coordinates filled. Review them before checking quotes.",
+        );
       },
-      (error) => {
-        console.error("Roadside request location failed", error);
-        setMessage(t("locationDenied"));
-        setBusy(false);
-      },
-      { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 },
+      () =>
+        setMessage(
+          "Location permission failed. Enter pickup coordinates instead.",
+        ),
+      { timeout: 10000, maximumAge: 60000 },
     );
   }
-
-  async function cancelRequest() {
-    if (!request) return;
+  async function checkQuotes(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setBusy(true);
     setMessage("");
+    setQuotes(null);
+    setSelected("");
+    const fields = Object.fromEntries(
+      new FormData(event.currentTarget),
+    ) as Record<string, string>;
     try {
-      const response = await fetch(`/api/requests/${request.id}`, { method: "POST" });
-      if (!response.ok) throw new Error("Request could not be cancelled.");
-      const result = (await response.json()) as { request: Request };
-      setRequest(result.request);
+      const result = await driverMutation<{
+        quotes: Quote[];
+        limitation?: string;
+      }>(
+        `/api/requests/quotes?${new URLSearchParams({ service: fields.serviceType, lat: fields.latitude, lng: fields.longitude })}`,
+        "GET",
+      );
+      setPickup(fields);
+      setQuotes(result.quotes);
+      if (!result.quotes.length)
+        setMessage(
+          result.limitation ??
+            "No verified provider quote is available for this pickup. No request was sent.",
+        );
     } catch (error) {
-      console.error("Roadside request could not be cancelled", error);
-      setMessage(t("requestCancelError"));
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Quotes could not be checked. No request was sent.",
+      );
     } finally {
       setBusy(false);
     }
   }
-
-  if (requestId) {
-    return (
-      <main className="dashboard-page">
-        <Link className="back-link" href="/app/help">← {t("backToHelp")}</Link>
-        <section className="dashboard-card" aria-labelledby="request-title">
-          {loading ? <div className="dashboard-skeleton" aria-busy="true" /> : request ? (
-            <>
-              <h1 id="request-title">{t("requestDetails")}</h1>
-              <p className="status-mark status-available"><strong>{t(`requestStatuses.${request.status}`)}</strong></p>
-              <p>{t("serviceLabel", { service: t(`services.${request.service_type}`) })}</p>
-              <p>{t("requestCreated", { date: new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(request.created_at)) })}</p>
-              {request.notes && <p>{request.notes}</p>}
-              {request.status === "requested" || request.status === "confirmed" ? (
-                <button type="button" className="cy-button cy-button--outline" disabled={busy} onClick={() => void cancelRequest()}>
-                  {busy ? t("working") : t("cancelRequest")}
-                </button>
-              ) : null}
-            </>
-          ) : <p className="inline-alert" role="alert">{message}</p>}
-          {message && request && <p className="inline-alert" role="alert">{message}</p>}
-        </section>
-      </main>
-    );
+  async function send(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!pickup || !selected) return;
+    setBusy(true);
+    setMessage("");
+    const contact = new FormData(event.currentTarget);
+    try {
+      const result = await driverMutation<{ request: RequestRecord }>(
+        "/api/requests",
+        "POST",
+        {
+          ...pickup,
+          latitude: Number(pickup.latitude),
+          longitude: Number(pickup.longitude),
+          quoteId: selected,
+          confirmedQuote: contact.get("confirm") === "on",
+          contactPhone: contact.get("contactPhone"),
+        },
+      );
+      router.push(`/app/help/${result.request.id}`);
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Request could not be sent.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
-
+  async function cancel() {
+    if (!requestId) return;
+    setBusy(true);
+    try {
+      await driverMutation(`/api/requests/${requestId}`, "POST");
+      detail.refresh();
+      history.refresh();
+      setConfirmCancel(false);
+      setMessage("Request cancelled.");
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Cancellation failed.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  const request = detail.data?.request;
+  const quote = quotes?.find((item) => item.id === selected);
   return (
     <main className="dashboard-page">
-      <section className="dashboard-greeting">
-        <p className="eyebrow">{t("summary")}</p>
-        <h1>{t("helpTitle")}</h1>
-      </section>
-      <section className="dashboard-card" aria-labelledby="help-form-title">
-        <h2 id="help-form-title">{t("helpFormTitle")}</h2>
-        <p>{t("locationHelp")}</p>
-        <div className="cy-station-filter-row" role="group" aria-label={t("serviceTypeLabel")}>
-          {services.map((service) => (
-            <button key={service} type="button" className={`cy-station-filter${serviceType === service ? " is-selected" : ""}`} aria-pressed={serviceType === service} onClick={() => setServiceType(service)}>
-              {t(`services.${service}`)}
-            </button>
+      <header className="driver-page-heading">
+        <div>
+          <h1>Get Help</h1>
+          <p>
+            Tyre assistance, battery jump-start, and towing. Fuel delivery is
+            not offered.
+          </p>
+        </div>
+      </header>
+      {message && (
+        <p className="driver-message" role="status">
+          {message}
+        </p>
+      )}
+      {requestId ? (
+        <section className="driver-section">
+          <Link href="/app/help">
+            <ArrowLeft /> All requests
+          </Link>
+          {detail.loading && !request && (
+            <p role="status">Loading request...</p>
+          )}
+          {detail.error && (
+            <p className="driver-error" role="alert">
+              {detail.error}
+              <button onClick={detail.refresh}>Retry</button>
+            </p>
+          )}
+          {request && (
+            <>
+              <h2>
+                {services.find((item) => item.value === request.service_type)
+                  ?.label ?? request.service_type}
+              </h2>
+              <p className="driver-status">{statusLabel(request.status)}</p>
+              <p>{new Date(request.created_at).toLocaleString()}</p>
+              {request.is_demo && (
+                <span className="demo-badge">
+                  Demo request, not a live dispatch
+                </span>
+              )}
+              <p>{request.notes}</p>
+              <p>
+                Quote:{" "}
+                {request.quote_amount_pkr == null
+                  ? "No recorded quote"
+                  : `PKR ${Number(request.quote_amount_pkr).toLocaleString()}`}
+              </p>
+              <p>
+                Provider reference:{" "}
+                {request.assigned_provider_id ?? "Not assigned"}
+              </p>
+              {["requested", "confirmed"].includes(request.status) &&
+                (confirmCancel ? (
+                  <div className="driver-confirm">
+                    <p>Cancel this request?</p>
+                    <button
+                      className="driver-secondary"
+                      disabled={busy}
+                      onClick={() => setConfirmCancel(false)}
+                    >
+                      Keep request
+                    </button>
+                    <button
+                      className="driver-primary"
+                      disabled={busy}
+                      onClick={cancel}
+                    >
+                      <X />
+                      Confirm cancellation
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="driver-secondary"
+                    onClick={() => setConfirmCancel(true)}
+                  >
+                    <X />
+                    Cancel request
+                  </button>
+                ))}
+            </>
+          )}
+        </section>
+      ) : (
+        <>
+          <section className="driver-section">
+            <h2>Find a verified quote</h2>
+            <p>
+              Only a current quote from an approved provider can be submitted.
+              Availability and arrival times are not guaranteed.
+            </p>
+            <form
+              ref={formRef}
+              onSubmit={checkQuotes}
+              onChange={() => {
+                setQuotes(null);
+                setPickup(null);
+              }}
+            >
+              <div className="driver-form-grid">
+                <label>
+                  Service
+                  <select name="serviceType">
+                    {services.map((service) => (
+                      <option key={service.value} value={service.value}>
+                        {service.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Vehicle (optional)
+                  <select
+                    name="vehicleId"
+                    disabled={vehicles.loading || !!vehicles.error}
+                  >
+                    <option value="">No vehicle selected</option>
+                    {vehicles.data?.vehicles.map((vehicle) => (
+                      <option value={vehicle.id} key={vehicle.id}>
+                        {vehicle.nickname}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Pickup latitude
+                  <input
+                    name="latitude"
+                    type="number"
+                    min={-90}
+                    max={90}
+                    step="any"
+                    required
+                  />
+                </label>
+                <label>
+                  Pickup longitude
+                  <input
+                    name="longitude"
+                    type="number"
+                    min={-180}
+                    max={180}
+                    step="any"
+                    required
+                  />
+                </label>
+                <label>
+                  Useful details (optional)
+                  <textarea name="notes" maxLength={500} />
+                </label>
+              </div>
+              {vehicles.error && (
+                <p role="alert">
+                  {vehicles.error}
+                  <button type="button" onClick={vehicles.refresh}>
+                    Retry vehicles
+                  </button>
+                </p>
+              )}
+              <div className="driver-actions">
+                <button
+                  type="button"
+                  className="driver-secondary"
+                  onClick={location}
+                >
+                  <NavigationArrow />
+                  Use current location
+                </button>
+                <button className="driver-primary" disabled={busy}>
+                  <MagnifyingGlass />
+                  {busy ? "Checking..." : "Check quotes"}
+                </button>
+              </div>
+            </form>
+          </section>
+          {!!quotes?.length && (
+            <section className="driver-section">
+              <h2>Review a verified quote</h2>
+              <form onSubmit={send}>
+                <label>
+                  Provider / quote
+                  <select
+                    required
+                    value={selected}
+                    onChange={(event) => setSelected(event.target.value)}
+                  >
+                    <option value="">Choose a quote</option>
+                    {quotes.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.provider_id} / PKR{" "}
+                        {Number(item.amount_pkr).toLocaleString()}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {quote && (
+                  <>
+                    <p>
+                      PKR {Number(quote.amount_pkr).toLocaleString()} / Verified{" "}
+                      {new Date(quote.verified_at).toLocaleString()} / Expires{" "}
+                      {new Date(quote.expires_at).toLocaleString()}
+                    </p>
+                    <label>
+                      Contact phone
+                      <input
+                        name="contactPhone"
+                        type="tel"
+                        required
+                        minLength={7}
+                        maxLength={30}
+                      />
+                    </label>
+                    <label className="driver-preference">
+                      <span>
+                        I reviewed this quote and agree to share my pickup and
+                        contact details for this request.
+                      </span>
+                      <input name="confirm" type="checkbox" required />
+                    </label>
+                    <button className="driver-primary" disabled={busy}>
+                      <Check />
+                      {busy ? "Submitting..." : "Confirm and request help"}
+                    </button>
+                  </>
+                )}
+              </form>
+            </section>
+          )}
+          <section className="driver-section">
+            <h2>Sample walkthrough</h2>
+            <p>
+              No verified quote? This local sample demonstrates statuses only.
+              No provider, price, arrival time, or dispatch is simulated as
+              real.
+            </p>
+            {!sample ? (
+              <button
+                className="driver-secondary"
+                onClick={() => setSample("review")}
+              >
+                Preview sample workflow
+              </button>
+            ) : (
+              <div className="driver-confirm">
+                <strong>Sample only: {sample}</strong>
+                {sample === "review" ? (
+                  <>
+                    <p>
+                      No real quote is available in this preview. Confirm to
+                      continue the sample, not to request a service.
+                    </p>
+                    <button
+                      className="driver-secondary"
+                      onClick={() => setSample("requested")}
+                    >
+                      Confirm sample review
+                    </button>
+                  </>
+                ) : (
+                  !["completed", "cancelled"].includes(sample) && (
+                    <button
+                      className="driver-secondary"
+                      onClick={() =>
+                        setSample(
+                          sample === "requested"
+                            ? "accepted"
+                            : sample === "accepted"
+                              ? "en route"
+                              : "completed",
+                        )
+                      }
+                    >
+                      Advance sample status
+                    </button>
+                  )
+                )}
+                <button
+                  className="driver-secondary"
+                  onClick={() =>
+                    setSample(
+                      sample === "cancelled" || sample === "completed"
+                        ? null
+                        : "cancelled",
+                    )
+                  }
+                >
+                  {["completed", "cancelled"].includes(sample)
+                    ? "Close sample"
+                    : "Cancel sample"}
+                </button>
+              </div>
+            )}
+          </section>
+        </>
+      )}
+      <section className="driver-section">
+        <h2>Request history</h2>
+        {history.loading && <p role="status">Loading requests...</p>}
+        {history.error && (
+          <p role="alert">
+            {history.error}
+            <button onClick={history.refresh}>Retry</button>
+          </p>
+        )}
+        {!history.loading &&
+          !history.error &&
+          !history.data?.requests.length && <p>No roadside requests yet.</p>}
+        <div className="driver-record-list">
+          {history.data?.requests.map((item) => (
+            <article className="driver-record" key={item.id}>
+              <Link href={`/app/help/${item.id}`}>
+                {services.find((service) => service.value === item.service_type)
+                  ?.label ?? item.service_type}
+              </Link>
+              <p>
+                {statusLabel(item.status)} /{" "}
+                {new Date(item.created_at).toLocaleDateString()}
+              </p>
+              {item.is_demo && <span className="demo-badge">Demo request</span>}
+            </article>
           ))}
         </div>
-        <label className="cy-field">
-          <span>{t("notesLabel")}</span>
-          <textarea value={notes} maxLength={500} onChange={(event) => setNotes(event.currentTarget.value)} />
-        </label>
-        {message && <p className="inline-alert" role="alert">{message}</p>}
-        <button type="button" className="cy-button cy-button--accent" disabled={busy} onClick={() => void createRequest()}>
-          {busy ? t("working") : t("sendRequest")}
-        </button>
       </section>
     </main>
   );

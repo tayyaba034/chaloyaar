@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireApiRole } from "@/lib/api-auth";
 import { resolveAvailabilityStatus } from "@/lib/availability";
+import { calculateMileage } from "@/lib/driver-records";
 
 const PILOT_ORIGIN = { latitude: 31.4181, longitude: 73.0791 };
 
@@ -21,7 +22,8 @@ export async function GET() {
   if ("response" in access) return access.response;
   const { profile, supabase } = access;
   const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const pakistanDate = new Date(now.getTime() + 5 * 60 * 60 * 1000);
+  const monthStart = new Date(Date.UTC(pakistanDate.getUTCFullYear(), pakistanDate.getUTCMonth(), 1) - 5 * 60 * 60 * 1000).toISOString();
   const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000).toISOString();
 
   const [stationResult, fuelPriceResult, fuelLogsResult, requestResult] =
@@ -41,10 +43,10 @@ export async function GET() {
         .maybeSingle(),
       supabase
         .from("fuel_logs")
-        .select("litres,total_amount,odometer_km,logged_at,is_demo")
+        .select("id,litres,total_amount,odometer_km,logged_at,is_demo,vehicle_id")
         .eq("user_id", profile.id)
         .gte("logged_at", yearAgo)
-        .order("logged_at", { ascending: true })
+        .order("logged_at", { ascending: false })
         .limit(200),
       supabase
         .from("service_requests")
@@ -120,17 +122,7 @@ export async function GET() {
   const fuelLogs = fuelLogsResult.data ?? [];
   const monthLogs = fuelLogs.filter((log) => log.logged_at >= monthStart);
   const totalSpend = monthLogs.reduce((sum, log) => sum + Number(log.total_amount), 0);
-  const odometerLogs = fuelLogs.filter(
-    (log) => log.odometer_km !== null && Number.isFinite(Number(log.odometer_km)),
-  );
-  const firstOdometer = odometerLogs[0];
-  const lastOdometer = odometerLogs.at(-1);
-  const totalLitres = fuelLogs.reduce((sum, log) => sum + Number(log.litres), 0);
-  const drivenKm =
-    firstOdometer && lastOdometer
-      ? Number(lastOdometer.odometer_km) - Number(firstOdometer.odometer_km)
-      : 0;
-  const kmPerLitre = drivenKm > 0 && totalLitres > 0 ? drivenKm / totalLitres : null;
+  const kmPerLitre = calculateMileage(fuelLogs.map(log => ({ ...log,litres:Number(log.litres),odometer_km:log.odometer_km === null ? null : Number(log.odometer_km) })));
   const activeRequest = (requestResult.data ?? []).find(
     (request) => !["completed", "cancelled"].includes(request.status),
   );
@@ -138,6 +130,7 @@ export async function GET() {
   return NextResponse.json(
     {
       profile: { displayName: profile.displayName },
+      recentFuelLog: fuelLogs[0] ?? null,
       nearestStation: nearest
         ? {
             id: nearest.id,

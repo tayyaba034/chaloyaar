@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveRoleAccess, type AuthProfile } from "./role-access";
+import { resolveRoleAccess, roleHome, type AuthProfile } from "./role-access";
 
 const driver: AuthProfile = {
   id: "driver-id",
@@ -25,6 +25,32 @@ const admin: AuthProfile = {
 };
 
 describe("resolveRoleAccess", () => {
+  it("always makes Driver Home the account entry point, not Settings", () => {
+    expect(roleHome("driver")).toBe("/app");
+  });
+  it.each([
+    "/app",
+    "/app/vehicle",
+    "/app/fuel-history",
+    "/app/profile",
+    "/app/settings",
+    "/app/help",
+    "/app/truecost",
+  ])("protects the actual Driver page %s", (path) => {
+    expect(resolveRoleAccess(path, driver)).toEqual({ allowed: true });
+    expect(resolveRoleAccess(path, null).allowed).toBe(false);
+    expect(resolveRoleAccess(path, approvedProvider)).toEqual({
+      allowed: false,
+      redirectPath: "/provider",
+    });
+    expect(resolveRoleAccess(path, admin)).toEqual({
+      allowed: false,
+      redirectPath: "/admin",
+    });
+    expect(
+      resolveRoleAccess(path, { ...driver, role: "station_admin" }),
+    ).toEqual({ allowed: false, redirectPath: "/station-admin" });
+  });
   it("redirects logged-out users to sign in with a return path", () => {
     expect(resolveRoleAccess("/app/help/new", null)).toEqual({
       allowed: false,
@@ -45,7 +71,9 @@ describe("resolveRoleAccess", () => {
 
   it("lets guests browse station list and detail, but not report actions", () => {
     expect(resolveRoleAccess("/app/stations", null)).toEqual({ allowed: true });
-    expect(resolveRoleAccess("/app/stations/station-1", null)).toEqual({ allowed: true });
+    expect(resolveRoleAccess("/app/stations/station-1", null)).toEqual({
+      allowed: true,
+    });
     expect(resolveRoleAccess("/app/stations/station-1/report", null)).toEqual({
       allowed: false,
       redirectPath: "/auth/sign-in?next=%2Fapp%2Fstations%2Fstation-1%2Freport",
@@ -53,7 +81,9 @@ describe("resolveRoleAccess", () => {
   });
 
   it("keeps pending and suspended providers out of every provider child route", () => {
-    expect(resolveRoleAccess("/provider", pendingProvider)).toEqual({ allowed: true });
+    expect(resolveRoleAccess("/provider", pendingProvider)).toEqual({
+      allowed: true,
+    });
     expect(resolveRoleAccess("/provider/requests", pendingProvider)).toEqual({
       allowed: false,
       redirectPath: "/provider",

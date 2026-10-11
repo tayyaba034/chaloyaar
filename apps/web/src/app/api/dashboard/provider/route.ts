@@ -17,7 +17,7 @@ export async function GET() {
     );
   }
   return NextResponse.json(
-    { requests: data ?? [] },
+    { requests: (data ?? []).map(item => ({ ...item, can_accept: item.status === "requested" && (!item.assigned_provider_id || item.assigned_provider_id === access.profile.id) })) },
     { headers: { "Cache-Control": "private, no-store" } },
   );
 }

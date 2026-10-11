@@ -10,7 +10,7 @@ export async function GET(
   const { id } = await params;
   const { data, error } = await access.supabase
     .from("service_requests")
-    .select("id,service_type,status,latitude,longitude,notes,created_at,updated_at,is_demo")
+    .select("id,service_type,status,latitude,longitude,notes,created_at,updated_at,is_demo,quote_amount_pkr,assigned_provider_id,vehicle_id")
     .eq("id", id)
     .eq("user_id", access.profile.id)
     .maybeSingle();

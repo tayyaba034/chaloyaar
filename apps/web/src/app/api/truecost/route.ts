@@ -2,45 +2,84 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireApiRole } from "@/lib/api-auth";
 import { calculateEstimate, distanceKm, type Point } from "@/lib/truecost";
 import { getDrivingRoute } from "@/lib/routing";
-
-const fuelTypes = new Set(["petrol", "diesel", "cng"]);
-
-function responseError(code: string, message: string, status = 400) {
-  return NextResponse.json({ error: { code, message } }, {
-    status,
-    headers: { "Cache-Control": "no-store" },
-  });
-}
+import { isUuid, numberInput } from "@/lib/driver-records";
+import { getStationLiveFacts } from "@/lib/stations";
 
 function point(payload: Record<string, unknown>, prefix: string): Point | null {
-  const latitude = Number(payload[`${prefix}Latitude`]);
-  const longitude = Number(payload[`${prefix}Longitude`]);
-  if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) return null;
-  if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) return null;
-  return { latitude, longitude };
+  const latitude = numberInput(payload[`${prefix}Latitude`]),
+    longitude = numberInput(payload[`${prefix}Longitude`]);
+  return latitude !== null &&
+    longitude !== null &&
+    Math.abs(latitude) <= 90 &&
+    Math.abs(longitude) <= 180
+    ? { latitude, longitude }
+    : null;
 }
-
 export async function POST(request: NextRequest) {
   const access = await requireApiRole("driver");
   if ("response" in access) return access.response;
-
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return responseError("INVALID_JSON", "Send valid JSON.");
+  const reply = (body: unknown, status = 200) =>
+    NextResponse.json(body, {
+      status,
+      headers: { "Cache-Control": "private, no-store" },
+    });
+  const error = (message: string, status = 400) =>
+    reply({ error: { message } }, status);
+  const payload = await request.json().catch(() => null);
+  if (!payload || typeof payload !== "object")
+    return error("Enter route and fuel details.");
+  const origin = point(payload, "origin"),
+    destination = point(payload, "destination"),
+    litres = numberInput(payload.litres);
+  if (
+    !origin ||
+    !destination ||
+    litres === null ||
+    litres <= 0 ||
+    litres > 500 ||
+    !["petrol", "diesel", "cng"].includes(payload.fuelType)
+  )
+    return error(
+      "Enter valid coordinates, fuel type and quantity (up to 500 litres).",
+    );
+  let economy =
+    payload.kmPerLitre == null || payload.kmPerLitre === ""
+      ? null
+      : numberInput(payload.kmPerLitre);
+  if (
+    payload.kmPerLitre != null &&
+    payload.kmPerLitre !== "" &&
+    economy === null
+  )
+    return error("Enter a valid fuel economy.");
+  if (payload.vehicleId) {
+    if (!isUuid(payload.vehicleId))
+      return error("Choose a valid saved vehicle.");
+    const vehicle = await access.supabase
+      .from("driver_vehicles")
+      .select("estimated_km_per_litre,fuel_type")
+      .eq("id", payload.vehicleId)
+      .eq("user_id", access.profile.id)
+      .maybeSingle();
+    if (vehicle.error || !vehicle.data)
+      return error("Choose one of your own vehicles.");
+    if (vehicle.data.fuel_type !== payload.fuelType)
+      return error("The selected fuel must match your vehicle.");
+    economy =
+      vehicle.data.estimated_km_per_litre === null
+        ? economy
+        : Number(vehicle.data.estimated_km_per_litre);
   }
-  if (!body || typeof body !== "object") return responseError("VALIDATION_ERROR", "Enter route and fuel details.");
-  const payload = body as Record<string, unknown>;
-  const origin = point(payload, "origin");
-  const destination = point(payload, "destination");
-  const fuelType = typeof payload.fuelType === "string" ? payload.fuelType : "";
-  const litres = Number(payload.litres);
-  if (!origin || !destination) return responseError("VALIDATION_ERROR", "Enter valid origin and destination coordinates.");
-  if (!fuelTypes.has(fuelType)) return responseError("VALIDATION_ERROR", "Choose a supported fuel type.");
-  if (!Number.isFinite(litres) || litres <= 0 || litres > 500) return responseError("VALIDATION_ERROR", "Fuel quantity must be between 0 and 500 litres.");
-
-  const [stationsResult, priceResult, logsResult] = await Promise.all([
+  if (economy !== null && (economy <= 0 || economy > 200))
+    return error("Fuel economy must be between 0 and 200 km/L.");
+  if (
+    !payload.vehicleId &&
+    payload.kmPerLitre != null &&
+    payload.kmPerLitre !== "" &&
+    economy === null
+  )
+    return error("Enter a valid fuel economy.");
+  const [stationsResult, priceResult] = await Promise.all([
     access.supabase
       .from("station_public")
       .select("id,name,address,latitude,longitude,supported_fuels,is_demo")
@@ -48,103 +87,98 @@ export async function POST(request: NextRequest) {
     access.supabase
       .from("fuel_prices")
       .select("price_per_litre,source_name,effective_at,is_demo")
-      .eq("fuel_type", fuelType)
+      .eq("fuel_type", payload.fuelType)
       .lte("effective_at", new Date().toISOString())
       .order("effective_at", { ascending: false })
       .limit(1)
       .maybeSingle(),
-    access.supabase
-      .from("fuel_logs")
-      .select("litres,odometer_km,logged_at")
-      .eq("user_id", access.profile.id)
-      .not("odometer_km", "is", null)
-      .order("logged_at", { ascending: true })
-      .limit(200),
   ]);
-  const failed = [stationsResult, priceResult, logsResult].find((result) => result.error);
-  if (failed?.error) {
-    console.error("TrueCost data query failed", failed.error.message);
-    return responseError("TRUECOST_UNAVAILABLE", "The estimate is temporarily unavailable.", 503);
-  }
+  if (stationsResult.error || priceResult.error)
+    return error("Route comparison data is unavailable.", 503);
+  if (!priceResult.data)
+    return error(
+      "No sourced fuel price is available. You can use the clearly labelled personal-figures calculator instead.",
+      422,
+    );
   const price = priceResult.data;
-  if (!price) return responseError("PRICE_UNAVAILABLE", "No official fuel price is available for this fuel type.", 422);
-
-  const logs = logsResult.data ?? [];
-  const first = logs[0]?.odometer_km;
-  const last = logs.at(-1)?.odometer_km;
-  const totalLitres = logs.reduce((sum, log) => sum + Number(log.litres), 0);
-  const kmPerLitre = first !== undefined && last !== undefined && Number(last) > Number(first) && totalLitres > 0
-    ? (Number(last) - Number(first)) / totalLitres
-    : null;
-  const route = await getDrivingRoute(origin, destination);
-  const directDistanceKm = route?.distanceKm ?? distanceKm(origin, destination);
-  const stationRows = stationsResult.data ?? [];
-  const availabilityResult = stationRows.length
-    ? await access.supabase
-      .from("station_service_availability")
-      .select("station_id,service_type,status,updated_at")
-      .in("station_id", stationRows.map((station) => station.id))
-    : { data: [], error: null };
-  if (availabilityResult.error) {
-    console.error("TrueCost availability query failed", availabilityResult.error.message);
-    return responseError("TRUECOST_UNAVAILABLE", "The estimate is temporarily unavailable.", 503);
-  }
-  const stationAvailability = new Map<string, string>();
-  for (const item of availabilityResult.data ?? []) {
-    stationAvailability.set(`${item.station_id}:${item.service_type}`, item.status);
-  }
-  const stations = stationRows
-    .filter((station) => Array.isArray(station.supported_fuels) && station.supported_fuels.includes(fuelType))
-    .map((station) => {
-      const stationPoint = { latitude: Number(station.latitude), longitude: Number(station.longitude) };
-      const viaStationDistanceKm = distanceKm(origin, stationPoint) + distanceKm(stationPoint, destination);
-      const estimate = calculateEstimate({
-        directDistanceKm,
-        viaStationDistanceKm,
-        litres,
-        pricePerLitre: Number(price.price_per_litre),
-        kmPerLitre,
-      });
+  const candidates = (stationsResult.data ?? [])
+    .filter((station) => station.supported_fuels?.includes(payload.fuelType))
+    .map((station) => ({
+      ...station,
+      latitude: Number(station.latitude),
+      longitude: Number(station.longitude),
+    }))
+    .filter(
+      (station) =>
+        Number.isFinite(station.latitude) &&
+        Number.isFinite(station.longitude) &&
+        distanceKm(origin, station) <= 15,
+    )
+    .sort((a, b) => distanceKm(origin, a) - distanceKm(origin, b))
+    .slice(0, 6);
+  const [direct, facts] = await Promise.all([
+    getDrivingRoute(origin, destination),
+    getStationLiveFacts(candidates.map((station) => station.id)),
+  ]);
+  const stations = await Promise.all(
+    candidates.map(async (station) => {
+      const via = direct
+        ? await getDrivingRoute(origin, destination, station)
+        : null;
+      const road = Boolean(direct && via && direct.source === via.source);
+      const directDistanceKm = road
+        ? direct!.distanceKm
+        : distanceKm(origin, destination);
+      const viaStationDistanceKm = road
+        ? via!.distanceKm
+        : distanceKm(origin, station) + distanceKm(station, destination);
       return {
-        id: station.id,
-        name: station.name,
-        address: station.address,
+        ...station,
         isDemo: station.is_demo,
-        latitude: Number(station.latitude),
-        longitude: Number(station.longitude),
-        availability: stationAvailability.get(`${station.id}:${fuelType}`) ?? "unknown",
+        availability:
+          facts.availability[station.id]?.[
+            payload.fuelType as "petrol" | "diesel" | "cng"
+          ]?.state ?? "unknown",
         directDistanceKm,
         viaStationDistanceKm,
-        ...estimate,
+        routing: road ? via!.source : "approximate",
+        geometry: road ? (via!.geometry ?? null) : null,
+        discount: 0,
+        ...calculateEstimate({
+          directDistanceKm,
+          viaStationDistanceKm,
+          litres,
+          pricePerLitre: Number(price.price_per_litre),
+          kmPerLitre: economy,
+        }),
       };
-    })
-    .filter((station) => Number.isFinite(station.viaStationDistanceKm))
-    .sort((firstStation, secondStation) => {
-      if (firstStation.totalCost !== null && secondStation.totalCost !== null) return firstStation.totalCost - secondStation.totalCost;
-      return firstStation.viaStationDistanceKm - secondStation.viaStationDistanceKm;
-    })
-    .slice(0, 10);
-
-  return NextResponse.json({
-    fuelType,
+    }),
+  );
+  stations.sort(
+    (a, b) =>
+      (a.totalCost ?? a.viaStationDistanceKm) -
+      (b.totalCost ?? b.viaStationDistanceKm),
+  );
+  return reply({
+    fuelType: payload.fuelType,
     litres,
-    directDistanceKm,
-    kmPerLitre,
+    kmPerLitre: economy,
+    directDistanceKm: direct?.distanceKm ?? distanceKm(origin, destination),
+    routing: direct?.source ?? "approximate",
+    routeDurationMinutes: direct?.durationMinutes ?? null,
+    routeGeometry: direct?.geometry ?? null,
     price: {
       amount: Number(price.price_per_litre),
       source: price.source_name,
       effectiveAt: price.effective_at,
       isDemo: price.is_demo,
     },
-    routing: route?.source ?? "approximate",
-    routeDurationMinutes: route?.durationMinutes ?? null,
     stations,
     assumptions: [
-      route
-        ? "The origin-to-destination distance and duration use a road route. Station detours are ranked using straight-line approximations."
-        : "Distances use straight-line approximation; no ETA is provided.",
-      kmPerLitre === null ? "Total detour cost is unavailable until you have valid fuel and odometer history." : "Detour fuel cost uses your recorded average efficiency.",
-      "No discount has been applied because no verified redeemable offer is configured.",
+      "Candidates are within 15 km (straight line) of the chosen origin; this is not exhaustive route coverage.",
+      "Road detours use a direct and via-station route from the same provider. Failed routes use consistently labelled straight-line estimates with no ETA.",
+      "Fuel economy uses your saved vehicle estimate or your entered km/L. This is not measured driving performance.",
+      "Total = purchase + detour fuel cost - eligible discount. Discount is zero because no verified redeemable offers are configured.",
     ],
-  }, { headers: { "Cache-Control": "private, no-store" } });
+  });
 }

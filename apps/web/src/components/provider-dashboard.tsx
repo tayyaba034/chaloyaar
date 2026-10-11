@@ -11,6 +11,7 @@ type ProviderRequest = {
   created_at: string;
   is_demo: boolean;
   assigned_provider_id: string | null;
+  can_accept?: boolean;
   latitude: number | null;
   longitude: number | null;
   notes: string | null;
@@ -92,7 +93,7 @@ export function ProviderDashboard() {
                 {request.is_demo && <span className="demo-badge">⚠ {t("demo")}</span>}
                 {request.notes && <p>{request.notes}</p>}
                 <div className="provider-request-actions">
-                  {request.status === "requested" && !request.assigned_provider_id && <>
+                  {request.status === "requested" && (!request.assigned_provider_id || request.can_accept) && <>
                     <button type="button" disabled={Boolean(busyKey)} onClick={() => void act(request.id, "accept")}>{t("accept")}</button>
                     <button type="button" disabled={Boolean(busyKey)} onClick={() => void act(request.id, "decline")}>{t("decline")}</button>
                   </>}
