@@ -10,6 +10,7 @@ import {
   GasPump,
   House,
   List,
+  ChartPolar,
   ListChecks,
   MapPin,
   SignOut,
@@ -34,6 +35,7 @@ const nav = [
   { key: "vehicle", href: "/app/vehicle", icon: Car },
   { key: "history", href: "/app/fuel-history", icon: ClockCounterClockwise },
   { key: "profile", href: "/app/profile", icon: UserCircle },
+  { key: "intelligence", href: "/app/station-intelligence", icon: ChartPolar },
   { key: "savedPlaces", href: "/app/saved-places", icon: MapPin },
   { key: "features", href: "/app/features", icon: ListChecks },
 ] as const;

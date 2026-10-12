@@ -338,7 +338,8 @@
         "help": "Madad Chahiye",
         "vehicle": "Meri Gaari",
         "features": "Kya ban chuka hai",
-        "savedPlaces": "Meri jagahein"
+        "savedPlaces": "Meri jagahein",
+        "intelligence": "Station naqsha maloomat"
       },
       "notificationsTitle": "Ittelaat"
     },
@@ -872,5 +873,79 @@
     "demo": "Demo",
     "markAllRead": "Sab ko parha hua karein",
     "offline": "Ittelaat load nahi ho sakin."
+  },
+  "intelligence": {
+    "eyebrow": "SIRF ASAL DATA",
+    "title": "Station naqsha maloomat",
+    "subtitle": "Fuel station kahan hain, kitne tasdeeq shuda hain, aur drivers aur stations ne kya report kiya — Chalo Yaar ke live database se. Khali ilaqe ka matlab hai abhi data nahi, fuel na hona nahi.",
+    "controls": "Naqshe ke controls",
+    "area": "Ilaqa",
+    "myLocation": "Mera maqam",
+    "useGps": "Mera maqam istemal karein",
+    "gpsUnsupported": "Yeh browser maqam share nahi kar sakta.",
+    "gpsLocating": "Aap ka maqam talaash ho raha hai…",
+    "gpsDenied": "Maqam ki ijazat nahi di gayi. Ilaqa muntakhib karein.",
+    "gpsFailed": "Aap ka maqam nahi mil saka. Ilaqa muntakhib karein.",
+    "layer": "Heat map",
+    "layers": {
+      "stations": "Stations ki maujoodgi",
+      "reports": "Dastiyabi ki reports"
+    },
+    "fuel": "Fuel",
+    "fuels": {
+      "all": "Tamam fuel",
+      "petrol": "Petrol",
+      "diesel": "Diesel",
+      "cng": "CNG"
+    },
+    "window": "Reports",
+    "windows": {
+      "24": "pichle 24 ghante",
+      "168": "pichle 7 din",
+      "336": "pichle 14 din"
+    },
+    "radius": "Daira: {km} km",
+    "threeD": "3D imaratein",
+    "loading": "Asal station data load ho raha hai…",
+    "offline": "Station data load nahi ho saka. Connection check karein.",
+    "statsLabel": "Live ginti",
+    "stats": {
+      "stations": "Naqshe par stations",
+      "stationsNote": "{withFuel} ne fuel ki aqsaam batayi hain",
+      "verified": "Chalo Yaar se tasdeeq shuda",
+      "verifiedNote": "Admin ne tafseel check ki",
+      "inRadius": "{km} km ke andar",
+      "inRadiusNote": "Muntakhib jagah se seedhi lakeer ka faasla",
+      "fresh": "Maujooda reports",
+      "freshNote": "Is muddat mein {total} manzoor shuda reports",
+      "conflicts": "Mutazaad reports wale stations",
+      "conflictsNote": "30 minute ke andar dastiyab aur ghair dastiyab",
+      "lastReport": "Taaza tareen report",
+      "lastReportNote": "Sirf manzoor shuda reports"
+    },
+    "never": "Abhi koi nahi",
+    "unverifiedMarker": "tafseel abhi tasdeeq shuda nahi",
+    "legend": "Heat map ki wazahat",
+    "legendNote": "fi {metres} meter hexagon",
+    "noReportsTitle": "Is muddat mein koi manzoor shuda report nahi",
+    "noReportsBody": "{window} mein koi manzoor shuda report nahi. Jaise jaise drivers aur stations report karenge, heat map bharega.",
+    "reportLink": "Kisi station ki dastiyabi report karein",
+    "radiusNote": "Tooti lakeer wala daira seedhi lakeer ka faasla hai, gaari ka rasta nahi.",
+    "threeDNote": "3D imaratein OpenStreetMap se hain; unchai sirf jahan darj hai wahan dikhti hai, is liye kai imaratein neechi nazar aati hain.",
+    "updated": "Update: {time}.",
+    "notBuiltTitle": "Abhi nahi bane",
+    "notBuiltBody": "Yeh hisse mansoobe mein hain. Farzi data dikhane ke bajaye yahan darj hain.",
+    "planned": {
+      "coverage": "Roadside madad ki rasai",
+      "coverageNote": "Service providers ke maqam aur daire ki zaroorat hai (database tabdeeli baqi).",
+      "alerts": "Station alerts aur phone ittelaat",
+      "alertsNote": "Station par nazar rakhna aur push alerts abhi nahi bane.",
+      "cesium": "Mukammal 3D shehar (CesiumJS)",
+      "cesiumNote": "Mansoobe mein; aaj ka kaam karta 3D manzar oopar wala 3D imaratein button hai.",
+      "evaluation": "Assistant ki karkardagi ka jaiza",
+      "evaluationNote": "Chaar zabanon mein test mansoobe mein; abhi koi score nahi."
+    },
+    "featuresLink": "Dekhein kya ban chuka hai",
+    "showPins": "Station nishan"
   }
 }

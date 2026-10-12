@@ -5,6 +5,7 @@ import type { FormEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ChatCircleDots, Lifebuoy, PaperPlaneTilt } from "@phosphor-icons/react";
 import { Link } from "@/i18n/navigation";
+import "./assistant-panel.css";
 
 type Source = {
   stationId: string;

@@ -105,7 +105,7 @@ export const featureRegistry: FeatureEntry[] = [
   },
 
   { id: "B1", track: "trip_planner", title: "Trip planner data model", summary: "Businesses, services, hours, availability, confirmations, itineraries, trips and audit tables with business-level access control.", status: "planned", needs: ["Migration applied", "Demo businesses seeded"] },
-  { id: "B2", track: "trip_planner", title: "Geo engine and itinerary solver", summary: "Fuel-cost maths, road or labelled straight-line distances, and stop-order optimisation with opening hours, deadlines and optional stops.", status: "planned" },
+  { id: "B2", track: "trip_planner", title: "Geo engine and itinerary solver", summary: "Built and tested (43 unit tests): fuel-cost formula, opening hours, road or labelled straight-line distances, exact stop-order optimisation up to 10 stops and a labelled best-found search above that, with explanations when no plan fits. It has no screen yet; the trip planner screens (B7) will show it.", status: "in_progress", commits: ["a58b477"] },
   { id: "B3", track: "trip_planner", title: "Geo Edge Function", summary: "The geo engine as a Supabase Edge Function, with an in-process fallback for local demos.", status: "planned", needs: ["Edge Function deployed (optional)"] },
   { id: "B4", track: "trip_planner", title: "Availability verification", summary: "Seven-state availability with sources, freshness, audit trail and confirmation requests.", status: "planned" },
   { id: "B5", track: "trip_planner", title: "Business portal", summary: "Business registration and dashboard for status, services, hours and customer requests.", status: "planned" },
@@ -115,14 +115,34 @@ export const featureRegistry: FeatureEntry[] = [
   { id: "B9", track: "trip_planner", title: "Data foundations for future prediction", summary: "Consent-based outcome features and a predictor interface; no invented probabilities.", status: "planned" },
   { id: "B10", track: "trip_planner", title: "End-to-end tests and production guide", summary: "Browser tests of the whole planner flow and the path to production.", status: "planned" },
 
-  { id: "A1", track: "station_intelligence", title: "Provider coverage and spatial data", summary: "Interactive provider base location, radius and distance-aware request preview.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Open intelligence workspace" }, needs: ["Migration applied for live data"] },
-  { id: "A2", track: "station_intelligence", title: "Station assistant v2", summary: "Interactive text and voice assistant surface with grounded station tools.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Try Assistant v2" } },
-  { id: "A3", track: "station_intelligence", title: "Spatial map layers", summary: "Report heat map, clustering, reachable area and admin coverage controls.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Explore map layers" } },
-  { id: "A4", track: "station_intelligence", title: "Station alerts and web push", summary: "Watch stations and request browser notifications for fuel changes.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Configure alerts" }, needs: ["Edge Function and VAPID keys for live push"] },
-  { id: "A5", track: "station_intelligence", title: "MapLibre 3D view", summary: "Tilted map with 3D buildings and terrain, with 2D fallback controls.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Open 3D view" } },
-  { id: "A6", track: "station_intelligence", title: "CesiumJS 3D showcase", summary: "Launch-ready full-scene showcase of the pilot area.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Open showcase" } },
-  { id: "A7", track: "station_intelligence", title: "Voice and offline", summary: "Voice input state and offline-ready interaction surfaces.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Try voice controls" } },
-  { id: "A8", track: "station_intelligence", title: "Assistant evaluation", summary: "Golden-question scorecard across four app languages.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "View evaluation" } },
+  {
+    id: "A3",
+    track: "station_intelligence",
+    title: "Station map insights: hexagon heat maps",
+    summary: "Real heat maps from the database: station coverage per 700 m hexagon (82 OpenStreetMap stations today) and approved availability reports by period and fuel, with counts of verified stations, current reports and conflicting reports. Empty layers mean no data yet.",
+    status: "done",
+    tryIt: { href: "/app/station-intelligence", label: "Open Station map insights" },
+    howToCheck: [
+      "Switch the heat map between Station coverage and Availability reports.",
+      "Move the radius slider: the dashed circle and the “Within km” count change together.",
+      "With no approved reports, the page says so instead of drawing a heat map.",
+    ],
+  },
+  {
+    id: "A5",
+    track: "station_intelligence",
+    title: "MapLibre 3D view",
+    summary: "Tilts the real map and extrudes OpenStreetMap buildings (free OpenFreeMap tiles). Heights appear only where OpenStreetMap has them.",
+    status: "done",
+    tryIt: { href: "/app/station-intelligence", label: "Turn on 3D buildings" },
+    howToCheck: ["Tick “3D buildings”: the map tilts and buildings rise near the centre when zoomed in."],
+  },
+  { id: "A1", track: "station_intelligence", title: "Provider coverage and spatial data", summary: "Provider base location and radius, and request filtering by distance.", status: "planned", needs: ["Migration (not written yet)"] },
+  { id: "A2", track: "station_intelligence", title: "Station assistant v2", summary: "Chat history, voice input and more station tools. Today's assistant (S4) is on Find Petrol and Station map insights.", status: "planned" },
+  { id: "A4", track: "station_intelligence", title: "Station alerts and web push", summary: "Alerts when a watched station runs out.", status: "planned", needs: ["Edge Function deployed", "VAPID keys"] },
+  { id: "A6", track: "station_intelligence", title: "CesiumJS 3D showcase", summary: "Full 3D scene of the pilot area.", status: "planned" },
+  { id: "A7", track: "station_intelligence", title: "Voice and offline", summary: "Recorded phrases and cached last search.", status: "planned" },
+  { id: "A8", track: "station_intelligence", title: "Assistant evaluation", summary: "Golden-question tests in four languages.", status: "planned" },
 ];
 
 export function registrySummary(entries: FeatureEntry[] = featureRegistry) {

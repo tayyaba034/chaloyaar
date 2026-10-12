@@ -22,16 +22,43 @@ type StationMarker = {
 type Geometry = { type: "LineString"; coordinates: number[][] };
 type Coordinates = { latitude: number; longitude: number };
 
+export type HexLayer = {
+  data: { type: "FeatureCollection"; features: unknown[] };
+  property: string;
+  max: number;
+  color: "olive" | "rust";
+};
+
+const hexColors = { olive: ["#e4ecd8", "#42735b"], rust: ["#f6e2d3", "#ac4d30"] } as const;
+
+// Approximate circle (64 points) for a straight-line search radius.
+function circlePolygon(center: Coordinates, radiusKm: number) {
+  const coordinates = Array.from({ length: 65 }, (_, index) => {
+    const angle = (index / 64) * 2 * Math.PI;
+    return [
+      center.longitude + (radiusKm / (111.32 * Math.cos((center.latitude * Math.PI) / 180))) * Math.cos(angle),
+      center.latitude + (radiusKm / 111.32) * Math.sin(angle),
+    ];
+  });
+  return { type: "Feature" as const, properties: {}, geometry: { type: "Polygon" as const, coordinates: [coordinates] } };
+}
+
 export function TrueCostMap({
   markers,
   routeGeometry,
   center,
   userLocation,
+  hexLayer,
+  threeD = false,
+  radius,
 }: {
   markers: StationMarker[];
   routeGeometry?: Geometry | null;
   center?: Coordinates;
   userLocation?: Coordinates | null;
+  hexLayer?: HexLayer | null;
+  threeD?: boolean;
+  radius?: { center: Coordinates; km: number } | null;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
@@ -139,6 +166,76 @@ export function TrueCostMap({
     else if (center) map.jumpTo({ center: [center.longitude, center.latitude] });
     return () => placed.forEach((marker) => marker.remove());
   }, [styleVersion, markers, routeGeometry, center, userLocation]);
+
+  // Hexagon heat layer (real aggregates supplied by the caller).
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || styleVersion === 0) return;
+    const source = map.getSource("cy-hexes") as GeoJSONSource | undefined;
+    if (!hexLayer) {
+      if (map.getLayer("cy-hexes-fill")) map.removeLayer("cy-hexes-fill");
+      if (map.getLayer("cy-hexes-line")) map.removeLayer("cy-hexes-line");
+      if (source) map.removeSource("cy-hexes");
+      return;
+    }
+    const data = hexLayer.data as Parameters<GeoJSONSource["setData"]>[0];
+    if (source) source.setData(data);
+    else map.addSource("cy-hexes", { type: "geojson", data });
+    const [low, high] = hexColors[hexLayer.color];
+    const max = Math.max(1, hexLayer.max);
+    const fillColor = ["interpolate", ["linear"], ["coalesce", ["get", hexLayer.property], 0], 0, low, max, high] as unknown as string;
+    if (!map.getLayer("cy-hexes-fill")) {
+      map.addLayer({ id: "cy-hexes-fill", type: "fill", source: "cy-hexes", paint: { "fill-color": fillColor, "fill-opacity": 0.65 } });
+      map.addLayer({ id: "cy-hexes-line", type: "line", source: "cy-hexes", paint: { "line-color": high, "line-width": 1, "line-opacity": 0.6 } });
+    } else {
+      map.setPaintProperty("cy-hexes-fill", "fill-color", fillColor);
+      map.setPaintProperty("cy-hexes-line", "line-color", high);
+    }
+  }, [styleVersion, hexLayer]);
+
+  // Straight-line search radius outline.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || styleVersion === 0) return;
+    const source = map.getSource("cy-radius") as GeoJSONSource | undefined;
+    if (!radius) {
+      if (map.getLayer("cy-radius")) map.removeLayer("cy-radius");
+      if (source) map.removeSource("cy-radius");
+      return;
+    }
+    const data = circlePolygon(radius.center, radius.km);
+    if (source) source.setData(data);
+    else {
+      map.addSource("cy-radius", { type: "geojson", data });
+      map.addLayer({ id: "cy-radius", type: "line", source: "cy-radius", paint: { "line-color": "#2f5d47", "line-width": 2, "line-dasharray": [2, 2] } });
+    }
+  }, [styleVersion, radius]);
+
+  // Real 3D: tilt the camera and extrude OpenStreetMap buildings (heights where mapped).
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || styleVersion === 0) return;
+    const hasStyleBuildings = Boolean(map.getLayer("building-3d"));
+    if (threeD && !hasStyleBuildings && !map.getLayer("cy-buildings-3d")) {
+      if (!map.getSource("cy-openfreemap")) map.addSource("cy-openfreemap", { type: "vector", url: "https://tiles.openfreemap.org/planet" });
+      map.addLayer({
+        id: "cy-buildings-3d",
+        type: "fill-extrusion",
+        source: "cy-openfreemap",
+        "source-layer": "building",
+        minzoom: 13,
+        paint: {
+          "fill-extrusion-color": "#d8d2c2",
+          "fill-extrusion-height": ["coalesce", ["get", "render_height"], 4],
+          "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
+          "fill-extrusion-opacity": 0.85,
+        },
+      });
+    }
+    if (map.getLayer("cy-buildings-3d")) map.setLayoutProperty("cy-buildings-3d", "visibility", threeD ? "visible" : "none");
+    if (hasStyleBuildings) map.setLayoutProperty("building-3d", "visibility", threeD ? "visible" : "none");
+    map.easeTo({ pitch: threeD ? 55 : 0, bearing: threeD ? -17 : 0, zoom: threeD ? Math.max(map.getZoom(), 14.5) : map.getZoom(), duration: 700 });
+  }, [styleVersion, threeD]);
 
   if (!hasContent)
     return (

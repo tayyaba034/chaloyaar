@@ -296,7 +296,8 @@
         "help": "Get Help",
         "vehicle": "My Car",
         "features": "What's built",
-        "savedPlaces": "My places"
+        "savedPlaces": "My places",
+        "intelligence": "Station map insights"
       },
       "notificationsTitle": "Notifications"
     },
@@ -872,5 +873,79 @@
     "demo": "Demo",
     "markAllRead": "Mark all as read",
     "offline": "Notifications could not be loaded."
+  },
+  "intelligence": {
+    "eyebrow": "REAL DATA ONLY",
+    "title": "Station map insights",
+    "subtitle": "Where fuel stations are, how many are verified, and what drivers and stations have reported, from Chalo Yaar's live database. Empty areas mean no data yet, not no fuel.",
+    "controls": "Map controls",
+    "area": "Area",
+    "myLocation": "My location",
+    "useGps": "Use my location",
+    "gpsUnsupported": "This browser cannot share location.",
+    "gpsLocating": "Finding your location…",
+    "gpsDenied": "Location permission was denied. Choose an area instead.",
+    "gpsFailed": "Your location could not be found. Choose an area instead.",
+    "layer": "Heat map",
+    "layers": {
+      "stations": "Station coverage",
+      "reports": "Availability reports"
+    },
+    "fuel": "Fuel",
+    "fuels": {
+      "all": "All fuels",
+      "petrol": "Petrol",
+      "diesel": "Diesel",
+      "cng": "CNG"
+    },
+    "window": "Reports from",
+    "windows": {
+      "24": "last 24 hours",
+      "168": "last 7 days",
+      "336": "last 14 days"
+    },
+    "radius": "Radius: {km} km",
+    "threeD": "3D buildings",
+    "loading": "Loading real station data…",
+    "offline": "Station data could not be loaded. Check your connection.",
+    "statsLabel": "Live counts",
+    "stats": {
+      "stations": "Stations on the map",
+      "stationsNote": "{withFuel} list which fuels they sell",
+      "verified": "Verified by Chalo Yaar",
+      "verifiedNote": "Details checked by an admin",
+      "inRadius": "Within {km} km",
+      "inRadiusNote": "Straight-line distance from the selected point",
+      "fresh": "Current reports",
+      "freshNote": "{total} approved reports in this period",
+      "conflicts": "Stations with conflicting reports",
+      "conflictsNote": "Available and unavailable within 30 minutes",
+      "lastReport": "Latest report",
+      "lastReportNote": "Approved reports only"
+    },
+    "never": "None yet",
+    "unverifiedMarker": "details not yet verified",
+    "legend": "Heat map legend",
+    "legendNote": "per {metres} m hexagon",
+    "noReportsTitle": "No approved availability reports in this period",
+    "noReportsBody": "There are no approved reports from the {window}. The heat map fills in as drivers and stations report availability.",
+    "reportLink": "Report availability at a station",
+    "radiusNote": "The dashed circle is a straight-line radius, not a driving distance.",
+    "threeDNote": "3D buildings come from OpenStreetMap; heights are shown only where mapped, so many buildings appear low.",
+    "updated": "Updated {time}.",
+    "notBuiltTitle": "Not built yet",
+    "notBuiltBody": "These parts are planned. They are listed here instead of showing made-up data.",
+    "planned": {
+      "coverage": "Roadside provider coverage",
+      "coverageNote": "Needs provider base locations and service radius (database change pending).",
+      "alerts": "Station alerts and phone notifications",
+      "alertsNote": "Watching a station and push alerts are not built yet.",
+      "cesium": "Full 3D city scene (CesiumJS)",
+      "cesiumNote": "Planned; the 3D buildings toggle above is the working 3D view today.",
+      "evaluation": "Assistant quality scorecard",
+      "evaluationNote": "Planned test set in four languages; no scores exist yet."
+    },
+    "featuresLink": "See what's built",
+    "showPins": "Station pins"
   }
 }
