@@ -1,40 +1,40 @@
 import "server-only";
 import type { FuelType } from "@/lib/station-data";
 import { formatReportTime, isAreaId, isFuelType, type AreaId, type StationSource } from "./find-stations";
-import type { GeminiContent, Generate } from "./gemini";
+import type { Generate, LlmMessage, ToolSpec } from "./llm";
 
 export type ServiceType = "puncture" | "battery" | "towing";
 export type AgentAction = { type: "roadside_help"; serviceType: ServiceType; href: string };
-export type AgentResult = { answer: string; sources: StationSource[]; action: AgentAction | null };
+export type AgentAnswer = { answer: string; sources: StationSource[]; action: AgentAction | null };
+// provider_error: try the next provider. unusable: the model answered but failed the checks.
+export type AgentOutcome = { ok: true; result: AgentAnswer } | { ok: false; reason: "provider_error" | "unusable" };
 type FindStations = (input: { fuel: FuelType | null; areaId: AreaId; origin: { latitude: number; longitude: number } | null }) => Promise<StationSource[]>;
 
 const MAX_MODEL_TURNS = 3;
 const languages = { en: "English", ur: "Urdu (Arabic script)", "ur-Latn": "Roman Urdu", "pa-Arab": "Punjabi in Shahmukhi script" } as const;
 
-const tools = [{
-  functionDeclarations: [
-    {
-      name: "find_stations",
-      description: "Look up verified Faisalabad fuel stations within 15 km and their latest reported availability. Always call this before mentioning any station, distance or availability.",
-      parameters: {
-        type: "object",
-        properties: {
-          fuel: { type: "string", enum: ["petrol", "diesel", "cng"], description: "Fuel the driver needs. Omit if unclear." },
-          area: { type: "string", enum: ["city-centre", "susan-road", "d-ground"], description: "Named pilot area. Omit to use the driver's shared location or the city centre." },
-        },
+const tools: ToolSpec[] = [
+  {
+    name: "find_stations",
+    description: "Look up verified Faisalabad fuel stations within 15 km and their latest reported availability. Always call this before mentioning any station, distance or availability.",
+    parameters: {
+      type: "object",
+      properties: {
+        fuel: { type: "string", enum: ["petrol", "diesel", "cng"], description: "Fuel the driver needs. Omit if unclear." },
+        area: { type: "string", enum: ["city-centre", "susan-road", "d-ground"], description: "Named pilot area. Omit to use the driver's shared location or the city centre." },
       },
     },
-    {
-      name: "roadside_help",
-      description: "Offer the driver a button to the roadside help form for a puncture, battery or towing problem. This does not send a request; the driver signs in, reviews a provider quote and confirms it themselves.",
-      parameters: {
-        type: "object",
-        properties: { service: { type: "string", enum: ["puncture", "battery", "towing"] } },
-        required: ["service"],
-      },
+  },
+  {
+    name: "roadside_help",
+    description: "Offer the driver a button to the roadside help form for a puncture, battery or towing problem. This does not send a request; the driver signs in, reviews a provider quote and confirms it themselves.",
+    parameters: {
+      type: "object",
+      properties: { service: { type: "string", enum: ["puncture", "battery", "towing"] } },
+      required: ["service"],
     },
-  ],
-}];
+  },
+];
 
 function systemPrompt(locale: keyof typeof languages, hasLocation: boolean) {
   return [
@@ -74,29 +74,27 @@ export async function runAgent(input: {
   origin: { latitude: number; longitude: number } | null;
   generate: Generate;
   findStations: FindStations;
-}): Promise<AgentResult | null> {
-  const contents: GeminiContent[] = [{ role: "user", parts: [{ text: input.message }] }];
+}): Promise<AgentOutcome> {
+  const messages: LlmMessage[] = [{ role: "user", text: input.message }];
   let sources: StationSource[] = [];
   let action: AgentAction | null = null;
   for (let turn = 0; turn < MAX_MODEL_TURNS; turn += 1) {
     const reply = await input.generate({
-      systemInstruction: { parts: [{ text: systemPrompt(input.locale, input.origin !== null) }] },
-      contents,
+      system: systemPrompt(input.locale, input.origin !== null),
+      messages,
       tools,
-      generationConfig: { temperature: 0.2, maxOutputTokens: 400 },
+      temperature: 0.2,
+      maxTokens: 400,
     });
-    if (!reply) return null;
-    const calls = reply.parts.filter((part) => part.functionCall);
-    if (!calls.length) {
-      const answer = reply.parts.map((part) => part.text ?? "").join("").trim();
-      if (!answer || answer.length > 1_000 || !answerIsGrounded(answer, sources)) return null;
-      return { answer, sources, action };
+    if (!reply) return { ok: false, reason: "provider_error" };
+    if (!reply.toolCalls.length) {
+      const answer = reply.text;
+      if (!answer || answer.length > 1_000 || !answerIsGrounded(answer, sources)) return { ok: false, reason: "unusable" };
+      return { ok: true, result: { answer, sources, action } };
     }
-    // Echo the model turn unchanged; Gemini needs its thought signatures back.
-    contents.push(reply);
-    const responses = [];
-    for (const { functionCall } of calls) {
-      const { name, args = {} } = functionCall!;
+    messages.push({ role: "assistant", text: reply.text, toolCalls: reply.toolCalls, raw: reply.raw });
+    const results = [];
+    for (const { id, name, args } of reply.toolCalls) {
       if (name === "find_stations") {
         // Coordinates stay on the server; the model only sees the station facts.
         sources = await input.findStations({
@@ -104,21 +102,21 @@ export async function runAgent(input: {
           areaId: isAreaId(args.area) ? args.area : "city-centre",
           origin: isAreaId(args.area) ? null : input.origin,
         });
-        responses.push({ functionResponse: { name, response: { stations: sources.map((source) => ({
+        results.push({ id, name, response: { stations: sources.map((source) => ({
           name: source.name,
           distance_km: source.distanceKm.toFixed(1),
           details_verified: source.verified,
           availability: source.availability,
           reported_at: source.reportedAt ? formatReportTime(source.reportedAt) : null,
-        })) } } });
+        })) } });
       } else if (name === "roadside_help" && (args.service === "puncture" || args.service === "battery" || args.service === "towing")) {
         action = { type: "roadside_help", serviceType: args.service, href: "/app/help" };
-        responses.push({ functionResponse: { name, response: { offered: true, note: "A button to the help form is shown. Nothing has been sent yet." } } });
+        results.push({ id, name, response: { offered: true, note: "A button to the help form is shown. Nothing has been sent yet." } });
       } else {
-        responses.push({ functionResponse: { name, response: { error: "Unknown tool or invalid arguments." } } });
+        results.push({ id, name, response: { error: "Unknown tool or invalid arguments." } });
       }
     }
-    contents.push({ role: "user", parts: responses });
+    messages.push({ role: "tool", results });
   }
-  return null;
+  return { ok: false, reason: "unusable" };
 }

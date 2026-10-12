@@ -53,7 +53,7 @@ The Maps and route keys discussed during planning are not wired into this shell 
 
 ## Station assistant (optional AI)
 
-The “Ask Chalo Yaar” panel on `/app/stations` works without any AI key: it matches the fuel and area in the question and answers from the station search. Setting `GEMINI_API_KEY` (server-only, free from Google AI Studio) turns it into a tool-calling agent:
+The “Ask Chalo Yaar” panel on `/app/stations` works without any AI key: it matches the fuel and area in the question and answers from the station search. Setting `GEMINI_API_KEY` and/or `GROQ_API_KEY` (server-only, both have free tiers) turns it into a tool-calling agent:
 
 - Gemini decides when to call `find_stations` (the same PostGIS search and availability reports) or `roadside_help`, then writes the reply in the driver's language.
 - The driver's coordinates stay on the server; Gemini only sees station names, rounded distances, availability and report times.
@@ -61,7 +61,7 @@ The “Ask Chalo Yaar” panel on `/app/stations` works without any AI key: it m
 - `roadside_help` only shows a link to the help form. The agent cannot submit a request; the driver still reviews a provider quote and confirms it.
 - Each client is limited to 8 questions per minute per server instance.
 
-`GEMINI_MODEL` defaults to `gemini-flash-lite-latest`. Free-tier limits change and Google may use free-tier prompts to improve its products; check the current limits and terms in AI Studio before a pilot, and move to a paid key before public launch.
+`GEMINI_MODEL` defaults to `gemini-flash-lite-latest`. An optional `GROQ_API_KEY` (free from the Groq console; `GROQ_MODEL` defaults to `llama-3.3-70b-versatile`) is tried when Gemini fails or is out of quota; an answer that fails the number check is not retried on another provider. Free-tier limits change and Google may use free-tier prompts to improve its products; check the current limits and terms in AI Studio before a pilot, and move to a paid key before public launch.
 
 ## Voice and current limits
 

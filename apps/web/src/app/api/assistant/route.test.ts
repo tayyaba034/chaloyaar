@@ -39,6 +39,7 @@ beforeEach(() => {
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
   vi.stubEnv("GEMINI_API_KEY", "");
+  vi.stubEnv("GROQ_API_KEY", "");
   resetAssistantRateLimit();
   mocks.nearby.mockResolvedValue([station]);
   mocks.facts.mockResolvedValue({
@@ -91,6 +92,21 @@ describe("assistant API", () => {
     const data = await (await POST(request({ message: "Find petrol near D-Ground", locale: "en" }))).json();
     expect(data.mode).toBe("basic");
     expect(data.answer).toContain("Verified Petrol Station");
+  });
+
+  it("falls back from Gemini to Groq when Gemini is out of quota", async () => {
+    vi.stubEnv("GEMINI_API_KEY", "test-key");
+    vi.stubEnv("GROQ_API_KEY", "groq-key");
+    const groqReplies = [
+      { tool_calls: [{ id: "t1", type: "function", function: { name: "find_stations", arguments: "{\"area\":\"d-ground\"}" } }] },
+      { content: "Verified Petrol Station is 2.4 km away." },
+    ];
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => url.includes("groq.com")
+      ? Response.json({ choices: [{ message: groqReplies.shift() }] })
+      : new Response("quota", { status: 429 })));
+    const data = await (await POST(request({ message: "petrol D-Ground?", locale: "en" }))).json();
+    expect(data).toMatchObject({ mode: "ai", provider: "groq" });
+    expect(data.answer).toContain("2.4 km");
   });
 
   it("rate limits one client", async () => {

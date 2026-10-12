@@ -3,7 +3,7 @@ import { stationAreas } from "@/lib/station-search";
 import type { FuelType } from "@/lib/station-data";
 import { findStations } from "@/lib/assistant/find-stations";
 import { runAgent } from "@/lib/assistant/agent";
-import { geminiGenerate, getGeminiConfig } from "@/lib/assistant/gemini";
+import { configuredProviders } from "@/lib/assistant/llm";
 import { allowAssistantRequest } from "@/lib/assistant/rate-limit";
 
 const headers = { "Cache-Control": "private, no-store" };
@@ -76,13 +76,15 @@ export async function POST(request: Request) {
   const origin = readOrigin(input);
   const limitation = "Availability is based on reports and is not a guarantee of stock.";
 
-  const gemini = getGeminiConfig();
-  if (gemini) {
+  // Try each configured free provider in order; an ungrounded answer is not retried elsewhere.
+  for (const provider of configuredProviders()) {
     try {
-      const result = await runAgent({ message, locale, origin, generate: geminiGenerate(gemini), findStations });
-      if (result) return NextResponse.json({ ...result, limitation, mode: "ai" }, { headers });
+      const outcome = await runAgent({ message, locale, origin, generate: provider.generate, findStations });
+      if (outcome.ok) return NextResponse.json({ ...outcome.result, limitation, mode: "ai", provider: provider.id }, { headers });
+      if (outcome.reason === "unusable") break;
     } catch (failure) {
       console.error("Assistant agent failed", failure instanceof Error ? failure.name : "Unknown failure");
+      break;
     }
   }
 
