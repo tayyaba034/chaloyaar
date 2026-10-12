@@ -35,11 +35,11 @@ function localAnswer(locale: string, fuel: FuelType | null, stations: Array<{
     return `I could not find a verified nearby station with usable ${fuelName} information. Station coverage may be incomplete.`;
   }
   const best = stations[0];
-  const report = best.reportedAt ? ` Reported at ${new Date(best.reportedAt).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}.` : " No current availability report is available.";
-  if (locale === "ur") return `${best.name} تقریباً ${best.distanceKm.toFixed(1)} کلومیٹر دور ہے۔ حالت: ${best.state}.${report}`;
-  if (locale === "pa-Arab") return `${best.name} لگ بھگ ${best.distanceKm.toFixed(1)} کلومیٹر دور اے۔ حال: ${best.state}.${report}`;
-  if (locale === "ur-Latn") return `${best.name} taqreeban ${best.distanceKm.toFixed(1)} km door hai. Haal: ${best.state}.${report}`;
-  return `${best.name} is about ${best.distanceKm.toFixed(1)} km away. Status: ${best.state}.${report}`;
+  const time = best.reportedAt ? new Date(best.reportedAt).toLocaleString("en-PK", { timeZone: "Asia/Karachi" }) : null;
+  if (locale === "ur") return `${best.name} تقریباً ${best.distanceKm.toFixed(1)} کلومیٹر دور ہے۔ حالت: ${best.state}۔ ${time ? `رپورٹ کا وقت: ${time}۔` : "دستیابی کی کوئی تازہ رپورٹ موجود نہیں۔"}`;
+  if (locale === "pa-Arab") return `${best.name} لگ بھگ ${best.distanceKm.toFixed(1)} کلومیٹر دور اے۔ حال: ${best.state}۔ ${time ? `رپورٹ دا ویلا: ${time}۔` : "دستیابی دی کوئی تازہ رپورٹ نئیں۔"}`;
+  if (locale === "ur-Latn") return `${best.name} taqreeban ${best.distanceKm.toFixed(1)} km door hai. Haal: ${best.state}. ${time ? `Report ka waqt: ${time}.` : "Dastiyabi ki koi taaza report maujood nahi."}`;
+  return `${best.name} is about ${best.distanceKm.toFixed(1)} km away. Status: ${best.state}. ${time ? `Reported at ${time}.` : "No current availability report is available."}`;
 }
 
 export async function POST(request: Request) {
