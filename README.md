@@ -51,6 +51,18 @@ This seeds `driver@demo.com` as a driver and `admin@demo.com` as an admin, marks
 
 The Maps and route keys discussed during planning are not wired into this shell milestone. MapLibre/MapTiler tiles, routing, geocoding and TrueCost are deferred; any later ORS key must remain server-only, and any public tile key must be domain-restricted. Rotate credentials that have been pasted into chat before using the project.
 
+## Station assistant (optional AI)
+
+The “Ask Chalo Yaar” panel on `/app/stations` works without any AI key: it matches the fuel and area in the question and answers from the station search. Setting `GEMINI_API_KEY` (server-only, free from Google AI Studio) turns it into a tool-calling agent:
+
+- Gemini decides when to call `find_stations` (the same PostGIS search and availability reports) or `roadside_help`, then writes the reply in the driver's language.
+- The driver's coordinates stay on the server; Gemini only sees station names, rounded distances, availability and report times.
+- Any reply containing a number that did not come from a tool result is discarded, and the basic answer is returned instead. Quota errors, timeouts and outages fall back the same way.
+- `roadside_help` only shows a link to the help form. The agent cannot submit a request; the driver still reviews a provider quote and confirms it.
+- Each client is limited to 8 questions per minute per server instance.
+
+`GEMINI_MODEL` defaults to `gemini-flash-lite-latest`. Free-tier limits change and Google may use free-tier prompts to improve its products; check the current limits and terms in AI Studio before a pilot, and move to a paid key before public launch.
+
 ## Voice and current limits
 
 Speaker controls try approved fixed-phrase audio first, then cloud TTS when configured, then a matching browser voice. No recordings or cloud TTS credentials are bundled in M1, so a device without a matching voice gets a translated explanation instead of fabricated speech.

@@ -8,6 +8,7 @@ vi.mock("@/lib/stations", () => ({
   getDiscoveryAvailability: mocks.facts,
 }));
 import { POST } from "./route";
+import { resetAssistantRateLimit } from "@/lib/assistant/rate-limit";
 
 const request = (body: unknown) => new NextRequest("http://localhost/api/assistant", {
   method: "POST",
@@ -35,6 +36,10 @@ const station = {
 
 beforeEach(() => {
   vi.resetAllMocks();
+  vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
+  vi.stubEnv("GEMINI_API_KEY", "");
+  resetAssistantRateLimit();
   mocks.nearby.mockResolvedValue([station]);
   mocks.facts.mockResolvedValue({
     [station.id]: {
@@ -63,6 +68,34 @@ describe("assistant API", () => {
     expect((await POST(request({ message: "" }))).status).toBe(400);
     expect((await POST(request({ message: "x".repeat(501) }))).status).toBe(400);
     expect(mocks.nearby).not.toHaveBeenCalled();
+  });
+
+  it("uses the Gemini agent when configured and labels the answer", async () => {
+    vi.stubEnv("GEMINI_API_KEY", "test-key");
+    const replies = [
+      { parts: [{ functionCall: { name: "find_stations", args: { area: "d-ground", fuel: "petrol" } } }] },
+      { parts: [{ text: "Verified Petrol Station is 2.4 km away; a report says petrol is available." }] },
+    ];
+    const fetchMock = vi.fn(async () => Response.json({ candidates: [{ content: { role: "model", ...replies.shift() } }] }));
+    vi.stubGlobal("fetch", fetchMock);
+    const data = await (await POST(request({ message: "petrol D-Ground?", locale: "en" }))).json();
+    expect(data.mode).toBe("ai");
+    expect(data.answer).toContain("2.4 km");
+    expect(data.sources[0].stationId).toBe(station.id);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("falls back to the basic answer when Gemini fails", async () => {
+    vi.stubEnv("GEMINI_API_KEY", "test-key");
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("quota", { status: 429 })));
+    const data = await (await POST(request({ message: "Find petrol near D-Ground", locale: "en" }))).json();
+    expect(data.mode).toBe("basic");
+    expect(data.answer).toContain("Verified Petrol Station");
+  });
+
+  it("rate limits one client", async () => {
+    for (let count = 0; count < 8; count += 1) expect((await POST(request({ message: "petrol" }))).status).toBe(200);
+    expect((await POST(request({ message: "petrol" }))).status).toBe(429);
   });
 
   it("does not fabricate a result when no verified fuel station exists", async () => {

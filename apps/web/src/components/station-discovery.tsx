@@ -177,7 +177,7 @@ export function StationDiscovery() {
       </section>
 
       <div className="cy-container cy-station-content">
-        <AssistantPanel />
+        <AssistantPanel origin={origin} />
         <form
           className="driver-actions driver-area-search"
           onSubmit={(event) => {

@@ -762,7 +762,10 @@
     "send": "Poochein",
     "thinking": "Check ho raha hai...",
     "grounded": "Mojooda station data par mabni. Availability ki guarantee nahi.",
-    "error": "Assistant station data check nahi kar saka."
+    "error": "Assistant station data check nahi kar saka.",
+    "helpAction": "Sarak par madad ka form kholein",
+    "helpNote": "Jab tak aap sign in kar ke provider ki qeemat dekh kar tasdeeq na karein, kuch nahi bheja jata.",
+    "aiNotice": "Yeh jawab station data se Google Gemini ne likha hai. Aap ka durust maqam Google ko nahi bheja jata."
   },
   "states": {
     "loading": "Page load ho raha hai",

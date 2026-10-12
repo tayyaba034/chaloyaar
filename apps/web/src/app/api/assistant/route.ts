@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { getDiscoveryAvailability, getNearbyStations } from "@/lib/stations";
-import { stationAreas, parseStationSearch } from "@/lib/station-search";
+import { stationAreas } from "@/lib/station-search";
 import type { FuelType } from "@/lib/station-data";
-import { isVerifiedStation } from "@/lib/station-discovery-facts";
+import { findStations } from "@/lib/assistant/find-stations";
+import { runAgent } from "@/lib/assistant/agent";
+import { geminiGenerate, getGeminiConfig } from "@/lib/assistant/gemini";
+import { allowAssistantRequest } from "@/lib/assistant/rate-limit";
 
 const headers = { "Cache-Control": "private, no-store" };
 function inferFuel(message: string): FuelType | null {
@@ -42,7 +44,20 @@ function localAnswer(locale: string, fuel: FuelType | null, stations: Array<{
   return `${best.name} is about ${best.distanceKm.toFixed(1)} km away. Status: ${best.state}. ${time ? `Reported at ${time}.` : "No current availability report is available."}`;
 }
 
+function clientKey(request: Request) {
+  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
+}
+
+function readOrigin(input: Record<string, unknown>) {
+  const { lat, lng } = input;
+  return typeof lat === "number" && typeof lng === "number" && Number.isFinite(lat) && Number.isFinite(lng)
+    && Math.abs(lat) <= 90 && Math.abs(lng) <= 180 ? { latitude: lat, longitude: lng } : null;
+}
+
 export async function POST(request: Request) {
+  if (!allowAssistantRequest(clientKey(request))) {
+    return NextResponse.json({ error: { code: "RATE_LIMITED", message: "Too many questions. Please wait a minute and try again." } }, { status: 429, headers });
+  }
   let body: unknown;
   try {
     body = await request.json();
@@ -58,31 +73,23 @@ export async function POST(request: Request) {
   if (!message || message.length > 500) {
     return NextResponse.json({ error: { code: "VALIDATION_ERROR", message: "Message must be between 1 and 500 characters." } }, { status: 400, headers });
   }
+  const origin = readOrigin(input);
+  const limitation = "Availability is based on reports and is not a guarantee of stock.";
+
+  const gemini = getGeminiConfig();
+  if (gemini) {
+    try {
+      const result = await runAgent({ message, locale, origin, generate: geminiGenerate(gemini), findStations });
+      if (result) return NextResponse.json({ ...result, limitation, mode: "ai" }, { headers });
+    } catch (failure) {
+      console.error("Assistant agent failed", failure instanceof Error ? failure.name : "Unknown failure");
+    }
+  }
 
   const fuel = inferFuel(message);
   const areaId = inferArea(message);
   try {
-    const search = parseStationSearch({
-      radiusKm: 15,
-      ...(typeof input.lat === "number" && typeof input.lng === "number"
-        ? { lat: input.lat, lng: input.lng }
-        : { areaId }),
-      ...(fuel ? { fuelType: fuel } : {}),
-    });
-    const found = await getNearbyStations(search);
-    const stations = found.filter((station) => !fuel || station.supportedFuels.includes(fuel));
-    const facts = await getDiscoveryAvailability(stations.map((station) => station.id), fuel ?? "petrol");
-    const sources = stations.slice(0, 5).map((station) => ({
-      stationId: station.id,
-      name: station.name,
-      distanceKm: station.distanceKm,
-      verified: isVerifiedStation(station),
-      availability: facts[station.id]?.state ?? "unknown",
-      reportedAt: facts[station.id]?.reportedAt ?? null,
-    })).sort((a, b) => {
-      const stateScore = (state: string) => state === "available" ? 0 : state === "queue_reported" ? 1 : state === "stale" ? 2 : 3;
-      return stateScore(a.availability) - stateScore(b.availability) || a.distanceKm - b.distanceKm;
-    });
+    const sources = await findStations({ fuel, areaId, origin });
     const answer = localAnswer(locale, fuel, sources.map((source) => ({
       name: source.name,
       distanceKm: source.distanceKm,
@@ -93,8 +100,10 @@ export async function POST(request: Request) {
     return NextResponse.json({
       answer,
       sources,
-      limitation: "Availability is based on reports and is not a guarantee of stock.",
-      area: stationAreas[areaId as keyof typeof stationAreas],
+      action: null,
+      limitation,
+      mode: "basic",
+      area: stationAreas[areaId],
     }, { headers });
   } catch {
     return NextResponse.json({ error: { code: "ASSISTANT_UNAVAILABLE", message: "Station information is temporarily unavailable. Please retry." } }, { status: 503, headers });

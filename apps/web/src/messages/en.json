@@ -762,7 +762,10 @@
     "send": "Ask",
     "thinking": "Checking...",
     "grounded": "Based on current station data. Availability is not guaranteed.",
-    "error": "The assistant could not check station data."
+    "error": "The assistant could not check station data.",
+    "helpAction": "Open roadside help form",
+    "helpNote": "Nothing is sent until you sign in, review a provider quote and confirm it.",
+    "aiNotice": "Worded by Google Gemini from station data. Your exact location is not sent to Google."
   },
   "states": {
     "loading": "Loading this page",
