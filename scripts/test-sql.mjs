@@ -74,7 +74,7 @@ grant execute on all functions in schema qa to anon, authenticated, service_role
 let baseImage;
 async function freshDatabase() {
   // Build the migrated database once, then clone it from a data-directory dump per test.
-  if (baseImage) return PGlite.create({ loadDataDir: baseImage, extensions: { postgis, pg_trgm } });
+  if (baseImage) return cloneBase();
   const db = await PGlite.create({ extensions: { postgis, pg_trgm } });
   await db.exec(supabaseShim);
   for (const file of fs.readdirSync(migrationsDir).filter((name) => name.endsWith(".sql")).sort()) {
@@ -87,7 +87,13 @@ async function freshDatabase() {
   await db.exec(testHelpers);
   baseImage = await db.dumpDataDir("none");
   await db.close();
-  return PGlite.create({ loadDataDir: baseImage, extensions: { postgis, pg_trgm } });
+  return cloneBase();
+}
+
+async function cloneBase() {
+  const db = await PGlite.create({ loadDataDir: baseImage, extensions: { postgis, pg_trgm } });
+  await db.exec('set search_path = "$user", public, extensions');
+  return db;
 }
 
 const tests = fs.readdirSync(testsDir).filter((name) => name.endsWith(".sql") && name.includes(filter)).sort();
