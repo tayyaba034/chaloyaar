@@ -294,7 +294,8 @@
         "stations": "Find Petrol",
         "truecost": "Save Money",
         "help": "Get Help",
-        "vehicle": "My Car"
+        "vehicle": "My Car",
+        "features": "What's built"
       }
     },
     "provider": {
@@ -787,5 +788,23 @@
     "title": "You're offline",
     "message": "Some information needs an internet connection. Try again when you're back online.",
     "retry": "Try again"
+  },
+  "features": {
+    "title": "What's built",
+    "subtitle": "Every feature in this build, where to try it and what it needs. Details are in English while features are in testing.",
+    "summary": "{done} done · {inProgress} in progress · {planned} planned",
+    "tracks": {
+      "shared": "Shared foundations",
+      "trip_planner": "Errand trip planner",
+      "station_intelligence": "Station intelligence & 3D"
+    },
+    "statuses": {
+      "done": "Done",
+      "in_progress": "In progress",
+      "planned": "Planned"
+    },
+    "howToCheck": "How to check",
+    "needs": "Needs",
+    "commits": "Commits"
   }
 }

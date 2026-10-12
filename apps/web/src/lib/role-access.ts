@@ -29,7 +29,7 @@ export function resolveRoleAccess(
   profile: AuthProfile | null,
 ): AccessDecision {
   const normalized = pathname.replace(/\/+$/, "") || "/";
-  if (/^\/app\/stations(?:\/[^/]+)?$/.test(normalized)) {
+  if (/^\/app\/stations(?:\/[^/]+)?$/.test(normalized) || normalized === "/app/features") {
     return { allowed: true };
   }
 

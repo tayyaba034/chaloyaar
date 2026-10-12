@@ -10,6 +10,7 @@ import {
   GasPump,
   House,
   List,
+  ListChecks,
   SignOut,
   SlidersHorizontal,
   UserCircle,
@@ -31,6 +32,7 @@ const nav = [
   { key: "vehicle", href: "/app/vehicle", icon: Car },
   { key: "history", href: "/app/fuel-history", icon: ClockCounterClockwise },
   { key: "profile", href: "/app/profile", icon: UserCircle },
+  { key: "features", href: "/app/features", icon: ListChecks },
 ] as const;
 type Profile = {
   display_name: string | null;

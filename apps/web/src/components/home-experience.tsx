@@ -52,6 +52,7 @@ export function HomeExperience({
   const t = useTranslations("home");
   const languageT = useTranslations("language");
   const landingT = useTranslations("landing");
+  const featuresT = useTranslations("features");
   const pathname = usePathname();
   const router = useRouter();
   const [showLanguagePicker, setShowLanguagePicker] = useState(!languageSelected);
@@ -305,6 +306,7 @@ export function HomeExperience({
             </div>
             <nav aria-label={landingT("footerLinksLabel")} className="cy-footer-links">
               <Link href="/app/stations">{landingT("browseStations")}</Link>
+              <Link href="/app/features">{featuresT("title")}</Link>
               <Link href="/auth/sign-in">{landingT("signIn")}</Link>
               <button type="button" onClick={() => setShowLanguagePicker(true)}>
                 {languageT("change")}

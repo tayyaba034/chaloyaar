@@ -71,6 +71,7 @@ describe("resolveRoleAccess", () => {
 
   it("lets guests browse station list and detail, but not report actions", () => {
     expect(resolveRoleAccess("/app/stations", null)).toEqual({ allowed: true });
+    expect(resolveRoleAccess("/app/features", null)).toEqual({ allowed: true });
     expect(resolveRoleAccess("/app/stations/station-1", null)).toEqual({
       allowed: true,
     });

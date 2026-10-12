@@ -336,7 +336,8 @@
         "stations": "Petrol Kidhar?",
         "truecost": "Sasta Scene",
         "help": "Madad Chahiye",
-        "vehicle": "Meri Gaari"
+        "vehicle": "Meri Gaari",
+        "features": "Kya ban chuka hai"
       }
     },
     "provider": {
@@ -787,5 +788,23 @@
     "title": "Internet nahi hai",
     "message": "Kuch maloomat ke liye internet chahiye. Connection milne par dobara koshish karein.",
     "retry": "Dobara koshish karein"
+  },
+  "features": {
+    "title": "Kya ban chuka hai",
+    "subtitle": "Is version ki har sahoolat, ise kahan azmayein aur ise kya chahiye. Jaanch ke dauran tafseel English mein hai.",
+    "summary": "{done} mukammal · {inProgress} jari · {planned} mansooba band",
+    "tracks": {
+      "shared": "Mushtarka bunyadein",
+      "trip_planner": "Kaamon ka safar planner",
+      "station_intelligence": "Station maloomat aur 3D"
+    },
+    "statuses": {
+      "done": "Mukammal",
+      "in_progress": "Jari",
+      "planned": "Mansooba band"
+    },
+    "howToCheck": "Kaise jaanchein",
+    "needs": "Darkaar",
+    "commits": "Commits"
   }
 }
