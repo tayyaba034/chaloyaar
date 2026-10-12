@@ -51,6 +51,7 @@ export function TrueCostMap({
   hexLayer,
   threeD = false,
   radius,
+  routeDashed = false,
 }: {
   markers: StationMarker[];
   routeGeometry?: Geometry | null;
@@ -59,6 +60,8 @@ export function TrueCostMap({
   hexLayer?: HexLayer | null;
   threeD?: boolean;
   radius?: { center: Coordinates; km: number } | null;
+  // Dashed lines mark straight-line connections that are not driving directions.
+  routeDashed?: boolean;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
@@ -158,6 +161,7 @@ export function TrueCostMap({
         map.addSource("driver-route", { type: "geojson", data });
         map.addLayer({ id: "driver-route", type: "line", source: "driver-route", paint: { "line-color": "#42735b", "line-width": 5 } });
       }
+      map.setPaintProperty("driver-route", "line-dasharray", routeDashed ? [1.5, 1.5] : [1, 0]);
     } else if (route) {
       map.removeLayer("driver-route");
       map.removeSource("driver-route");
@@ -165,7 +169,7 @@ export function TrueCostMap({
     if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 50, maxZoom: 14, duration: 0 });
     else if (center) map.jumpTo({ center: [center.longitude, center.latitude] });
     return () => placed.forEach((marker) => marker.remove());
-  }, [styleVersion, markers, routeGeometry, center, userLocation]);
+  }, [styleVersion, markers, routeGeometry, center, userLocation, routeDashed]);
 
   // Hexagon heat layer (real aggregates supplied by the caller).
   useEffect(() => {
