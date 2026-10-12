@@ -16,6 +16,7 @@ import { StationMap } from "./station-map";
 import { StationInformation, type DiscoveryAvailability } from "./station-information";
 import { stationAreas } from "@/lib/station-search";
 import { isVerifiedStation, matchesDiscoveryFuel } from "@/lib/station-discovery-facts";
+import { AssistantPanel } from "./assistant-panel";
 
 type NearbyStation = Station & {
   distanceKm: number;
@@ -176,6 +177,7 @@ export function StationDiscovery() {
       </section>
 
       <div className="cy-container cy-station-content">
+        <AssistantPanel />
         <form
           className="driver-actions driver-area-search"
           onSubmit={(event) => {

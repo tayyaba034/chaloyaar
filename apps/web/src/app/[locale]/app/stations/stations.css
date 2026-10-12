@@ -219,6 +219,94 @@
   z-index: 2;
 }
 
+.cy-assistant {
+  display: grid;
+  gap: 0.8rem;
+  margin-block: 1.5rem 2rem;
+  border: 1px solid rgb(68 83 58 / 14%);
+  border-radius: 1.25rem;
+  background: var(--cy-surface);
+  padding: 1rem;
+  box-shadow: 0 0.8rem 2rem -1.5rem rgb(51 36 26 / 35%);
+}
+
+.cy-assistant-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.cy-assistant-heading > svg {
+  flex: 0 0 auto;
+  margin-block-start: 0.2rem;
+  color: var(--cy-accent);
+  font-size: 1.6rem;
+}
+
+.cy-assistant h2,
+.cy-assistant p {
+  margin: 0;
+}
+
+.cy-assistant-heading p {
+  color: var(--cy-body);
+  font-size: 0.9rem;
+}
+
+.cy-assistant-form {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.cy-assistant-form label {
+  color: var(--cy-body);
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.cy-assistant-form > div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cy-assistant-form input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--cy-line);
+  border-radius: 0.7rem;
+  padding: 0.65rem 0.8rem;
+}
+
+.cy-assistant-form button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: var(--cy-olive-deep);
+  color: white;
+  padding: 0.55rem 0.8rem;
+  cursor: pointer;
+}
+
+.cy-assistant-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.cy-assistant-answer {
+  border-radius: 0.8rem;
+  background: var(--cy-olive-wash);
+  padding: 0.8rem;
+}
+
+.cy-assistant-answer ul {
+  margin: 0.5rem 0 0;
+  padding-inline-start: 1.2rem;
+  color: var(--cy-body);
+  font-size: 0.85rem;
+}
+
 .cy-station-search-panel {
   display: flex;
   min-height: 6.3rem;
