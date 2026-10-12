@@ -65,14 +65,13 @@ export const featureRegistry: FeatureEntry[] = [
     id: "S1",
     track: "shared",
     title: "Places gazetteer (free geocoding)",
-    summary: "Search about 900 Faisalabad areas, roads, hospitals, offices and landmarks from OpenStreetMap by English, Urdu or Roman Urdu name.",
+    summary: "Search 913 Faisalabad areas, roads, hospitals, offices and landmarks from OpenStreetMap by English, Urdu or Roman Urdu name.",
     status: "done",
     tryIt: { href: "/app/saved-places", label: "Search places" },
     howToCheck: [
       "Open My places and type “ghanta” or “susan” in Search the map.",
       "Results list the place type and, when you share location, the distance.",
     ],
-    needs: ["Migration 20261012120000_shared_places_notifications applied", "Run: node scripts/import-places.mjs"],
   },
   {
     id: "S2",
@@ -82,7 +81,6 @@ export const featureRegistry: FeatureEntry[] = [
     status: "done",
     tryIt: { href: "/app", label: "Open the bell (top right)" },
     howToCheck: ["Sign in as a driver and open the bell: Notifications appear above Request updates."],
-    needs: ["Migration 20261012120000_shared_places_notifications applied"],
   },
   {
     id: "S3",
@@ -101,7 +99,6 @@ export const featureRegistry: FeatureEntry[] = [
     status: "done",
     tryIt: { href: "/app/saved-places", label: "Open My places" },
     howToCheck: ["Add Home from search or GPS, then try adding a second Home (it is refused)."],
-    needs: ["Migration 20261012120000_shared_places_notifications applied"],
   },
 
   { id: "B1", track: "trip_planner", title: "Trip planner data model", summary: "Businesses, services, hours, availability, confirmations, itineraries, trips and audit tables with business-level access control.", status: "planned", needs: ["Migration applied", "Demo businesses seeded"] },
