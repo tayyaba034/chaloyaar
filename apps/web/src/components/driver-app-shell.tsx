@@ -11,6 +11,7 @@ import {
   House,
   List,
   ListChecks,
+  MapPin,
   SignOut,
   SlidersHorizontal,
   UserCircle,
@@ -23,6 +24,7 @@ import { routing, type AppLocale } from "@/i18n/routing";
 import { signOutAction } from "@/app/actions";
 import { SpeakerButton } from "./speaker-button";
 import { useAppVoice } from "./use-app-voice";
+import { NotificationList } from "./notification-list";
 
 const nav = [
   { key: "home", href: "/app", icon: House },
@@ -32,6 +34,7 @@ const nav = [
   { key: "vehicle", href: "/app/vehicle", icon: Car },
   { key: "history", href: "/app/fuel-history", icon: ClockCounterClockwise },
   { key: "profile", href: "/app/profile", icon: UserCircle },
+  { key: "savedPlaces", href: "/app/saved-places", icon: MapPin },
   { key: "features", href: "/app/features", icon: ListChecks },
 ] as const;
 type Profile = {
@@ -257,6 +260,8 @@ export function DriverAppShell({
                 </button>
                 {notifications && (
                   <div className="driver-popover driver-update-list">
+                    <h2>{t("notificationsTitle")}</h2>
+                    <NotificationList userId={userId} onNavigate={closeMenus} />
                     <h2>Request updates</h2>
                     {!profile.driver_notifications ? (
                       <p>In-app updates are turned off in Settings.</p>

@@ -39,3 +39,26 @@ export async function requireApiRole(role: AppRole) {
   }
   return { profile, supabase } as const;
 }
+
+// Any signed-in role (driver, provider, station admin, admin) for user-owned data.
+export async function requireApiUser() {
+  const profile = await getAuthProfile();
+  if (!profile) {
+    return {
+      response: NextResponse.json(
+        { error: { code: "UNAUTHENTICATED", message: "Sign in to continue." } },
+        { status: 401, headers: { "Cache-Control": "no-store" } },
+      ),
+    } as const;
+  }
+  const supabase = await getSupabaseServerClient();
+  if (!supabase) {
+    return {
+      response: NextResponse.json(
+        { error: { code: "SERVICE_NOT_CONFIGURED", message: "This service is not configured." } },
+        { status: 503, headers: { "Cache-Control": "no-store" } },
+      ),
+    } as const;
+  }
+  return { profile, supabase } as const;
+}

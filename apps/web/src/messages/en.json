@@ -295,8 +295,10 @@
         "truecost": "Save Money",
         "help": "Get Help",
         "vehicle": "My Car",
-        "features": "What's built"
-      }
+        "features": "What's built",
+        "savedPlaces": "My places"
+      },
+      "notificationsTitle": "Notifications"
     },
     "provider": {
       "navigationLabel": "Provider navigation",
@@ -806,5 +808,69 @@
     "howToCheck": "How to check",
     "needs": "Needs",
     "commits": "Commits"
+  },
+  "setup": {
+    "migrationTitle": "Setup needed",
+    "migrationBody": "This feature is built, but its database migration has not been applied to the Supabase project yet.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Please try again."
+  },
+  "placeSearch": {
+    "placeholder": "Area, road or landmark",
+    "searching": "Searching…",
+    "noResults": "No matching place in the Faisalabad map data.",
+    "distance": "{km} km away",
+    "offline": "You appear to be offline.",
+    "error": "Place search failed. Please try again.",
+    "kinds": {
+      "area": "Area",
+      "neighbourhood": "Neighbourhood",
+      "landmark": "Landmark",
+      "road": "Road",
+      "market": "Market",
+      "hospital": "Hospital",
+      "clinic": "Clinic",
+      "school": "School/college",
+      "office": "Office",
+      "mosque": "Mosque",
+      "park": "Park",
+      "transport": "Transport",
+      "other": "Place"
+    }
+  },
+  "savedPlaces": {
+    "title": "My places",
+    "subtitle": "Save home, work and other places to plan trips faster. Only you can see them.",
+    "addTitle": "Add a place",
+    "searchLabel": "Search the map",
+    "useGps": "Use my current location",
+    "gpsUnsupported": "This browser cannot share location. Search for the place instead.",
+    "gpsLocating": "Finding your location…",
+    "gpsReady": "Location found.",
+    "gpsDenied": "Location permission was denied. Search for the place instead.",
+    "gpsFailed": "Your location could not be found. Search for the place instead.",
+    "label": "Name",
+    "kind": "Type",
+    "kinds": {
+      "home": "Home",
+      "work": "Work",
+      "custom": "Other"
+    },
+    "fromGps": "Using your current GPS location.",
+    "fromSearch": "Using map place: {name}",
+    "save": "Save place",
+    "saving": "Saving…",
+    "listTitle": "Saved places",
+    "loading": "Loading your places…",
+    "empty": "No saved places yet.",
+    "remove": "Remove {label}",
+    "offline": "You appear to be offline."
+  },
+  "notifications": {
+    "loading": "Loading…",
+    "empty": "No notifications yet.",
+    "demo": "Demo",
+    "markAllRead": "Mark all as read",
+    "offline": "Notifications could not be loaded."
   }
 }

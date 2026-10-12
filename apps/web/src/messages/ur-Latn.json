@@ -337,8 +337,10 @@
         "truecost": "Sasta Scene",
         "help": "Madad Chahiye",
         "vehicle": "Meri Gaari",
-        "features": "Kya ban chuka hai"
-      }
+        "features": "Kya ban chuka hai",
+        "savedPlaces": "Meri jagahein"
+      },
+      "notificationsTitle": "Ittelaat"
     },
     "provider": {
       "navigationLabel": "Provider navigation",
@@ -806,5 +808,69 @@
     "howToCheck": "Kaise jaanchein",
     "needs": "Darkaar",
     "commits": "Commits"
+  },
+  "setup": {
+    "migrationTitle": "Setup darkaar hai",
+    "migrationBody": "Yeh sahoolat tayyar hai, lekin is ki database migration abhi Supabase project par apply nahi hui.",
+    "errorTitle": "Kuch ghalat ho gaya",
+    "errorBody": "Baraye meharbani dobara koshish karein."
+  },
+  "placeSearch": {
+    "placeholder": "Ilaqa, sarak ya mashhoor jagah",
+    "searching": "Talaash jari hai…",
+    "noResults": "Faisalabad ke naqshe mein koi milti jagah nahi mili.",
+    "distance": "{km} km door",
+    "offline": "Lagta hai aap offline hain.",
+    "error": "Jagah ki talaash nakaam rahi. Dobara koshish karein.",
+    "kinds": {
+      "area": "Ilaqa",
+      "neighbourhood": "Mohalla",
+      "landmark": "Mashhoor jagah",
+      "road": "Sarak",
+      "market": "Bazaar",
+      "hospital": "Hospital",
+      "clinic": "Clinic",
+      "school": "School/college",
+      "office": "Daftar",
+      "mosque": "Masjid",
+      "park": "Park",
+      "transport": "Station/adda",
+      "other": "Jagah"
+    }
+  },
+  "savedPlaces": {
+    "title": "Meri jagahein",
+    "subtitle": "Safar jaldi plan karne ke liye ghar, kaam aur doosri jagahein mehfooz karein. Inhein sirf aap dekh sakte hain.",
+    "addTitle": "Jagah shamil karein",
+    "searchLabel": "Naqshe mein talaash karein",
+    "useGps": "Mera mojooda maqam istemal karein",
+    "gpsUnsupported": "Yeh browser maqam share nahi kar sakta. Jagah talaash karein.",
+    "gpsLocating": "Aap ka maqam talaash ho raha hai…",
+    "gpsReady": "Maqam mil gaya.",
+    "gpsDenied": "Maqam ki ijazat nahi di gayi. Jagah talaash karein.",
+    "gpsFailed": "Aap ka maqam nahi mil saka. Jagah talaash karein.",
+    "label": "Naam",
+    "kind": "Qisam",
+    "kinds": {
+      "home": "Ghar",
+      "work": "Kaam",
+      "custom": "Deegar"
+    },
+    "fromGps": "Aap ka mojooda GPS maqam istemal ho raha hai.",
+    "fromSearch": "Naqshe ki jagah: {name}",
+    "save": "Jagah mehfooz karein",
+    "saving": "Mehfooz ho raha hai…",
+    "listTitle": "Mehfooz jagahein",
+    "loading": "Aap ki jagahein load ho rahi hain…",
+    "empty": "Abhi koi jagah mehfooz nahi.",
+    "remove": "{label} hatayein",
+    "offline": "Lagta hai aap offline hain."
+  },
+  "notifications": {
+    "loading": "Load ho raha hai…",
+    "empty": "Abhi koi ittela nahi.",
+    "demo": "Demo",
+    "markAllRead": "Sab ko parha hua karein",
+    "offline": "Ittelaat load nahi ho sakin."
   }
 }
