@@ -223,9 +223,6 @@ export function HomeExperience({
                         </span>
                         <span className="cy-action-name">{t(`actions.${key}`)}</span>
                         <span className="cy-action-text">{landingT(`actions.${key}`)}</span>
-                        <span className="cy-tag cy-tag--live">
-                          {landingT("liveTag")}
-                        </span>
                         <ArrowRight className="cy-action-arrow cy-flip" aria-hidden="true" weight="bold" />
                       </Link>
                     </Reveal>

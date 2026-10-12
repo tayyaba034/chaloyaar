@@ -34,7 +34,7 @@ export async function proxy(request: NextRequest) {
       },
     });
     const { data: authData, error: authError } = await supabase.auth.getUser();
-    if (authError) {
+    if (authError && authError.message !== "Auth session missing!") {
       console.error("Middleware session lookup failed", authError.message);
     } else if (authData.user) {
       const { data: row, error: profileError } = await supabase
