@@ -115,14 +115,14 @@ export const featureRegistry: FeatureEntry[] = [
   { id: "B9", track: "trip_planner", title: "Data foundations for future prediction", summary: "Consent-based outcome features and a predictor interface; no invented probabilities.", status: "planned" },
   { id: "B10", track: "trip_planner", title: "End-to-end tests and production guide", summary: "Browser tests of the whole planner flow and the path to production.", status: "planned" },
 
-  { id: "A1", track: "station_intelligence", title: "Provider coverage and spatial data", summary: "Provider base location and radius, and request filtering by distance.", status: "planned", needs: ["Migration applied"] },
-  { id: "A2", track: "station_intelligence", title: "Station assistant v2", summary: "Chat with voice input and more station tools.", status: "planned" },
-  { id: "A3", track: "station_intelligence", title: "Spatial map layers", summary: "Report heat map, clustering, reachable area and admin coverage map.", status: "planned" },
-  { id: "A4", track: "station_intelligence", title: "Station alerts and web push", summary: "Alerts when a watched station runs out.", status: "planned", needs: ["Edge Function deployed", "VAPID keys"] },
-  { id: "A5", track: "station_intelligence", title: "MapLibre 3D view", summary: "Tilted map with 3D buildings and terrain, with 2D fallback.", status: "planned" },
-  { id: "A6", track: "station_intelligence", title: "CesiumJS 3D showcase", summary: "Full 3D scene of the pilot area.", status: "planned" },
-  { id: "A7", track: "station_intelligence", title: "Voice and offline", summary: "Recorded phrases and cached last search.", status: "planned" },
-  { id: "A8", track: "station_intelligence", title: "Assistant evaluation", summary: "Golden-question tests in four languages.", status: "planned" },
+  { id: "A1", track: "station_intelligence", title: "Provider coverage and spatial data", summary: "Interactive provider base location, radius and distance-aware request preview.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Open intelligence workspace" }, needs: ["Migration applied for live data"] },
+  { id: "A2", track: "station_intelligence", title: "Station assistant v2", summary: "Interactive text and voice assistant surface with grounded station tools.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Try Assistant v2" } },
+  { id: "A3", track: "station_intelligence", title: "Spatial map layers", summary: "Report heat map, clustering, reachable area and admin coverage controls.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Explore map layers" } },
+  { id: "A4", track: "station_intelligence", title: "Station alerts and web push", summary: "Watch stations and request browser notifications for fuel changes.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Configure alerts" }, needs: ["Edge Function and VAPID keys for live push"] },
+  { id: "A5", track: "station_intelligence", title: "MapLibre 3D view", summary: "Tilted map with 3D buildings and terrain, with 2D fallback controls.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Open 3D view" } },
+  { id: "A6", track: "station_intelligence", title: "CesiumJS 3D showcase", summary: "Launch-ready full-scene showcase of the pilot area.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Open showcase" } },
+  { id: "A7", track: "station_intelligence", title: "Voice and offline", summary: "Voice input state and offline-ready interaction surfaces.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "Try voice controls" } },
+  { id: "A8", track: "station_intelligence", title: "Assistant evaluation", summary: "Golden-question scorecard across four app languages.", status: "in_progress", tryIt: { href: "/app/station-intelligence", label: "View evaluation" } },
 ];
 
 export function registrySummary(entries: FeatureEntry[] = featureRegistry) {
