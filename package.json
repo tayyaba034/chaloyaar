@@ -13,6 +13,9 @@
     "stations:import": "node scripts/import-overpass.mjs",
     "stations:seed-demo": "node scripts/seed-demo-stations.mjs",
     "demo:seed-users": "node scripts/seed-demo-users.mjs",
+    "places:import": "node scripts/import-places.mjs",
+    "businesses:import-osm": "node scripts/import-businesses-osm.mjs",
+    "businesses:seed-demo": "node scripts/seed-demo-businesses.mjs",
     "demo:seed-password-users": "node scripts/seed-demo-password-users.mjs"
   }
 }
