@@ -9,6 +9,7 @@
     "build": "npm run build --workspace=apps/web",
     "lint": "npm run lint --workspace=apps/web",
     "test": "npm run test --workspace=apps/web",
+    "test:sql": "node scripts/test-sql.mjs",
     "stations:import": "node scripts/import-overpass.mjs",
     "stations:seed-demo": "node scripts/seed-demo-stations.mjs",
     "demo:seed-users": "node scripts/seed-demo-users.mjs",
