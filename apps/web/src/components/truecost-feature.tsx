@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowUpRight, MapPin, NavigationArrow } from "@phosphor-icons/react";
 import { Link } from "@/i18n/navigation";
@@ -33,6 +33,16 @@ export function TrueCostFeature() {
   const [selected, setSelected] = useState("");
   const [personal, setPersonal] = useState<ReturnType<typeof calculateEstimate> | null>(null);
   const savedVehicle = vehicles.data?.vehicles.find(vehicle => vehicle.id === vehicleId);
+  // Stable map props so the map only refits when the result or selection changes.
+  const mapView = useMemo(() => {
+    if (result?.status !== "ready" || !result.direct) return null;
+    const start = result.direct.geometry?.coordinates[0];
+    return {
+      center: start ? { latitude: start[1], longitude: start[0] } : undefined,
+      routeGeometry: result.stations.find(station => station.id === selected)?.geometry ?? result.direct.geometry,
+      markers: result.stations.map(station => ({ name: station.name, latitude: station.latitude, longitude: station.longitude, address: station.address })),
+    };
+  }, [result, selected]);
   const money = (value: number | null) => value === null ? t("unknown") : `PKR ${value.toFixed(2)}`;
   const date = (value: string) => new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Karachi" }).format(new Date(value));
 
@@ -115,7 +125,7 @@ export function TrueCostFeature() {
           <p>{t("quantity")}: {result.litres} L · {t("economy")}: {result.kmPerLitre ?? t("unknown")}</p>
           <p>{t("calculatedAt")}: {date(result.calculatedAt)}</p>
           <p>{t("coverage")}</p><p>{t(result.ranking === "estimated_total" ? "rankedTotal" : "rankedDistance")}</p>
-          <TrueCostMap center={result.direct!.geometry ? { latitude: result.direct!.geometry.coordinates[0][1], longitude: result.direct!.geometry.coordinates[0][0] } : undefined} routeGeometry={result.stations.find(station => station.id === selected)?.geometry ?? result.direct!.geometry} markers={result.stations.map(station => ({ name: station.name, latitude: station.latitude, longitude: station.longitude, address: station.address }))} />
+          {mapView && <TrueCostMap center={mapView.center} routeGeometry={mapView.routeGeometry} markers={mapView.markers} />}
           {!result.stations.length && <p role="status">{t("noStations")}</p>}
           {result.stations.map(station => <article className="driver-section" key={station.id}>
             <div className="driver-page-heading"><h3>{station.name}</h3><button type="button" className="driver-secondary" aria-pressed={selected === station.id} onClick={() => setSelected(station.id)}><MapPin />{selected === station.id ? t("selected") : t("select")}</button></div>

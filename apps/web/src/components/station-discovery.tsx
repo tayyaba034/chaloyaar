@@ -111,6 +111,13 @@ export function StationDiscovery() {
           .includes(search.trim().toLowerCase()),
     );
   }, [fuel, stations, search]);
+  const mapMarkers = useMemo(() => visibleStations.map((station) => ({
+    name: `${station.name} (${t(isVerifiedStation(station) ? "discovery.verified" : "discovery.unverified")})`,
+    address: station.address,
+    latitude: station.latitude,
+    longitude: station.longitude,
+    warning: station.availability.state === "unavailable" ? "Unavailable" : undefined,
+  })), [visibleStations, t]);
 
   function useMyLocation() {
     if (!navigator.geolocation) {
@@ -354,20 +361,12 @@ export function StationDiscovery() {
               <ArrowUpRight />
             </Link>
           </div>
-          {view === "map" && !loading && !error && (
+          {/* Stays mounted while loading so the map is updated, not rebuilt. */}
+          {view === "map" && !error && (
             <StationMap
               center={origin ?? stationAreas[area]}
               userLocation={origin}
-              markers={visibleStations.map((station) => ({
-                name: `${station.name} (${t(isVerifiedStation(station) ? "discovery.verified" : "discovery.unverified")})`,
-                address: station.address,
-                latitude: station.latitude,
-                longitude: station.longitude,
-                warning:
-                  station.availability.state === "unavailable"
-                    ? "Unavailable"
-                    : undefined,
-              }))}
+              markers={mapMarkers}
             />
           )}
           <div className="cy-station-results-heading">
