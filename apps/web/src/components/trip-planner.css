@@ -1,0 +1,173 @@
+.tp-page {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.tp-card {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  border: 1px solid var(--cy-line, #e2e0d6);
+  border-radius: 10px;
+  background: #fff;
+  padding: 16px;
+}
+
+.tp-card h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.tp-card label {
+  display: grid;
+  gap: 6px;
+  color: #746e62;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.tp-card select,
+.tp-card input:not([type="range"]):not([type="checkbox"]),
+.tp-card textarea {
+  min-width: 0;
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #d7dccf;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--cy-ink, #1f1d1a);
+  padding: 9px 11px;
+  font: inherit;
+}
+
+.tp-search {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+}
+
+.tp-input-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tp-input-icon svg {
+  flex: 0 0 auto;
+  color: #718260;
+}
+
+.tp-origin {
+  grid-template-columns: 1fr;
+}
+
+.tp-results-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.tp-results {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-result {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  border: 1px solid var(--cy-line, #e2e0d6);
+  border-radius: 10px;
+  background: #fff;
+  padding: 14px;
+}
+
+.tp-result p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.tp-result-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.tp-result-name {
+  color: var(--cy-ink, #1f1d1a);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.tp-demo,
+.tp-tag {
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tp-demo {
+  background: #efe2f4;
+  color: #6a3a7c;
+}
+
+.tp-tag {
+  background: #ecebe4;
+  color: #6d6a5f;
+}
+
+.tp-map {
+  position: sticky;
+  top: 100px;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.tp-map .truecost-map {
+  height: 420px;
+  border-radius: 10px;
+}
+
+.tp-list,
+.tp-requests {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+.tp-list li,
+.tp-requests li {
+  display: grid;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}
+
+.tp-back {
+  justify-self: start;
+}
+
+@media (max-width: 860px) {
+  .tp-search,
+  .tp-results-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tp-map {
+    position: static;
+  }
+
+  .tp-map .truecost-map {
+    height: 320px;
+  }
+}

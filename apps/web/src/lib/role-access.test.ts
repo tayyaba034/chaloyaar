@@ -73,6 +73,8 @@ describe("resolveRoleAccess", () => {
     expect(resolveRoleAccess("/app/stations", null)).toEqual({ allowed: true });
     expect(resolveRoleAccess("/app/features", null)).toEqual({ allowed: true });
     expect(resolveRoleAccess("/app/station-intelligence", null)).toEqual({ allowed: true });
+    expect(resolveRoleAccess("/app/places", null)).toEqual({ allowed: true });
+    expect(resolveRoleAccess("/app/places/11111111-1111-4111-8111-111111111111", null)).toEqual({ allowed: true });
     expect(resolveRoleAccess("/app/stations/station-1", null)).toEqual({
       allowed: true,
     });

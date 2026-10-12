@@ -264,6 +264,66 @@ begin
 end $$;
 grant execute on function public.current_availability(uuid, uuid, timestamptz) to anon, authenticated;
 
+-- Business directory search with current availability. Demo listings only when asked for.
+create or replace function public.search_businesses(
+  query text default null, wanted_category text default null,
+  near_latitude double precision default null, near_longitude double precision default null,
+  radius_km double precision default 15, include_demo boolean default false, max_results integer default 20
+)
+returns table (
+  id uuid, name text, category text, description text, address text, phone text,
+  latitude double precision, longitude double precision, listing_status text, is_demo boolean, published_hours_text text,
+  distance_km double precision, match_score real,
+  availability_state text, availability_source text, availability_submitted_at timestamptz, availability_until timestamptz, availability_explanation text,
+  services jsonb
+)
+language plpgsql stable security invoker set search_path = ''
+as $$
+declare
+  needle text := lower(trim(coalesce(query, '')));
+  origin extensions.geography;
+begin
+  if char_length(needle) > 80 then raise exception 'Search text is too long.'; end if;
+  if max_results is null or max_results not between 1 and 50 then raise exception 'Result limit must be 1 to 50.'; end if;
+  if radius_km is null or radius_km not between 0.5 and 50 then raise exception 'Radius must be 0.5 to 50 km.'; end if;
+  if wanted_category is not null and wanted_category not in ('mechanic', 'workshop', 'clinic', 'pharmacy', 'office', 'shop', 'other_service') then
+    raise exception 'Choose a valid category.';
+  end if;
+  if (near_latitude is null) <> (near_longitude is null) then raise exception 'Send both coordinates or neither.'; end if;
+  if near_latitude is not null then
+    if near_latitude not between -90 and 90 or near_longitude not between -180 and 180 then raise exception 'Choose a valid map location.'; end if;
+    origin := extensions.st_setsrid(extensions.st_makepoint(near_longitude, near_latitude), 4326)::extensions.geography;
+  end if;
+  return query
+  with candidates as (
+    select b.*,
+      case when origin is null then null else extensions.st_distance(b.location, origin) / 1000.0 end as km,
+      case when needle = '' then 1::real else greatest(
+        extensions.word_similarity(needle, b.search_text),
+        coalesce((select max(extensions.word_similarity(needle, lower(s.name || ' ' || coalesce(s.tag, '') || ' ' || coalesce(s.description, ''))))
+          from public.services s where s.business_id = b.id and s.is_active), 0)
+      )::real end as score
+    from public.businesses b
+    where b.listing_status in ('active', 'unclaimed')
+      and (include_demo or not b.is_demo)
+      and (wanted_category is null or b.category = wanted_category)
+      and (origin is null or extensions.st_dwithin(b.location, origin, radius_km * 1000))
+  )
+  select c.id, c.name, c.category, c.description, c.address, c.phone, c.latitude::double precision, c.longitude::double precision,
+    c.listing_status, c.is_demo, c.published_hours_text, c.km, c.score,
+    a.state, a.source, a.submitted_at, a.effective_until, a.explanation,
+    coalesce((select jsonb_agg(jsonb_build_object('id', s.id, 'name', s.name, 'tag', s.tag, 'durationMinutes', s.duration_minutes, 'priceNote', s.price_note) order by s.name)
+      from public.services s where s.business_id = c.id and s.is_active), '[]'::jsonb)
+  from candidates c
+  left join lateral public.current_availability(c.id) a on true
+  where needle = '' or c.score >= 0.3
+  order by c.score desc,
+    case a.state when 'CONFIRMED' then 0 when 'PENDING_CONFIRMATION' then 1 when 'UNCONFIRMED' then 2 when 'EXPIRED' then 3 when 'UNKNOWN' then 4 else 5 end,
+    c.km asc nulls last, c.name
+  limit max_results;
+end $$;
+grant execute on function public.search_businesses(text, text, double precision, double precision, double precision, boolean, integer) to anon, authenticated;
+
 -- ---------------------------------------------------------------------------
 -- Driver-side planning tables
 -- ---------------------------------------------------------------------------

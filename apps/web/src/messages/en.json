@@ -297,7 +297,8 @@
         "vehicle": "My Car",
         "features": "What's built",
         "savedPlaces": "My places",
-        "intelligence": "Station map insights"
+        "intelligence": "Station map insights",
+        "places": "Find services"
       },
       "notificationsTitle": "Notifications"
     },
@@ -947,5 +948,137 @@
     },
     "featuresLink": "See what's built",
     "showPins": "Station pins"
+  },
+  "availability": {
+    "states": {
+      "UNKNOWN": {
+        "label": "Unknown",
+        "meaning": "No confirmation yet. Published hours do not show whether anyone is available."
+      },
+      "UNCONFIRMED": {
+        "label": "Not confirmed",
+        "meaning": "Some information exists, but the business has not confirmed it."
+      },
+      "PENDING_CONFIRMATION": {
+        "label": "Waiting for reply",
+        "meaning": "A confirmation request was sent. No reply is not a confirmation."
+      },
+      "CONFIRMED": {
+        "label": "Confirmed",
+        "meaning": "The business or an accepted appointment confirmed it, for a limited time."
+      },
+      "UNAVAILABLE": {
+        "label": "Not available",
+        "meaning": "The business said this service, person or part is not available."
+      },
+      "TEMPORARILY_CLOSED": {
+        "label": "Temporarily closed",
+        "meaning": "The business marked itself closed until a set time."
+      },
+      "EXPIRED": {
+        "label": "Out of date",
+        "meaning": "The last update is too old to rely on. Ask again before travelling."
+      }
+    },
+    "sources": {
+      "business_dashboard": "Business update",
+      "appointment_accepted": "Accepted appointment",
+      "messaging": "Message reply",
+      "manual_confirmation": "Checked by phone (Chalo Yaar)",
+      "external_provider": "External data",
+      "system": "System"
+    },
+    "updatedAgo": "{minutes} min ago",
+    "validUntil": "valid until {time}",
+    "expiredAt": "expired {time}",
+    "legendTitle": "What the availability labels mean",
+    "legendNote": "Only “Confirmed” means someone confirmed recently. Opening hours alone never count as confirmation."
+  },
+  "places": {
+    "title": "Find services",
+    "subtitle": "Mechanics, workshops, clinics, pharmacies, offices and shops in Faisalabad, with whether they have confirmed they can help.",
+    "searchLabel": "Business, service or need",
+    "searchPlaceholder": "Car AC repair, medicine, document…",
+    "category": "Type",
+    "allCategories": "All types",
+    "categories": {
+      "mechanic": "Mechanic",
+      "workshop": "Workshop",
+      "clinic": "Clinic",
+      "pharmacy": "Pharmacy",
+      "office": "Office",
+      "shop": "Shop",
+      "other_service": "Other service"
+    },
+    "radius": "Within {km} km",
+    "search": "Search",
+    "near": "Searching near: {place}",
+    "changeLocation": "Search near another place",
+    "useGps": "Use my location",
+    "myLocation": "My location",
+    "gpsUnsupported": "This browser cannot share location.",
+    "gpsLocating": "Finding your location…",
+    "gpsDenied": "Location permission was denied. Search for a place instead.",
+    "gpsFailed": "Your location could not be found. Search for a place instead.",
+    "loading": "Searching…",
+    "offline": "Could not reach Chalo Yaar. Check your connection.",
+    "resultsLabel": "Businesses",
+    "empty": "No matching businesses in this area. Try a wider radius or another word.",
+    "demo": "Demo – not a real business",
+    "demoNotice": "Fictional demo businesses are shown for testing. They are marked “Demo” and are not real listings.",
+    "unclaimed": "Not on Chalo Yaar yet",
+    "notAvailable": "not available",
+    "distance": "{km} km straight-line",
+    "distanceFromHere": "{km} km from this business",
+    "publishedHours": "Published hours: {hours}",
+    "mapNote": "Distances are straight-line until you plan a trip with road routing.",
+    "back": "All services",
+    "availabilityTitle": "Can they help right now?",
+    "requestTitle": "Ask the business to confirm",
+    "requestIntro": "The business answers in its Chalo Yaar dashboard. Requests expire after 30 minutes; no answer is not a confirmation.",
+    "service": "Service",
+    "anyService": "Any service",
+    "question": "Your question",
+    "defaultQuestion": "Is {service} available today?",
+    "sendRequest": "Send confirmation request",
+    "sending": "Sending…",
+    "call": "Call",
+    "alreadyPending": "A request is already waiting for an answer.",
+    "closedNoRequest": "The business is temporarily closed.",
+    "signInToRequest": "Sign in to ask a business to confirm.",
+    "signIn": "Sign in",
+    "requestSent": "Request sent. You will get a notification when they answer.",
+    "requestStatus": {
+      "requested": "Waiting",
+      "confirmed": "Confirmed",
+      "declined": "Declined",
+      "expired": "Expired – no answer",
+      "cancelled": "Cancelled",
+      "failed": "Not reached",
+      "not_configured": "Cannot be sent"
+    },
+    "servicesTitle": "Services",
+    "minutes": "about {minutes} min",
+    "hoursTitle": "Published opening hours",
+    "hoursNote": "Opening hours only limit when you can visit. They do not confirm anyone is there.",
+    "weekdays": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "closed": "closed",
+    "nextDay": "(next day)",
+    "hoursSource": {
+      "owner": "from the business",
+      "osm": "from OpenStreetMap",
+      "admin": "from Chalo Yaar",
+      "demo": "demo"
+    },
+    "noHours": "No published hours.",
+    "alternativesTitle": "Similar places nearby"
   }
 }

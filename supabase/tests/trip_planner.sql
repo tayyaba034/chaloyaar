@@ -174,4 +174,15 @@ select qa.login('c1111111-1111-4111-8111-111111111102');
 select qa.assert((select count(*) from public.trip_outcomes) = 0, 'outcomes are private to the driver');
 select qa.assert((select count(*) from public.itineraries) = 0, 'itineraries are private to the driver');
 select qa.logout();
+-- Directory search: public, filters demo unless asked, ranks by match and availability.
+insert into public.businesses(name, category, latitude, longitude, source, listing_status, is_demo) values ('[DEMO] QA Demo Garage', 'workshop', 31.41, 73.08, 'demo', 'active', true);
+select qa.login(null);
+select qa.assert((select count(*) from public.search_businesses('car ac')) >= 1, 'service text is searchable');
+select qa.assert((select name from public.search_businesses('car ac') limit 1) = 'QA Cool Air Workshop', 'match by service name');
+select qa.assert((select count(*) from public.search_businesses(null, 'workshop')) = 1, 'demo hidden by default');
+select qa.assert((select count(*) from public.search_businesses(null, 'workshop', null, null, 15, true)) = 2, 'demo shown when asked');
+select qa.assert((select availability_state from public.search_businesses(null, 'workshop') limit 1) = 'TEMPORARILY_CLOSED', 'search returns current availability');
+select qa.assert((select count(*) from public.search_businesses(null, null, 31.41, 73.08, 1)) >= 1, 'radius search');
+select qa.assert((select jsonb_array_length(services) from public.search_businesses('car ac') limit 1) = 1, 'services included');
+select qa.logout();
 rollback;

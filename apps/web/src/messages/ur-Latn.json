@@ -339,7 +339,8 @@
         "vehicle": "Meri Gaari",
         "features": "Kya ban chuka hai",
         "savedPlaces": "Meri jagahein",
-        "intelligence": "Station naqsha maloomat"
+        "intelligence": "Station naqsha maloomat",
+        "places": "Service talaash karein"
       },
       "notificationsTitle": "Ittelaat"
     },
@@ -947,5 +948,137 @@
     },
     "featuresLink": "Dekhein kya ban chuka hai",
     "showPins": "Station nishan"
+  },
+  "availability": {
+    "states": {
+      "UNKNOWN": {
+        "label": "Maloom nahi",
+        "meaning": "Abhi koi tasdeeq nahi. Auqaat-e-kaar se pata nahi chalta ke koi maujood hai."
+      },
+      "UNCONFIRMED": {
+        "label": "Ghair tasdeeq shuda",
+        "meaning": "Kuch maloomat hain, lekin karobar ne tasdeeq nahi ki."
+      },
+      "PENDING_CONFIRMATION": {
+        "label": "Jawab ka intezar",
+        "meaning": "Tasdeeq ki darkhwast bheji gayi hai. Jawab na aana tasdeeq nahi."
+      },
+      "CONFIRMED": {
+        "label": "Tasdeeq shuda",
+        "meaning": "Karobar ya manzoor shuda appointment ne mehdood waqt ke liye tasdeeq ki."
+      },
+      "UNAVAILABLE": {
+        "label": "Dastiyab nahi",
+        "meaning": "Karobar ne bataya ke yeh service, shakhs ya purza dastiyab nahi."
+      },
+      "TEMPORARILY_CLOSED": {
+        "label": "Aarzi taur par band",
+        "meaning": "Karobar ne khud ko muqarrara waqt tak band kiya hai."
+      },
+      "EXPIRED": {
+        "label": "Purani maloomat",
+        "meaning": "Aakhri update purani hai. Jane se pehle dobara poochein."
+      }
+    },
+    "sources": {
+      "business_dashboard": "Karobar ki update",
+      "appointment_accepted": "Manzoor shuda appointment",
+      "messaging": "Paigham ka jawab",
+      "manual_confirmation": "Phone par check (Chalo Yaar)",
+      "external_provider": "Bairooni maloomat",
+      "system": "System"
+    },
+    "updatedAgo": "{minutes} minute pehle",
+    "validUntil": "{time} tak durust",
+    "expiredAt": "{time} par khatam",
+    "legendTitle": "Dastiyabi ke label ka matlab",
+    "legendNote": "Sirf “Tasdeeq shuda” ka matlab hai ke kisi ne haal hi mein tasdeeq ki. Sirf auqaat-e-kaar kabhi tasdeeq nahi."
+  },
+  "places": {
+    "title": "Service talaash karein",
+    "subtitle": "Faisalabad mein mistri, workshop, clinic, pharmacy, daftar aur dukanein, aur yeh ke kya unhon ne madad ki tasdeeq ki hai.",
+    "searchLabel": "Karobar, service ya zaroorat",
+    "searchPlaceholder": "Gaari ka AC, dawai, kaghazaat…",
+    "category": "Qisam",
+    "allCategories": "Tamam aqsaam",
+    "categories": {
+      "mechanic": "Mistri",
+      "workshop": "Workshop",
+      "clinic": "Clinic",
+      "pharmacy": "Pharmacy",
+      "office": "Daftar",
+      "shop": "Dukan",
+      "other_service": "Deegar service"
+    },
+    "radius": "{km} km ke andar",
+    "search": "Talaash karein",
+    "near": "Qareeb talaash: {place}",
+    "changeLocation": "Kisi aur jagah ke qareeb talaash karein",
+    "useGps": "Mera maqam istemal karein",
+    "myLocation": "Mera maqam",
+    "gpsUnsupported": "Yeh browser maqam share nahi kar sakta.",
+    "gpsLocating": "Aap ka maqam talaash ho raha hai…",
+    "gpsDenied": "Maqam ki ijazat nahi di gayi. Jagah talaash karein.",
+    "gpsFailed": "Aap ka maqam nahi mil saka. Jagah talaash karein.",
+    "loading": "Talaash jari hai…",
+    "offline": "Chalo Yaar se rabta nahi ho saka. Connection check karein.",
+    "resultsLabel": "Karobar",
+    "empty": "Is ilaqe mein koi milta karobar nahi. Daira barhayein ya koi aur lafz azmayein.",
+    "demo": "Demo – asal karobar nahi",
+    "demoNotice": "Jaanch ke liye farzi demo karobar dikhaye ja rahe hain. In par “Demo” likha hai aur yeh asal nahi.",
+    "unclaimed": "Abhi Chalo Yaar par nahi",
+    "notAvailable": "dastiyab nahi",
+    "distance": "{km} km seedha faasla",
+    "distanceFromHere": "Is karobar se {km} km",
+    "publishedHours": "Auqaat-e-kaar: {hours}",
+    "mapNote": "Jab tak sarak ke raste se safar na banayein, faasle seedhi lakeer ke hain.",
+    "back": "Tamam services",
+    "availabilityTitle": "Kya abhi madad mil sakti hai?",
+    "requestTitle": "Karobar se tasdeeq mangein",
+    "requestIntro": "Karobar apne Chalo Yaar dashboard mein jawab deta hai. Darkhwast 30 minute baad khatam ho jati hai; jawab na aana tasdeeq nahi.",
+    "service": "Service",
+    "anyService": "Koi bhi service",
+    "question": "Aap ka sawal",
+    "defaultQuestion": "Kya aaj {service} dastiyab hai?",
+    "sendRequest": "Tasdeeq ki darkhwast bhejein",
+    "sending": "Bheja ja raha hai…",
+    "call": "Phone karein",
+    "alreadyPending": "Ek darkhwast pehle hi jawab ke intezar mein hai.",
+    "closedNoRequest": "Karobar aarzi taur par band hai.",
+    "signInToRequest": "Tasdeeq mangne ke liye sign in karein.",
+    "signIn": "Sign in",
+    "requestSent": "Darkhwast bhej di gayi. Jawab aane par ittela milegi.",
+    "requestStatus": {
+      "requested": "Intezar",
+      "confirmed": "Tasdeeq shuda",
+      "declined": "Inkar",
+      "expired": "Khatam – jawab nahi aya",
+      "cancelled": "Mansookh",
+      "failed": "Rabta nahi hua",
+      "not_configured": "Bheji nahi ja sakti"
+    },
+    "servicesTitle": "Services",
+    "minutes": "taqreeban {minutes} minute",
+    "hoursTitle": "Elaan shuda auqaat-e-kaar",
+    "hoursNote": "Auqaat-e-kaar sirf batate hain ke kab ja sakte hain. Yeh tasdeeq nahi ke koi maujood hai.",
+    "weekdays": {
+      "0": "Itwar",
+      "1": "Peer",
+      "2": "Mangal",
+      "3": "Budh",
+      "4": "Jumeraat",
+      "5": "Jumma",
+      "6": "Hafta"
+    },
+    "closed": "band",
+    "nextDay": "(agle din)",
+    "hoursSource": {
+      "owner": "karobar se",
+      "osm": "OpenStreetMap se",
+      "admin": "Chalo Yaar se",
+      "demo": "demo"
+    },
+    "noHours": "Auqaat-e-kaar darj nahi.",
+    "alternativesTitle": "Qareeb milti julti jagahein"
   }
 }
