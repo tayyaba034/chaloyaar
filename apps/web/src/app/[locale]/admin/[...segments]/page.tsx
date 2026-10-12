@@ -4,6 +4,7 @@ import { StationReportModeration } from "@/components/station-report-moderation"
 import { AdminFuelPrices } from "@/components/admin-fuel-prices";
 import { AdminStationAvailability } from "@/components/admin-station-availability";
 import { AdminStations } from "@/components/admin-stations";
+import { AdminBusinesses } from "@/components/admin-businesses";
 
 const sections: Record<string, Parameters<typeof FeaturePlaceholder>[0]["feature"]> = {
   "fuel-prices": "adminFuelPrices",
@@ -19,6 +20,7 @@ export default async function AdminSectionPage({
   params,
 }: PageProps<"/[locale]/admin/[...segments]">) {
   const { segments } = await params;
+  if (segments.join("/") === "businesses") return <AdminBusinesses />;
   if (segments.join("/") === "reports") return <StationReportModeration />;
   if (segments.join("/") === "fuel-prices") return <AdminFuelPrices />;
   if (segments.join("/") === "stations") return <><AdminStations /><AdminStationAvailability /></>;

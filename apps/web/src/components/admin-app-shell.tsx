@@ -8,6 +8,7 @@ const navigation = [
   { key: "overview", href: "/admin" },
   { key: "fuelPrices", href: "/admin/fuel-prices" },
   { key: "stations", href: "/admin/stations" },
+  { key: "businesses", href: "/admin/businesses" },
   { key: "reports", href: "/admin/reports" },
   { key: "providers", href: "/admin/providers" },
   { key: "requests", href: "/admin/requests" },

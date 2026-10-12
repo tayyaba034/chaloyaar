@@ -5,6 +5,8 @@ import { DriverFuelHistory } from "@/components/driver-fuel-history";
 import { DriverProfile } from "@/components/driver-profile";
 import { TrueCostFeature } from "@/components/truecost-feature";
 import { SavedPlaces } from "@/components/saved-places";
+import { BusinessDashboard } from "@/components/business-dashboard";
+import { Suspense } from "react";
 
 export default async function DriverFeaturePage({
   params,
@@ -19,6 +21,7 @@ export default async function DriverFeaturePage({
   if (key === "settings") return <DriverProfile settings />;
   if (key === "truecost") return <TrueCostFeature />;
   if (key === "saved-places") return <SavedPlaces />;
+  if (key === "business") return <Suspense><BusinessDashboard /></Suspense>;
   if (segments[0] === "help" && segments.length === 2) {
     return <RoadsideAssistance requestId={segments[1]} />;
   }

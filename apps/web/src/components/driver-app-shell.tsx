@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
   Bell,
+  Briefcase,
   Car,
   CaretDown,
   ClockCounterClockwise,
@@ -38,6 +39,7 @@ const nav = [
   { key: "profile", href: "/app/profile", icon: UserCircle },
   { key: "places", href: "/app/places", icon: Storefront },
   { key: "intelligence", href: "/app/station-intelligence", icon: ChartPolar },
+  { key: "business", href: "/app/business", icon: Briefcase },
   { key: "savedPlaces", href: "/app/saved-places", icon: MapPin },
   { key: "features", href: "/app/features", icon: ListChecks },
 ] as const;
